@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main"
+    android:gravity="center_horizontal" >
+
+    <TextView
+        android:id="@+id/workout_ctl_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp"
+        android:gravity="center_horizontal"
+        android:text="@string/workout_ctl_title"
+        android:textColor="#ffffff"
+        android:textSize="40sp" />
+
+    <LinearLayout
+        android:id="@+id/workout_ctl_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/workout_ctl_title"
+        android:layout_marginTop="70dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/workout_ctl_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_setting_sub" />
+
+        <SeekBar
+            android:id="@+id/workout_ctl_seekbar"
+            android:layout_width="637dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:maxHeight="44dp"
+            android:minHeight="44dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:progressDrawable="@drawable/skbar_style_setting"
+            android:thumb="@drawable/skbar_thumb_setting" />
+
+        <Button
+            android:id="@+id/workout_ctl_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_setting_add" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp" >
+
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="220dp"
+            android:layout_height="60dp"
+            android:background="@drawable/btn_common_confirm"
+            android:text="@string/confirm"
+            android:textColor="@color/text_color1"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/cancle_btn"
+            android:layout_width="220dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_common_confirm"
+            android:text="@string/cancle"
+            android:textColor="@color/text_color1"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

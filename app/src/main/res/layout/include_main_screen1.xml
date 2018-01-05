@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="@dimen/main_line1_top_margin"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon2_height"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="263dp"
+                android:background="@drawable/btn_login"
+                android:gravity="top|center_horizontal"
+                android:paddingTop="@dimen/main_tx_padding_top"
+                android:text="@string/user_login"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/main_tx_size"/>
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="0px"
+                android:layout_marginRight="0px"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_register_user"
+                android:gravity="center"
+                android:text="@string/user_register"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/main_tx_size"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/main_FrameLayout_line_workout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="@dimen/main_line1_top_margin">
+
+        <include
+            android:id="@+id/main_running_ll"
+            layout="@layout/include_main_screen1_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
+
+        <include
+            android:id="@+id/main_stop_ll"
+            layout="@layout/include_main_screen1_run"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/main_line1_left_margin"
+        android:layout_marginTop="@dimen/main_line1_top_margin"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/reportButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:background="@drawable/btn_report"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/report"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size"/>
+
+        <Button
+            android:id="@+id/vaButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:layout_marginTop="@dimen/main_item_top_margin"
+            android:background="@drawable/btn_va"
+            android:clickable="false"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/virtual"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size"/>
+
+        <Button
+            android:id="@+id/exerciseButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:layout_marginTop="@dimen/main_item_top_margin"
+            android:background="@drawable/btn_exercise"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/exercise"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/main_line1_left_margin"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="@dimen/main_icon3_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="183dp"
+            android:background="@drawable/btn_next"/>
+    </RelativeLayout>
+</LinearLayout>

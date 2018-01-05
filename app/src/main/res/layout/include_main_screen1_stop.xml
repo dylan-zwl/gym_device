@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/goalDistanceButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon2_height"
+            android:background="@drawable/btn_distance"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/goaldistance"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size" />
+
+        <Button
+            android:id="@+id/languageButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:layout_marginTop="@dimen/main_item_top_margin"
+            android:background="@drawable/btn_language"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/language"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/main_line1_left_margin"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/goalTimeButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon2_height"
+            android:background="@drawable/btn_goal_time"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/goaltime"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:layout_marginTop="@dimen/main_item_top_margin"
+            android:background="@drawable/btn_start"
+            android:gravity="center"
+            android:paddingTop="0px"
+            android:text="@string/start"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/start_title_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/main_line1_left_margin"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/goalCalorieButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon2_height"
+            android:background="@drawable/btn_calorie"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/goalcalorie"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size" />
+
+        <Button
+            android:id="@+id/helpButton"
+            android:layout_width="@dimen/main_icon1_with"
+            android:layout_height="@dimen/main_icon1_height"
+            android:layout_marginTop="@dimen/main_item_top_margin"
+            android:background="@drawable/btn_help"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="@dimen/main_tx_padding_top"
+            android:text="@string/help"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/main_tx_size" />
+    </LinearLayout>
+</LinearLayout>

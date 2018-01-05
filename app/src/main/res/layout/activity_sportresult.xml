@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:background="@drawable/bg_main"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginTop="74dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="74dp"
+            android:gravity="center"
+            android:text="@string/result_title"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/result_title" />
+
+        <Button
+            android:id="@+id/sports_record"
+            android:layout_width="220dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="380dp"
+            android:background="@drawable/btn_clear"
+            android:text="@string/sports_record"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="482dp"
+        android:layout_marginTop="74dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/result_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_distance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/result_distance_unit"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_distance" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="74dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/result_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_value" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/result_time_unit"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_value_unit" />
+
+        <TextView
+            android:id="@+id/result_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="132dp"
+            android:gravity="center"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_value" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/result_speed_unit"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_value_unit" />
+
+        <TextView
+            android:id="@+id/result_calorie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="132dp"
+            android:gravity="center"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_value" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/result_calorie_unit"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/result_value_unit" />
+    </LinearLayout>
+
+</LinearLayout>

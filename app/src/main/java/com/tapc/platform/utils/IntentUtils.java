@@ -1,0 +1,160 @@
+package com.tapc.platform.utils;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+
+/**
+ * Created by Administrator on 2016/11/13.
+ */
+
+public class IntentUtils {
+
+    public static void startActivity(Context context, Class<?> cls) {
+        Intent intent = new Intent();
+        intent.setClass(context, cls);
+        context.startActivity(intent);
+    }
+
+    public static void startActivity(Context context, Class<?> cls, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(context, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void startActivity(Context context, Class<?> cls, Bundle bundle, int flag) {
+        Intent intent = new Intent();
+        intent.setClass(context, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        intent.setFlags(flag);
+        context.startActivity(intent);
+    }
+
+
+    public static boolean startThirdApp(Context context, String packageName,
+                                        String className, Bundle bundle, int flag) {
+        if (!isAppInstalled(context, packageName)) {
+            return false;
+        }
+        Intent intent = new Intent();
+        intent.setClassName(packageName, className);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        intent.setFlags(flag);
+        intent.setAction(Intent.ACTION_VIEW);
+        context.startActivity(intent);
+        return true;
+    }
+
+    public static void startActivityForResult(Activity activity, Class<?> cls, Bundle bundle, int requestCode) {
+        Intent intent = new Intent();
+        intent.setClass(activity, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    public static boolean isAppInstalled(Context context, String packagename) {
+        PackageInfo packageInfo;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(packagename, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            packageInfo = null;
+        }
+        if (packageInfo == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private static boolean isServiceRunning(Context context, String serviceName) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer
+                .MAX_VALUE)) {
+            if (service.service.getClassName().equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void startService(Context context, Class<?> cls) {
+        Intent intent = new Intent(context, cls);
+        context.startService(intent);
+    }
+
+    public static void stopService(Context context, Class<?> cls) {
+        if (isServiceRunning(context, cls.getName())) {
+            Intent intent = new Intent(context, cls);
+            context.stopService(intent);
+        }
+    }
+
+    public static void bindService(Context context, Class<?> cls, ServiceConnection conn, int flags) {
+        Intent intent = new Intent(context, cls);
+        context.startService(intent);
+        context.bindService(intent, conn, flags);
+    }
+
+    public static void home(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);// 注意
+        intent.addCategory(Intent.CATEGORY_HOME);
+        context.startActivity(intent);
+    }
+
+    public static boolean isTopActivity(Context context, Class cls) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ComponentName app = am.getRunningTasks(1).get(0).topActivity;
+        return app.getClassName().equals(cls.getName());
+    }
+
+    public static void startApp(Context context, String packageName) {
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        context.startActivity(launchIntent);
+    }
+
+    public static void registerReceiver(Context context, BroadcastReceiver receiver, String... actionList) {
+        IntentFilter filter = new IntentFilter();
+        for (String action : actionList) {
+            filter.addAction(action);
+        }
+        context.registerReceiver(receiver, filter);
+    }
+
+    public static void sendBroadcast(Context context, String action, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setAction(action);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.sendBroadcast(intent);
+    }
+
+
+    public static void unregisterReceiver(Context context, BroadcastReceiver receiver) {
+        if (receiver != null) {
+            try {
+                context.unregisterReceiver(receiver);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

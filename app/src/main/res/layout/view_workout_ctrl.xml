@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/show_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/show_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/workout_title_size"/>
+
+        <TextView
+            android:id="@+id/show_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/show_title"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/show_title"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/show_value_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/show_title_rl"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:textColor="@android:color/white"
+        android:textSize="48sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/show_value_text"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Sub"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_sub"/>
+
+        <Button
+            android:id="@+id/Add"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="60dp"
+            android:background="@drawable/btn_add"/>
+    </LinearLayout>
+</RelativeLayout>

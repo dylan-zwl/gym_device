@@ -1,0 +1,69 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="menuBar">91dp</dimen>
+    <dimen name="normolTextSize">30dp</dimen>
+    <dimen name="numberTextSize">20dp</dimen>
+    <dimen name="datetimeTextSize">20dp</dimen>
+
+    <!-- MainActivity-->
+    <dimen name="main_icon1_with">170dp</dimen>
+    <dimen name="main_icon1_height">150dp</dimen>
+    <dimen name="main_icon1_height2">69dp</dimen>
+    <dimen name="main_icon2_height">313dp</dimen>
+    <dimen name="main_icon3_with">80dp</dimen>
+    <dimen name="main_icon4_with">352dp</dimen>
+
+
+    <!--workout-->
+    <dimen name="workout_title_size">25sp</dimen>
+    <dimen name="workout_unit_size">20sp</dimen>
+    <dimen name="workout_value_size">43sp</dimen>
+
+    <!--margin-->
+    <dimen name="main_line1_top_margin">21dp</dimen>
+    <dimen name="main_line1_left_margin">12dp</dimen>
+    <dimen name="main_item_top_margin">12dp</dimen>
+
+    <!--text size-->
+    <dimen name="main_tx_size">32sp</dimen>
+    <dimen name="start_title_size">60sp</dimen>
+    <dimen name="main_tx_padding_top">13dp</dimen>
+    <dimen name="main_tx_padding_left">25dp</dimen>
+
+
+    <!-- activity_program.xml -->
+    <dimen name="program_with">171dp</dimen>
+    <dimen name="program_height">179dp</dimen>
+    <dimen name="program_magin_l">21dp</dimen>
+    <!-- menu -->
+    <dimen name="osd_with">112dp</dimen>
+    <dimen name="osd_height">91dp</dimen>
+
+    <!-- Setting. -->
+    <dimen name="settings_item_w">160dp</dimen>
+    <dimen name="settings_mitem_w">180dp</dimen>
+    <dimen name="settings_citem_w">240dp</dimen>
+    <dimen name="settings_item_h">60dp</dimen>
+    <dimen name="settings_button_w">30dp</dimen>
+    <dimen name="settings_margin">30dp</dimen>
+    <dimen name="settings_margin_top">20dp</dimen>
+    <dimen name="settings_title_size">25sp</dimen>
+
+    <!-- Textsize. -->
+    <dimen name="login_title_size">25sp</dimen>
+    <dimen name="goal_title_size">32sp</dimen>
+    <dimen name="stop_title_size">38sp</dimen>
+    <dimen name="workout_osd_size">30sp</dimen>
+    <dimen name="goal_activity_title_size">38sp</dimen>
+    <dimen name="goal_activity_value_size">25sp</dimen>
+    <dimen name="record_data_size">25sp</dimen>
+    <dimen name="start_size">50sp</dimen>
+    <dimen name="language_sel_size">28sp</dimen>
+    <dimen name="program_sel_size">23sp</dimen>
+    <dimen name="result_title">40sp</dimen>
+    <dimen name="result_distance">80sp</dimen>
+    <dimen name="result_value">35sp</dimen>
+    <dimen name="result_value_unit">12sp</dimen>
+</resources>
