@@ -12,7 +12,7 @@ import android.content.Context;
 public class FragmentUtils {
     public static void replaceFragment(Context context, FragmentManager fragmentManager, int id, Class<?> cls) {
         FragmentTransaction ft = fragmentManager.beginTransaction();
-//        ft.setTransition(FragmentTransaction.TRANSIT_ENTER_MASK);
+        //        ft.setTransition(FragmentTransaction.TRANSIT_ENTER_MASK);
         ft.replace(id, Fragment.instantiate(context, cls.getName()));
         ft.commit();
     }

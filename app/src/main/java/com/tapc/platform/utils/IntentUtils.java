@@ -44,8 +44,8 @@ public class IntentUtils {
     }
 
 
-    public static boolean startThirdApp(Context context, String packageName,
-                                        String className, Bundle bundle, int flag) {
+    public static boolean startThirdApp(Context context, String packageName, String className, Bundle bundle, int
+            flag) {
         if (!isAppInstalled(context, packageName)) {
             return false;
         }
@@ -85,8 +85,7 @@ public class IntentUtils {
 
     private static boolean isServiceRunning(Context context, String serviceName) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer
-                .MAX_VALUE)) {
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (service.service.getClassName().equals(serviceName)) {
                 return true;
             }

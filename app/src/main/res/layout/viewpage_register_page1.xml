@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_main" >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_main">
 
     <TextView
         android:id="@+id/textView1"
@@ -12,7 +12,7 @@
         android:layout_marginTop="70dp"
         android:text="@string/basic_information"
         android:textColor="@android:color/white"
-        android:textSize="40sp" />
+        android:textSize="40sp"/>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -21,13 +21,13 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="96dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_register_edit"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="169dp"
@@ -36,14 +36,14 @@
                 android:text="@string/user_name"
                 android:textColor="@color/text_color1"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/user_name_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:singleLine="true" />
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_register_edit"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="169dp"
@@ -60,7 +60,7 @@
                 android:text="@string/user_password"
                 android:textColor="@color/text_color1"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/user_password_edit"
@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:inputType="textPassword"
-                android:singleLine="true" />
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_register_edit"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="169dp"
@@ -85,7 +85,7 @@
                 android:text="@string/user_sure_password"
                 android:textColor="@color/text_color1"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/user_sure_password_edit"
@@ -93,7 +93,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:inputType="textPassword"
-                android:singleLine="true" />
+                android:singleLine="true"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -102,17 +102,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp" >
+        android:layout_marginBottom="33dp">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_goal_page_sel" />
+            android:background="@drawable/selector_goal_page_sel"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_goal_page_unsel" />
+            android:background="@drawable/selector_goal_page_unsel"/>
     </LinearLayout>
 
     <Button
@@ -121,6 +121,6 @@
         android:layout_height="@dimen/main_icon1_height"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/btn_next" />
+        android:background="@drawable/btn_next"/>
 
 </RelativeLayout>

@@ -3,14 +3,14 @@
     <!-- 背景图 -->
     <item
         android:id="@android:id/background"
-        android:drawable="@drawable/slot" />
+        android:drawable="@drawable/slot"/>
     <!-- 第二进度图 -->
     <item
         android:id="@android:id/secondaryProgress"
-        android:drawable="@drawable/slot" />
+        android:drawable="@drawable/slot"/>
     <!-- 进度度 -->
     <item
         android:id="@android:id/progress"
-        android:drawable="@drawable/fill" />
+        android:drawable="@drawable/fill"/>
 
 </layer-list>

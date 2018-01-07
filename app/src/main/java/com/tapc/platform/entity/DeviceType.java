@@ -5,6 +5,5 @@ package com.tapc.platform.entity;
  */
 
 public enum DeviceType {
-    TREADMILL,
-    BIKE,
+    TREADMILL, BIKE,
 }

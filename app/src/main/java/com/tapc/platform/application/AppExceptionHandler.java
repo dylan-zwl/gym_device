@@ -2,7 +2,7 @@ package com.tapc.platform.application;
 
 import android.util.Log;
 
-import com.tapc.platform.activity.MainActivity;
+import com.tapc.platform.entity.EventEntity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,7 +20,7 @@ public class AppExceptionHandler implements UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         Log.d("AppExceptionHandler", "app error exit");
-        EventBus.getDefault().post(new MainActivity.ReloadApp());
+        EventBus.getDefault().post(new EventEntity.ReloadApp());
         // defaultUEH.uncaughtException(thread, ex);
     }
 

@@ -12,7 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 
-import com.tapc.platform.entity.AppInfoEntity;
+import com.tapc.platform.model.app.AppInfoEntity;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -136,8 +136,7 @@ public class AppUtils {
         for (AppInfoEntity appInfoEntity : listAppInfo) {
             Method method = null;
             try {
-                method = Class.forName("android.app.ActivityManager").getMethod("forceStopPackage",
-                        String.class);
+                method = Class.forName("android.app.ActivityManager").getMethod("forceStopPackage", String.class);
                 method.invoke(manager, appInfoEntity.getPkgName());
             } catch (Exception e) {
                 Log.d(TAG, "app " + appInfoEntity.getPkgName() + " exit failed");

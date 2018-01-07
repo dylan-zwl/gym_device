@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.tapc.platform.R;
 import com.tapc.platform.entity.BluetoothConnectStatus;
+import com.tapc.platform.entity.EventEntity;
 import com.tapc.platform.jni.Driver;
 import com.tapc.platform.library.abstractset.Workout;
 import com.tapc.platform.library.data.TreadmillWorkout;
@@ -90,7 +91,7 @@ public class MenuBar extends BaseSystemView implements Observer {
         super.initView();
         EventBus.getDefault().register(this);
         showRunInformation(false);
-        setWifi();
+        setWifi(null);
         changeFanStatus();
         mWorkOuting = WorkOuting.getInstance();
         RxjavaUtils.interval(1, 1, TimeUnit.SECONDS, new Consumer() {
@@ -107,8 +108,8 @@ public class MenuBar extends BaseSystemView implements Observer {
      */
     private void updateTime() {
         ContentResolver c = mContext.getContentResolver();
-        String strTimeFormat = android.provider.Settings.System.getString(c,
-                android.provider.Settings.System.TIME_12_24);
+        String strTimeFormat = android.provider.Settings.System.getString(c, android.provider.Settings.System
+                .TIME_12_24);
         String sysTimeStr;
         long sysTime = System.currentTimeMillis();
         if (strTimeFormat != null) {
@@ -141,10 +142,10 @@ public class MenuBar extends BaseSystemView implements Observer {
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void wifiStatusChange(NetworkInfo networkInfo) {
-        setWifi();
+        setWifi(networkInfo);
     }
 
-    private void setWifi() {
+    private void setWifi(NetworkInfo networkInfo) {
         if (NetUtils.isConnected(mContext)) {
             mWifiStatus.setBackgroundResource(R.drawable.ic_wifi_connect);
             mWifiStatus.setVisibility(View.VISIBLE);
@@ -165,7 +166,12 @@ public class MenuBar extends BaseSystemView implements Observer {
 
     @OnClick(R.id.volume)
     public void voiceOnClick(View v) {
-        SoundCtlUtils.getInstance().openVolume(mContext);
+        SoundCtlUtils.getInstance().openVolume();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changeFanStatus(EventEntity.ChangeFanStatus fanStatus) {
+        changeFanStatus();
     }
 
     @OnClick(R.id.fan)
@@ -177,7 +183,7 @@ public class MenuBar extends BaseSystemView implements Observer {
             mFanLevel = 0;
             mFan.setBackgroundResource(R.drawable.ic_fan_off);
         }
-//        TapcApp.getInstance().getController().setFanLevel(mFanLevel);
+        //        TapcApp.getInstance().getController().setFanLevel(mFanLevel);
     }
 
     @OnClick(R.id.back)
@@ -187,7 +193,7 @@ public class MenuBar extends BaseSystemView implements Observer {
 
     @OnClick(R.id.home)
     void homeOnClick() {
-//        Driver.home();
+        //        Driver.home();
         IntentUtils.home(mContext);
     }
 

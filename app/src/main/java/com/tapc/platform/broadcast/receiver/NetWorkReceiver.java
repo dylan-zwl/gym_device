@@ -1,4 +1,4 @@
-package com.tapc.platform.receiver;
+package com.tapc.platform.broadcast.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -63,12 +63,10 @@ public class QrcodeUtils {
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
             // 剪切中间的二维码区域，减少padding区域
-            if (startX <= minPandingSize)
-                return bitmap;
+            if (startX <= minPandingSize) return bitmap;
             int x1 = startX - minPandingSize;
             int y1 = startY - minPandingSize;
-            if (x1 < 0 || y1 < 0)
-                return bitmap;
+            if (x1 < 0 || y1 < 0) return bitmap;
             int w1 = width - x1 * 2;
             int h1 = height - y1 * 2;
             Bitmap bitmapQR = Bitmap.createBitmap(bitmap, x1, y1, w1, h1);
@@ -127,8 +125,8 @@ public class QrcodeUtils {
      */
     public static void show(final String qrcodeStr, final ImageView imageView, final int minPandingSize,
                             ObservableTransformer composer) {
-        if (TextUtils.isEmpty(qrcodeStr) || imageView == null ||
-                imageView.getWidth() == 0 || imageView.getHeight() == 0) {
+        if (TextUtils.isEmpty(qrcodeStr) || imageView == null || imageView.getWidth() == 0 || imageView.getHeight()
+                == 0) {
             return;
         }
         RxjavaUtils.create(new ObservableOnSubscribe<Object>() {

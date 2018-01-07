@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/setting_linearlayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_scene_play"
-    android:orientation="horizontal">
+              android:id="@+id/setting_linearlayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_scene_play"
+              android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,33 +30,33 @@
                     android:id="@+id/app_settings"
                     style="@style/setting_left_item_style"
                     android:checked="true"
-                    android:text="@string/app_settings" />
+                    android:text="@string/app_settings"/>
 
                 <RadioButton
                     android:id="@+id/machine_settings"
                     style="@style/setting_left_item_style"
-                    android:text="@string/machine_settings" />
+                    android:text="@string/machine_settings"/>
 
                 <RadioButton
                     android:id="@+id/under_ctl_settings"
                     style="@style/setting_left_item_style"
                     android:text="@string/xiakong_settings"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <RadioButton
                     android:id="@+id/install_app"
                     style="@style/setting_left_item_style"
-                    android:text="@string/install_app" />
+                    android:text="@string/install_app"/>
 
                 <RadioButton
                     android:id="@+id/uninstall_app"
                     style="@style/setting_left_item_style"
-                    android:text="@string/uninstall_app" />
+                    android:text="@string/uninstall_app"/>
 
                 <RadioButton
                     android:id="@+id/systems_settings"
                     style="@style/setting_left_item_style"
-                    android:text="@string/system_settings" />
+                    android:text="@string/system_settings"/>
             </RadioGroup>
         </ScrollView>
     </LinearLayout>

@@ -105,7 +105,7 @@ public class CopyFileUtil {
                 FileLock lock = outChannel.lock(start, size, false);
 
                 inChannel.transferTo(start, size, outChannel);
-//                outChannel.transferFrom(inChannel, start, (end - start));
+                //                outChannel.transferFrom(inChannel, start, (end - start));
 
                 //释放锁
                 lock.release();

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="top"
-    android:background="@drawable/bg_main"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="top"
+              android:background="@drawable/bg_main"
+              android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,20 +13,20 @@
         android:gravity="center_horizontal"
         android:text="@string/language_title"
         android:textColor="#ffffff"
-        android:textSize="@dimen/goal_activity_title_size" />
+        android:textSize="@dimen/goal_activity_title_size"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="111dp"
         android:gravity="center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <RadioGroup
             android:id="@+id/language_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/chinese"
@@ -38,7 +38,7 @@
                 android:gravity="center"
                 android:text="中文"
                 android:textColor="#ffffff"
-                android:textSize="@dimen/language_sel_size" />
+                android:textSize="@dimen/language_sel_size"/>
 
             <RadioButton
                 android:id="@+id/english"
@@ -51,7 +51,7 @@
                 android:gravity="center"
                 android:text="English"
                 android:textColor="#ffffff"
-                android:textSize="@dimen/language_sel_size" />
+                android:textSize="@dimen/language_sel_size"/>
         </RadioGroup>
     </LinearLayout>
 

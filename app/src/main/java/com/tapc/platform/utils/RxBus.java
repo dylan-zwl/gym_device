@@ -70,15 +70,14 @@ public class RxBus {
     }
 
     public <T> void subscribe(Object subscriber, Class<T> type, Scheduler scheduler, Consumer<T> next) {
-        Disposable disposable = getObservable(type).subscribeOn(Schedulers.io()).observeOn(scheduler)
-                .subscribe(next);
+        Disposable disposable = getObservable(type).subscribeOn(Schedulers.io()).observeOn(scheduler).subscribe(next);
         addSubscription(subscriber, disposable);
     }
 
     public <T> void subscribe(Object subscriber, Class<T> type, Scheduler scheduler, Consumer<T> next,
                               Consumer<Throwable> error) {
-        Disposable disposable = getObservable(type).subscribeOn(Schedulers.io()).observeOn(scheduler)
-                .subscribe(next, error);
+        Disposable disposable = getObservable(type).subscribeOn(Schedulers.io()).observeOn(scheduler).subscribe(next,
+                error);
         addSubscription(subscriber, disposable);
     }
 

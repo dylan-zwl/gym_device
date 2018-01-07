@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadeScrollbars="true"
-    android:orientation="vertical"
-    android:scrollbarFadeDuration="0"
-    android:scrollbars="none">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="true"
+            android:orientation="vertical"
+            android:scrollbarFadeDuration="0"
+            android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/settings_margin"
-                android:layout_marginRight="@dimen/settings_margin" />
+                android:layout_marginRight="@dimen/settings_margin"/>
         </LinearLayout>
 
         <LinearLayout
@@ -78,7 +78,7 @@
                 android:layout_marginLeft="@dimen/settings_margin"
                 android:layout_weight="1"
                 android:text="@string/admin_update_os"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/update_mcu"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/settings_margin"
                 android:layout_weight="1"
-                android:text="@string/admin_update_mcu" />
+                android:text="@string/admin_update_mcu"/>
 
             <Button
                 android:id="@+id/update_app_u"
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/settings_margin"
                 android:layout_weight="1"
-                android:text="@string/admin_update_apku" />
+                android:text="@string/admin_update_apku"/>
 
             <Button
                 android:id="@+id/update_app_online"
@@ -103,7 +103,7 @@
                 android:layout_marginLeft="@dimen/settings_margin"
                 android:layout_weight="1"
                 android:text="@string/admin_update_apk_online"
-                android:visibility="visible" />
+                android:visibility="visible"/>
         </LinearLayout>
 
         <LinearLayout
@@ -126,14 +126,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/settings_margin"
                 android:layout_weight="1"
-                android:text="@string/start_slope_calibration" />
+                android:text="@string/start_slope_calibration"/>
 
             <ProgressBar
                 android:id="@+id/calibration_progress"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/settings_title_size"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/calibration_msg"
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/admin_third_app_install_manager"
-                android:textSize="@dimen/settings_title_size" />
+                android:textSize="@dimen/settings_title_size"/>
 
             <RadioGroup
                 android:id="@+id/app_install_group"
@@ -170,14 +170,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/admin_third_app_install_ban" />
+                    android:text="@string/admin_third_app_install_ban"/>
 
                 <RadioButton
                     android:id="@+id/app_install_allow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="60dp"
-                    android:text="@string/admin_third_app_install_allow" />
+                    android:text="@string/admin_third_app_install_allow"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/admin_detectperson"
-                android:textSize="@dimen/settings_title_size" />
+                android:textSize="@dimen/settings_title_size"/>
 
             <RadioGroup
                 android:id="@+id/detectperson_group"
@@ -208,14 +208,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/admin_third_app_install_ban" />
+                    android:text="@string/admin_third_app_install_ban"/>
 
                 <RadioButton
                     android:id="@+id/detectperson_allow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="60dp"
-                    android:text="@string/admin_third_app_install_allow" />
+                    android:text="@string/admin_third_app_install_allow"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -232,7 +232,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/admin_erp"
-                android:textSize="@dimen/settings_title_size" />
+                android:textSize="@dimen/settings_title_size"/>
 
             <RadioGroup
                 android:id="@+id/erp_group"
@@ -246,14 +246,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/admin_third_app_install_ban" />
+                    android:text="@string/admin_third_app_install_ban"/>
 
                 <RadioButton
                     android:id="@+id/erp_allow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="60dp"
-                    android:text="@string/admin_third_app_install_allow" />
+                    android:text="@string/admin_third_app_install_allow"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -270,7 +270,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/admin_test"
-                android:textSize="@dimen/settings_title_size" />
+                android:textSize="@dimen/settings_title_size"/>
 
             <RadioGroup
                 android:id="@+id/test_group"
@@ -284,14 +284,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/admin_close" />
+                    android:text="@string/admin_close"/>
 
                 <RadioButton
                     android:id="@+id/test_allow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="60dp"
-                    android:text="@string/admin_open" />
+                    android:text="@string/admin_open"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -318,7 +318,7 @@
                     android:id="@+id/enter_reset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/enter_reset" />
+                    android:text="@string/enter_reset"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

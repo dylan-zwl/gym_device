@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DeviceCtl">
+        <attr name="ctlIcon" format="reference"/>
+        <attr name="ctlTitle" format="string"/>
+        <attr name="ctlUnit" format="string"/>
+    </declare-styleable>
+
+</resources>

@@ -29,11 +29,11 @@ public class RxjavaUtils {
     public static Disposable create(ObservableOnSubscribe<Object> source, Consumer consumer, ObservableTransformer
             composer) {
         if (composer != null) {
-            return Observable.create(source).subscribeOn(Schedulers.io()).observeOn
-                    (AndroidSchedulers.mainThread()).compose(composer).subscribe(consumer);
+            return Observable.create(source).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .compose(composer).subscribe(consumer);
         } else {
-            return Observable.create(source).subscribeOn(Schedulers.io()).observeOn
-                    (AndroidSchedulers.mainThread()).subscribe(consumer);
+            return Observable.create(source).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(consumer);
         }
     }
 

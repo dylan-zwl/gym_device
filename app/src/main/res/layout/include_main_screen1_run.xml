@@ -27,7 +27,7 @@
             workout:titleName="@string/heart"
             workout:unitName="min"/>
 
-        <com.tapc.platform.ui.view.WorkoutCtrl
+        <com.tapc.platform.ui.view.DeviceCtl
             android:id="@+id/inclineCtrl"
             android:layout_width="@dimen/main_icon1_with"
             android:layout_height="@dimen/main_icon1_height"
@@ -81,7 +81,7 @@
                 android:textSize="@dimen/main_tx_size"/>
 
             <Button
-                android:id="@+id/restartButton"
+                android:id="@+id/resumeButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_pause"
@@ -114,7 +114,7 @@
             workout:titleName="@string/altitude"
             workout:unitName="km"/>
 
-        <com.tapc.platform.ui.view.WorkoutCtrl
+        <com.tapc.platform.ui.view.DeviceCtl
             android:id="@+id/speedCtrl"
             android:layout_width="@dimen/main_icon1_with"
             android:layout_height="@dimen/main_icon1_height"

@@ -1,4 +1,4 @@
-package com.tapc.platform.receiver;
+package com.tapc.platform.broadcast.receiver;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;

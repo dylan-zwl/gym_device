@@ -13,9 +13,7 @@ import com.tapc.platform.ui.base.BaseActivity;
 public class GoalActivity extends BaseActivity {
 
     public enum GoalModeType {
-        TIME,
-        DISTANCE,
-        CALORIE
+        TIME, DISTANCE, CALORIE
     }
 
     public static void launch(Context c, GoalModeType modeType) {

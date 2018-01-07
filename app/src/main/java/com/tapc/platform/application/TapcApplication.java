@@ -12,6 +12,7 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.jni.Driver;
+import com.tapc.platform.library.abstractset.ProgramSetting;
 import com.tapc.platform.library.common.AppSettings;
 import com.tapc.platform.library.common.BikeSystemSettings;
 import com.tapc.platform.library.common.CommonEnum;
@@ -35,17 +36,23 @@ public class TapcApplication extends Application {
     private MenuService mService;
     private KeyEvent mKeyEvent;
 
+    private ProgramSetting mProgramSetting;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
 
-//        Thread.setDefaultUncaughtExceptionHandler(new AppExceptionHandler());
+        //        Thread.setDefaultUncaughtExceptionHandler(new AppExceptionHandler());
 
-//        内存泄漏检测工具
+        //        内存泄漏检测工具
         if (Config.Debug.OPEN_REF_WATCHER) {
-//            mRefWatcher = LeakCanary.install(this);
+            //            mRefWatcher = LeakCanary.install(this);
         }
+
+        Logger.init("tapc").methodCount(1).hideThreadInfo().logLevel(LogLevel.FULL).methodOffset(0);
+
+        initControl(this);
 
         IntentUtils.stopService(this, MenuService.class);
         IntentUtils.bindService(this, MenuService.class, new ServiceConnection() {
@@ -63,10 +70,7 @@ public class TapcApplication extends Application {
             }
         }, Context.BIND_AUTO_CREATE);
 
-        initControl(this);
         initDeviceId();
-
-        Logger.init("tapc").methodCount(1).hideThreadInfo().logLevel(LogLevel.FULL).methodOffset(0);
     }
 
     private void initDeviceId() {
@@ -88,7 +92,7 @@ public class TapcApplication extends Application {
         }
         if (systemSettings != null) {
             systemSettings.Load(this, null);
-//            systemSettings.mPath = "/mnt/sdcard/premierprograms.db";
+            //            systemSettings.mPath = "/mnt/sdcard/premierprograms.db";
             AppSettings.setPlatform(CommonEnum.Platform.S700);
             AppSettings.setLoopbackMode(false);
             MachineController controller = MachineController.getInstance();
@@ -98,15 +102,15 @@ public class TapcApplication extends Application {
         }
     }
 
-//    public void addRefWatcher(Object watchedReference) {
-//        if (mRefWatcher != null) {
-//            mRefWatcher.watch(watchedReference);
-//        }
-//    }
-//
-//    public RefWatcher getRefWatcher() {
-//        return mRefWatcher;
-//    }
+    //    public void addRefWatcher(Object watchedReference) {
+    //        if (mRefWatcher != null) {
+    //            mRefWatcher.watch(watchedReference);
+    //        }
+    //    }
+    //
+    //    public RefWatcher getRefWatcher() {
+    //        return mRefWatcher;
+    //    }
 
     public static TapcApplication getInstance() {
         return mInstance;
@@ -117,23 +121,22 @@ public class TapcApplication extends Application {
     }
 
     //    public Driver getKeyEvent() {
-//        return mDriver;
-//    }
-//
-//    public Class<?> getHomeActivity() {
-//        return mHomeActivity;
-//    }
-//
-//    public void setHomeActivity(Class<?> homeActivity) {
-//        this.mHomeActivity = homeActivity;
-//    }
-//
-//    public ProgramSetting getProgramSetting() {
-//        return mProgramSetting;
-//    }
-//
-//    public void setProgramSetting(ProgramSetting programSetting) {
-//        this.mProgramSetting = programSetting;
-//    }
-//
+    //        return mDriver;
+    //    }
+    //
+    //    public Class<?> getHomeActivity() {
+    //        return mHomeActivity;
+    //    }
+    //
+    //    public void setHomeActivity(Class<?> homeActivity) {
+    //        this.mHomeActivity = homeActivity;
+    //    }
+    //
+    public ProgramSetting getProgramSetting() {
+        return mProgramSetting;
+    }
+
+    public void setProgramSetting(ProgramSetting programSetting) {
+        this.mProgramSetting = programSetting;
+    }
 }

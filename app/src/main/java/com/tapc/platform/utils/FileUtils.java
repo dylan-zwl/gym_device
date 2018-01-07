@@ -102,6 +102,24 @@ public class FileUtils {
         }
     }
 
+    public static void RecursionDeleteFile(File file, FilenameFilter filter) {
+        if (file.isFile()) {
+            file.delete();
+            return;
+        }
+        if (file.isDirectory()) {
+            File[] childFile = file.listFiles(filter);
+            if (childFile == null || childFile.length == 0) {
+                file.delete();
+                return;
+            }
+            for (File f : childFile) {
+                RecursionDeleteFile(f, filter);
+            }
+            file.delete();
+        }
+    }
+
     private static final int BUFF_SIZE = 1024 * 1024; // 1M Byte
 
     public static void upZipFile(String zipFileString, String outPathString) throws Exception {

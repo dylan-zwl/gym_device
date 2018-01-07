@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_appback"
-    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_appback"
+                android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:gravity="center"
             android:numColumns="5"
             android:scrollbarFadeDuration="0"
-            android:scrollbars="none" />
+            android:scrollbars="none"/>
     </RelativeLayout>
 
     <Button
@@ -32,6 +32,6 @@
         android:layout_centerHorizontal="true"
         android:text="@string/a_key_uninstall_app"
         android:textSize="@dimen/settings_title_size"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
 </RelativeLayout>

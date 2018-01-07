@@ -3,12 +3,15 @@ package com.tapc.platform.utils;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.view.SoundEffectConstants;
 
 /**
  * Created by Administrator on 2016/11/13.
  */
 public class SoundCtlUtils {
     private static SoundCtlUtils sSoundCtlUtils;
+    private AudioManager mAudioManager;
+    private int mSaveVolume;
 
     public static SoundCtlUtils getInstance() {
         if (sSoundCtlUtils == null) {
@@ -21,38 +24,63 @@ public class SoundCtlUtils {
         return sSoundCtlUtils;
     }
 
-    public int getMaxVolume(Context context) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    public void init(Context context) {
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
-    public int getVolume(Context context) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+    public AudioManager getAudioManager() {
+        return mAudioManager;
     }
 
-    public void openVolume(Context context) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_SAME, AudioManager
+    public int getMaxVolume() {
+        return mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    }
+
+    public int getVolume() {
+        return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+    }
+
+    public void openVolume() {
+        mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_SAME, AudioManager
                 .FLAG_SHOW_UI);
     }
 
-    public void setVolume(Context context, int volume) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_VIBRATE);
+    public void setVolume(int volume) {
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_VIBRATE);
     }
 
-
-    public void addVolume(Context context) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager
+    public void addVolume() {
+        mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager
                 .FLAG_SHOW_UI);
     }
 
-    public void subVolume(Context context) {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager
+    public void subVolume() {
+        mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager
                 .FLAG_SHOW_UI);
+    }
+
+    public boolean isEnble() {
+        if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void setSoundEnble(boolean enble) {
+        if (enble) {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mSaveVolume, AudioManager.FLAG_SHOW_UI);
+        } else {
+            mSaveVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_SHOW_UI);
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        }
+        openVolume();
+    }
+
+    public void clickSound(Context context) {
+        mAudioManager.playSoundEffect(SoundEffectConstants.CLICK);
     }
 
     private void releasePlayer(MediaPlayer players) {
