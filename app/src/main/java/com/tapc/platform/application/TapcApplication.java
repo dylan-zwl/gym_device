@@ -37,6 +37,7 @@ public class TapcApplication extends Application {
     private KeyEvent mKeyEvent;
 
     private ProgramSetting mProgramSetting;
+    private boolean isScreenOn = true;
 
     @Override
     public void onCreate() {
@@ -138,5 +139,13 @@ public class TapcApplication extends Application {
 
     public void setProgramSetting(ProgramSetting programSetting) {
         this.mProgramSetting = programSetting;
+    }
+
+    public boolean isScreenOn() {
+        return isScreenOn;
+    }
+
+    public void setScreenOn(boolean screenOn) {
+        isScreenOn = screenOn;
     }
 }

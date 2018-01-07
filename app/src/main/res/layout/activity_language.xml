@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/chinese"
+                android:id="@+id/language_cn"
                 android:layout_width="184dp"
                 android:layout_height="78dp"
                 android:background="@drawable/selector_language"
@@ -41,7 +41,7 @@
                 android:textSize="@dimen/language_sel_size"/>
 
             <RadioButton
-                android:id="@+id/english"
+                android:id="@+id/language_en"
                 android:layout_width="184dp"
                 android:layout_height="78dp"
                 android:layout_marginLeft="54dp"

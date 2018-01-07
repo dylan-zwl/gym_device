@@ -24,6 +24,7 @@ import com.tapc.platform.library.data.TreadmillWorkout;
 import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.ClickModel;
+import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.ui.activity.ApplicationActivity;
 import com.tapc.platform.ui.activity.GoalActivity;
@@ -32,6 +33,7 @@ import com.tapc.platform.ui.activity.LanguageAcivity;
 import com.tapc.platform.ui.activity.ScenePlayActivity;
 import com.tapc.platform.ui.activity.SettingActivity;
 import com.tapc.platform.ui.activity.SportResultActivity;
+import com.tapc.platform.ui.activity.WorkoutCtlSetActivity;
 import com.tapc.platform.ui.base.BaseActivity;
 import com.tapc.platform.ui.view.DeviceCtl;
 import com.tapc.platform.ui.view.WorkoutGoal;
@@ -94,6 +96,8 @@ public class MainActivity extends BaseActivity implements Observer {
     private WorkOuting mWorkOuting = WorkOuting.getInstance();
     private CountdownDialog mCountdownDialog;
     private WorkoutReceiver mWorkoutReceiver;
+    private boolean isAppToBackground;
+    private int mPage = 0;
 
     @Override
     protected int getContentView() {
@@ -110,6 +114,7 @@ public class MainActivity extends BaseActivity implements Observer {
         initDeviceCtl();
         initWorkOutReceive();
         initCountdownDialog();
+        initNoActionModel();
     }
 
     private void initDeviceCtl() {
@@ -124,6 +129,11 @@ public class MainActivity extends BaseActivity implements Observer {
             @Override
             public void onSubClick() {
                 mLeftDeviceCtl.setValue(mWorkOuting.onLeftKeypadSub());
+            }
+
+            @Override
+            public void onValueTextClick(float value) {
+                WorkoutCtlSetActivity.launch(mContext, WorkoutCtlSetActivity.SPEED, value);
             }
 
             @Override
@@ -144,6 +154,11 @@ public class MainActivity extends BaseActivity implements Observer {
             @Override
             public void onSubClick() {
                 mRightDeviceCtl.setValue(mWorkOuting.onRightKeypadSub());
+            }
+
+            @Override
+            public void onValueTextClick(float value) {
+                WorkoutCtlSetActivity.launch(mContext, WorkoutCtlSetActivity.SPEED, value);
             }
 
             @Override
@@ -498,6 +513,7 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void showMainPage(int page) {
+        mPage = page;
         switch (page) {
             case 1:
             default:
@@ -534,6 +550,28 @@ public class MainActivity extends BaseActivity implements Observer {
         ApplicationActivity.launch(context, ApplicationActivity.START_APP, packageName, className);
     }
 
+    private void initNoActionModel() {
+        NoActionModel noActionModel = NoActionModel.getInstance();
+        noActionModel.setListener(new NoActionModel.Listener() {
+            @Override
+            public boolean restriction() {
+                if (mTapcApp.getService().getCountdownDialog().isShown() || WorkOuting.getInstance().isRunning() ||
+                        !mTapcApp.isScreenOn()) {
+                    return false;
+                }
+                if (isAppToBackground && AppUtils.isApplicationBroughtToBackground(mContext)) {
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public void count(int total) {
+
+            }
+        });
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND, priority = 100)
     public void reload(EventEntity.ReloadApp reload) {
         IntentUtils.stopService(this, MenuService.class);
@@ -550,6 +588,21 @@ public class MainActivity extends BaseActivity implements Observer {
             showMainPage(1);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isAppToBackground = false;
+        if (mPage == 2) {
+            mTapcApp.getService().getMenuBar().showRunInformation(false);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isAppToBackground = true;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class ConfigModel {
     private static final String ERP = "erp";
     private static final String TEST = "test";
     private static final String RFID = "rfid";
-    private static final String LANGUAGE = "language";
+    private static final String LANGUAGE = "languageName";
     private static final String BACKLIGHT = "backlight";
     private static final String LOCAL_USER = "local_user";
     private static final String DEVICE_ID = "device_id";
@@ -71,11 +71,11 @@ public class ConfigModel {
     /**
      * @Description: 语言
      */
-    public static int getLanguage(Context context, int defaults) {
-        return PreferenceHelper.readInt(context, SETTING_CONFIG, LANGUAGE, defaults);
+    public static String getLanguage(Context context, String defaults) {
+        return PreferenceHelper.readString(context, SETTING_CONFIG, LANGUAGE, defaults);
     }
 
-    public static void setLanguage(Context context, int data) {
+    public static void setLanguage(Context context, String data) {
         PreferenceHelper.write(context, SETTING_CONFIG, LANGUAGE, data);
     }
 

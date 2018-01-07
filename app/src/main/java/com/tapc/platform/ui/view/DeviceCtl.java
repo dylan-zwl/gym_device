@@ -110,6 +110,13 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
         return true;
     }
 
+    @OnClick(R.id.show_value_text)
+    protected void valueClick(View v) {
+        if (mListener != null) {
+            mListener.onValueTextClick(mNowValue);
+        }
+    }
+
     public void cancelObserable() {
         if (mDisposable != null) {
             if (!mDisposable.isDisposed()) {
@@ -167,6 +174,8 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
         void onAddClick();
 
         void onSubClick();
+
+        void onValueTextClick(float value);
 
         void setDeviceValue(float value);
     }

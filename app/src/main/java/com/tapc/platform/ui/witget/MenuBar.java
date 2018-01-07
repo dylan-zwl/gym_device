@@ -126,6 +126,32 @@ public class MenuBar extends BaseSystemView implements Observer {
         mDateTime.setValue(sysDateStr);
     }
 
+    /**
+     * 功能描述 : 无人检测功能
+     */
+    private int noPersonRunningCount;
+    private static int NOPERSON_DELAYTIME_S = 120;
+
+    public void checkHasPersonRunning() {
+        if (!mWorkOuting.isRunning()) {
+            return;
+        }
+        TreadmillWorkout workout = (TreadmillWorkout) WorkOuting.getInstance().getWorkout();
+        if (workout != null) {
+            //            int paceRate = workout.getPaceFlag();
+            int paceRate = 0;
+            if (paceRate == 0 && !WorkOuting.getInstance().isPausing()) {
+                noPersonRunningCount++;
+                if (noPersonRunningCount >= NOPERSON_DELAYTIME_S) {
+                    noPersonRunningCount = 0;
+                    WorkOuting.getInstance().stop();
+                }
+            } else {
+                noPersonRunningCount = 0;
+            }
+        }
+    }
+
 
     /**
      * 功能描述 : 显示运动信息栏
