@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tapc.platform.R;
@@ -32,9 +33,9 @@ import static com.tapc.platform.library.controller.MachineStatusController.DEVIC
 
 public class ErrorDialog extends BaseSystemView {
     @BindView(R.id.error_safekey)
-    LinearLayout mSafeKeyLL;
+    RelativeLayout mSafeKeyRL;
     @BindView(R.id.error_code)
-    LinearLayout mErrorCodeLL;
+    RelativeLayout mErrorCodeRL;
 
     @BindView(R.id.error_code_tx)
     TextView mErrorCodeTx;
@@ -55,7 +56,7 @@ public class ErrorDialog extends BaseSystemView {
         IntentUtils.registerReceiver(mContext, mErrorReceiver, DEVICE_ERROR_STATUS);
         IntentUtils.registerReceiver(mContext, mSafeKeyReceiver, DEVICE_SAFE_KEY_STATUS);
         int safekey = MachineController.getInstance().getSafeKeyStatus();
-        setSafeKeyShow(safekey);
+//        setSafeKeyShow(safekey);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class ErrorDialog extends BaseSystemView {
     @OnClick(R.id.noShowError_r)
     void rightOnClick() {
         if (isHideError) {
-            mErrorCodeLL.setVisibility(GONE);
+            mErrorCodeRL.setVisibility(GONE);
             isShowError = false;
             if (mErrorReceiver != null) {
                 IntentUtils.unregisterReceiver(mContext, mErrorReceiver);
@@ -103,13 +104,13 @@ public class ErrorDialog extends BaseSystemView {
             }
             if (status == 0) {
                 mErrorCodeTx.setText("");
-                mErrorCodeLL.setVisibility(GONE);
+                mErrorCodeRL.setVisibility(GONE);
                 isShowError = false;
             } else {
                 String errorStr = Integer.toHexString(status);
                 //                String text = String.format("2s%", errorStr);
                 mErrorCodeTx.setText(errorStr);
-                mErrorCodeLL.setVisibility(VISIBLE);
+                mErrorCodeRL.setVisibility(VISIBLE);
                 isShowError = true;
             }
             resetDialogStatus();
@@ -128,10 +129,10 @@ public class ErrorDialog extends BaseSystemView {
 
     private void setSafeKeyShow(int status) {
         if (status == 0) {
-            mSafeKeyLL.setVisibility(GONE);
+            mSafeKeyRL.setVisibility(GONE);
             isShowSafeKey = false;
         } else {
-            mSafeKeyLL.setVisibility(VISIBLE);
+            mSafeKeyRL.setVisibility(VISIBLE);
             isShowSafeKey = true;
         }
         resetDialogStatus();

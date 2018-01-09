@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tapc.platform.R;
 import com.tapc.platform.application.TapcApplication;
@@ -25,12 +26,15 @@ import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.ClickModel;
 import com.tapc.platform.model.common.NoActionModel;
+import com.tapc.platform.model.vaplayer.VaRecordPosition;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.ui.activity.ApplicationActivity;
 import com.tapc.platform.ui.activity.GoalActivity;
 import com.tapc.platform.ui.activity.HelpActivity;
 import com.tapc.platform.ui.activity.LanguageAcivity;
+import com.tapc.platform.ui.activity.ProgramAcitvity;
 import com.tapc.platform.ui.activity.ScenePlayActivity;
+import com.tapc.platform.ui.activity.SceneRunActivity;
 import com.tapc.platform.ui.activity.SettingActivity;
 import com.tapc.platform.ui.activity.SportResultActivity;
 import com.tapc.platform.ui.activity.WorkoutCtlSetActivity;
@@ -54,6 +58,8 @@ import java.util.Observer;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.tapc.platform.entity.DeviceWorkout.COUNTDDOWN;
+
 /**
  * Created by Administrator on 2018/1/5.
  */
@@ -68,9 +74,9 @@ public class MainActivity extends BaseActivity implements Observer {
     @BindView(R.id.main_running_ll)
     LinearLayout mRunningll;
     @BindView(R.id.inclineCtrl)
-    DeviceCtl mRightDeviceCtl;
-    @BindView(R.id.speedCtrl)
     DeviceCtl mLeftDeviceCtl;
+    @BindView(R.id.speedCtrl)
+    DeviceCtl mRightDeviceCtl;
     @BindView(R.id.workout_goal)
     WorkoutGoal mWorkoutGoal;
     @BindView(R.id.totalTime)
@@ -94,8 +100,6 @@ public class MainActivity extends BaseActivity implements Observer {
 
     private ClickModel mClickModel;
     private WorkOuting mWorkOuting = WorkOuting.getInstance();
-    private CountdownDialog mCountdownDialog;
-    private WorkoutReceiver mWorkoutReceiver;
     private boolean isAppToBackground;
     private int mPage = 0;
 
@@ -108,18 +112,17 @@ public class MainActivity extends BaseActivity implements Observer {
     protected void initView() {
         super.initView();
         mWorkOuting.subscribeObserverNotification(this);
-
         EventBus.getDefault().register(this);
+
         initEnterSetting();
         initDeviceCtl();
         initWorkOutReceive();
-        initCountdownDialog();
         initNoActionModel();
     }
 
     private void initDeviceCtl() {
         mLeftDeviceCtl.setConfig(TreadmillSystemSettings.MIN_INCLINE, TreadmillSystemSettings.MAX_INCLINE,
-                TreadmillSystemSettings.STEP_INCLINE, 0.0f);
+                TreadmillSystemSettings.STEP_INCLINE, 0.0f, 500);
         mLeftDeviceCtl.setOnClickListener(new DeviceCtl.Listener() {
             @Override
             public void onAddClick() {
@@ -133,7 +136,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
             @Override
             public void onValueTextClick(float value) {
-                WorkoutCtlSetActivity.launch(mContext, WorkoutCtlSetActivity.SPEED, value);
+                WorkoutCtlSetActivity.launch(mContext, WorkoutCtlSetActivity.INCLINE, value);
             }
 
             @Override
@@ -144,7 +147,7 @@ public class MainActivity extends BaseActivity implements Observer {
         });
 
         mRightDeviceCtl.setConfig(TreadmillSystemSettings.MIN_SPEED, TreadmillSystemSettings.MAX_SPEED,
-                TreadmillSystemSettings.STEP_SPEED, 0.0f);
+                TreadmillSystemSettings.STEP_SPEED, 0.0f, 100);
         mRightDeviceCtl.setOnClickListener(new DeviceCtl.Listener() {
             @Override
             public void onAddClick() {
@@ -218,10 +221,10 @@ public class MainActivity extends BaseActivity implements Observer {
                     updateWorkout(workout);
                     break;
                 case UI_LEFT:
-                    mRightDeviceCtl.setValue(workout.getIncline());
+                    mLeftDeviceCtl.setValue(workout.getIncline());
                     break;
                 case UI_RIGHT:
-                    mLeftDeviceCtl.setValue(workout.getSpeed());
+                    mRightDeviceCtl.setValue(workout.getSpeed());
                     break;
                 case UI_START:
                     startRun();
@@ -259,7 +262,7 @@ public class MainActivity extends BaseActivity implements Observer {
         double altitude = workout.getTotalAltitude();
         mWorkoutTextPace.setValue(String.format("%.2f", altitude));
 
-        float cur = workout.getGoal();
+        float goal = workout.getGoal();
         switch (workout.getWorkoutGoal()) {
             case TIME:
                 if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.WARMUP) {
@@ -271,29 +274,29 @@ public class MainActivity extends BaseActivity implements Observer {
                 } else {
                     mWorkoutGoal.setTitleName(getString(R.string.goal_sports), "min");
                 }
-                int goaltime = (int) workout.getTime();
-                mGoalRun.setText(String.format("%d", goaltime / 60));
-                if (goaltime != 0) {
-                    mWorkoutGoal.SetRange(0, goaltime);
-                    mWorkoutGoal.setPos(cur);
+                int timeProgress = workout.getTime();
+                mGoalRun.setText(String.format("%d", (int) (goal / 60)));
+                if (timeProgress != 0) {
+                    mWorkoutGoal.SetRange(0, (int) goal);
+                    mWorkoutGoal.setPos(timeProgress);
                 }
                 break;
             case DISTANCE:
                 mWorkoutGoal.setTitleName(getString(R.string.goal_sports), "km");
-                float goaldistance = workout.getGoal();
-                mGoalRun.setText(String.format("%.0f", goaldistance));
-                if (distance != 0) {
-                    mWorkoutGoal.SetRange(0, goaldistance * 100);
-                    mWorkoutGoal.setPos((float) (cur * 100));
+                float distanceProgress = workout.getDistance();
+                mGoalRun.setText(String.format("%.0f", goal));
+                if (distanceProgress != 0) {
+                    mWorkoutGoal.SetRange(0, (int) (goal * 100));
+                    mWorkoutGoal.setPos(distanceProgress * 100);
                 }
                 break;
             case CALORIE:
                 mWorkoutGoal.setTitleName(getString(R.string.goal_sports), "kcal");
-                float goalcalorie = workout.getGoal();
-                mGoalRun.setText(String.format("%.0f", goalcalorie));
+                float calorieProgress = workout.getCalorie();
+                mGoalRun.setText(String.format("%.0f", goal));
                 if (calorie != 0) {
-                    mWorkoutGoal.SetRange(0, goalcalorie * 100);
-                    mWorkoutGoal.setPos(cur * 100);
+                    mWorkoutGoal.SetRange(0, (int) (goal * 100));
+                    mWorkoutGoal.setPos(calorieProgress);
                 }
                 break;
         }
@@ -328,7 +331,7 @@ public class MainActivity extends BaseActivity implements Observer {
         v.setClickable(false);
         switch (v.getId()) {
             case R.id.startButton:
-                WorkoutBroadcase.send(mContext, DeviceWorkout.COUNTDDOWN);
+                WorkoutBroadcase.send(mContext, COUNTDDOWN);
                 break;
             case R.id.pauseButton:
                 WorkoutBroadcase.send(mContext, DeviceWorkout.PAUSE);
@@ -365,37 +368,25 @@ public class MainActivity extends BaseActivity implements Observer {
         IntentUtils.registerReceiver(this, mWorkoutReceiver, DeviceWorkout.ACTION);
     }
 
-    private void initCountdownDialog() {
-        mCountdownDialog = mTapcApp.getService().getCountdownDialog();
-        mCountdownDialog.setFinishedListener(new CountdownDialog.FinishedListener() {
-            @Override
-            public void onFinished() {
-                if (mWorkOuting.isRunning()) {
-                    WorkoutBroadcase.send(mContext, DeviceWorkout.RESUME);
-                } else {
-                    WorkoutBroadcase.send(mContext, DeviceWorkout.START);
-                }
-            }
-        });
-    }
-
-    public class WorkoutReceiver extends BroadcastReceiver {
+    private BroadcastReceiver mWorkoutReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(DeviceWorkout.ACTION)) {
                 int msgWhat = intent.getIntExtra(DeviceWorkout.MSG_WHAT, 0);
                 switch (msgWhat) {
-                    case DeviceWorkout.COUNTDDOWN:
+                    case COUNTDDOWN:
                         if (!mWorkOuting.isRunning()) {
-                            if (!mCountdownDialog.isShown()) {
+                            CountdownDialog countdownDialog = mTapcApp.getService().getCountdownDialog();
+                            if (!countdownDialog.isShown()) {
                                 startCountdown();
-                                mCountdownDialog.show();
+                                countdownDialog.show();
                             }
                         }
                         break;
                     case DeviceWorkout.START:
                         startWorkOuting();
+                        startRun();
                         break;
                     case DeviceWorkout.STOP:
                         WorkOuting.getInstance().stop();
@@ -411,7 +402,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 }
             }
         }
-    }
+    };
 
 
     @OnClick({R.id.internetButton, R.id.weatherButton, R.id.gameButton, R.id.bluetoothButton, R.id.datetimeButton, R
@@ -461,31 +452,30 @@ public class MainActivity extends BaseActivity implements Observer {
                 IntentUtils.startActivity(this, LanguageAcivity.class);
                 break;
             case R.id.exerciseButton:
-                //                if (isDevieRun()) {
-                //                    Toast.makeText(this, R.string.cannot_operate, Toast.LENGTH_SHORT).show();
-                //                } else {
-                //                    IntentUtils.startActivity(this, ProgramAcitvity.class);
-                //                }
+                if (mWorkOuting.isRunning()) {
+                    Toast.makeText(this, R.string.cannot_operate, Toast.LENGTH_SHORT).show();
+                } else {
+                    IntentUtils.startActivity(this, ProgramAcitvity.class);
+                }
                 break;
             case R.id.reportButton:
-                //                if (isDevieRun()) {
-                //                    Toast.makeText(this, R.string.cannot_operate, Toast.LENGTH_SHORT).show();
-                //                } else {
-                //                    SportResultActivity.launch(this, "click_show");
-                //                }
+                if (mWorkOuting.isRunning()) {
+                    Toast.makeText(this, R.string.cannot_operate, Toast.LENGTH_SHORT).show();
+                } else {
+                    SportResultActivity.launch(this, "click_show");
+                }
                 break;
             case R.id.vaButton:
-                //                if (isDevieRun() && TapcApp.getInstance().getVaRecordPosition().isNeedToResume
-                // ()) {
-                //                    IntentUtils.startActivity(this, ScenePlayActivity.class);
-                //                } else {
-                //                    IntentUtils.startActivity(this, SceneRunActivity.class);
-                //                }
+                VaRecordPosition vaRecordPosition = ScenePlayActivity.getVaRecordPosition();
+                if (mWorkOuting.isRunning() && vaRecordPosition != null && vaRecordPosition.isNeedToResume()) {
+                    IntentUtils.startActivity(this, ScenePlayActivity.class);
+                } else {
+                    IntentUtils.startActivity(this, SceneRunActivity.class);
+                }
                 break;
             case R.id.helpButton:
                 IntentUtils.startActivity(this, HelpActivity.class);
                 break;
-
 
             case R.id.goalDistanceButton:
                 GoalActivity.launch(this, GoalActivity.GoalModeType.DISTANCE);
@@ -551,8 +541,7 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void initNoActionModel() {
-        NoActionModel noActionModel = NoActionModel.getInstance();
-        noActionModel.setListener(new NoActionModel.Listener() {
+        NoActionModel.getInstance().setListener(new NoActionModel.Listener() {
             @Override
             public boolean restriction() {
                 if (mTapcApp.getService().getCountdownDialog().isShown() || WorkOuting.getInstance().isRunning() ||

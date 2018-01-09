@@ -20,12 +20,12 @@ import butterknife.OnClick;
  * Created by dylan on 2018/1/7.
  */
 
-class SetProgramTimeAcitvity extends BaseActivity {
+public class SetProgramTimeAcitvity extends BaseActivity {
     @BindView(R.id.program_time_seekbar)
-    private SeekBar mSeekBar;
+    SeekBar mSeekBar;
 
     @BindView(R.id.program_time_title)
-    private TextView mProgramTimeText;
+    TextView mProgramTimeText;
 
     private int mProgramTimeMax = 99;
     private int mProgramTimeMin = 5;

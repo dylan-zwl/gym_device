@@ -3,9 +3,9 @@ package com.tapc.platform.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.IPackageDataObserver;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.RemoteException;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +25,7 @@ import java.io.FilenameFilter;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -35,7 +36,7 @@ import butterknife.OnClick;
  */
 public class ApplicationActivity extends BaseActivity {
     @BindView(R.id.show_app_grid)
-    RecyclerView show_app_grid;
+    RecyclerView mShowAppGrid;
 
     public final static int NO_TYPE = 0;
     public final static int START_APP = 255;
@@ -61,17 +62,12 @@ public class ApplicationActivity extends BaseActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_app;
+        return 0;
     }
 
     @Override
     protected void initView() {
         super.initView();
-    }
-
-    @Override
-    protected void onCreate(Bundle arg0) {
-        super.onCreate(arg0);
         mlistAppInfo = AppModel.getAllAppInfo(this, false);
         //        if (mlistAppInfo == null) {
         //            mlistAppInfo = new ArrayList<AppInfoEntity>();
@@ -81,6 +77,7 @@ public class ApplicationActivity extends BaseActivity {
         switch (mAppType) {
             case NO_TYPE:
                 setContentView(R.layout.activity_app);
+                ButterKnife.bind(this);
                 init();
                 break;
             case START_APP:
@@ -108,8 +105,8 @@ public class ApplicationActivity extends BaseActivity {
 
     private void getThirdApplication() {
         mAdapter = new AppGridViewAdapter(this, mlistAppInfo);
-        show_app_grid.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        mShowAppGrid.setAdapter(mAdapter);
+        mShowAppGrid.setLayoutManager(new GridLayoutManager(mContext, 5));
         mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener<AppInfoEntity>() {
             @Override
             public void onItemClick(View view, AppInfoEntity appInfoEntity) {
@@ -118,6 +115,7 @@ public class ApplicationActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        mAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.app_exit)
@@ -147,11 +145,11 @@ public class ApplicationActivity extends BaseActivity {
                 }
                 FileUtils.RecursionDeleteFile(new File(Environment.getExternalStorageDirectory().getPath()), new
                         FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return name.toLowerCase().equals("va");
-                    }
-                });
+                            @Override
+                            public boolean accept(File dir, String name) {
+                                return name.toLowerCase().equals("va");
+                            }
+                        });
                 Toast.makeText(mContext, R.string.app_clear_completed, Toast.LENGTH_LONG).show();
             }
         }.run();

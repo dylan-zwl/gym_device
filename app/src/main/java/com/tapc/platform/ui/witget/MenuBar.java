@@ -16,10 +16,11 @@ import com.tapc.platform.R;
 import com.tapc.platform.entity.BluetoothConnectStatus;
 import com.tapc.platform.entity.EventEntity;
 import com.tapc.platform.jni.Driver;
-import com.tapc.platform.library.abstractset.Workout;
+import com.tapc.platform.library.common.SystemSettings;
 import com.tapc.platform.library.data.TreadmillWorkout;
 import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.library.workouting.WorkOuting;
+import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.ui.base.BaseSystemView;
 import com.tapc.platform.ui.view.WorkoutOSD;
 import com.tapc.platform.utils.CommonUtils;
@@ -41,6 +42,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
+
+import static com.tapc.platform.R.id.calorie;
 
 public class MenuBar extends BaseSystemView implements Observer {
     @BindView(R.id.fan)
@@ -98,6 +101,8 @@ public class MenuBar extends BaseSystemView implements Observer {
             @Override
             public void accept(@NonNull Object o) throws Exception {
                 updateTime();
+                NoActionModel.getInstance().increaseCount();
+                checkHasPersonRunning();
             }
         }, null);
         mWorkOuting.subscribeObserverNotification(this);
@@ -143,13 +148,13 @@ public class MenuBar extends BaseSystemView implements Observer {
             if (paceRate == 0 && !WorkOuting.getInstance().isPausing()) {
                 noPersonRunningCount++;
                 if (noPersonRunningCount >= NOPERSON_DELAYTIME_S) {
-                    noPersonRunningCount = 0;
                     WorkOuting.getInstance().stop();
+                } else {
+                    return;
                 }
-            } else {
-                noPersonRunningCount = 0;
             }
         }
+        noPersonRunningCount = 0;
     }
 
 
@@ -223,8 +228,56 @@ public class MenuBar extends BaseSystemView implements Observer {
         IntentUtils.home(mContext);
     }
 
-    public void updateWorkout(Workout workout) {
+    public void updateWorkout(TreadmillWorkout workout) {
+        // incline
+        double incline = workout.getIncline();
+        mIncline.setValue(String.format("%.1f", incline));
+        // speed
+        double speed = workout.getSpeed();
+        mSpeed.setValue(String.format("%.1f", speed));
+        // time
+        long time = workout.getTotalTime();
+        mTime.setValue(String.format("%02d:%02d", time / 60, time % 60));
+        // heart
+        int heart = (int) workout.getHeart();
+        mHeart.setValue(String.valueOf(heart));
 
+        float goal = workout.getGoal();
+        switch (workout.getWorkoutGoal()) {
+            case TIME:
+                if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.WARMUP) {
+                    // mGoalText.setTitleName(getString(R.string.warmUp_time), "min");
+                } else if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.COOLDOWN) {
+                    if (SystemSettings.COOLDOWN_TIME > 0) {
+                        mGoalText.setText(R.string.relax_time);
+                    }
+                } else {
+                    mGoalText.setText(R.string.goal_sports);
+                }
+                int timeProgress = workout.getTime();
+                mGoalText.setText(String.format("%d", (int) (goal / 60)));
+                if (timeProgress != 0) {
+                    mTarget.setMax((int) goal);
+                    mTarget.setProgress(timeProgress);
+                }
+                break;
+            case DISTANCE:
+                mGoalText.setText(R.string.goal_sports);
+                float distanceProgress = workout.getDistance();
+                if (distanceProgress != 0) {
+                    mTarget.setMax((int) (goal * 100));
+                    mTarget.setProgress((int) (distanceProgress * 100));
+                }
+                break;
+            case CALORIE:
+                mGoalText.setText(R.string.goal_sports);
+                float calorieProgress = workout.getCalorie();
+                if (calorie != 0) {
+                    mTarget.setMax((int) (goal * 100));
+                    mTarget.setProgress((int) calorieProgress);
+                }
+                break;
+        }
     }
 
     @Override
@@ -237,6 +290,13 @@ public class MenuBar extends BaseSystemView implements Observer {
             }
             switch (workoutUpdate) {
                 case UI_UPDATE:
+                    updateWorkout(workout);
+                    break;
+                case UI_LEFT:
+                    mIncline.setValue(String.format("%.1f", workout.getIncline()));
+                    break;
+                case UI_RIGHT:
+                    mSpeed.setValue(String.format("%.1f", workout.getSpeed()));
                     break;
             }
         }

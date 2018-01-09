@@ -61,7 +61,7 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
     private static final int SUB_TOUCH = 1;
     private VaPlayer mPlayer;
     private PlayEntity mPlayEntity;
-    private VaRecordPosition mVaRecordPosition;
+    private static VaRecordPosition sVaRecordPosition;
 
     private boolean isFullScreen = false;
     private boolean isLongTouch = true;
@@ -137,7 +137,7 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
                 mPlayer = new VaPlayer(mSurfaceView.getHolder());
                 mPlayer.init();
                 mPlayer.setBackMusicVisibility(false);
-                mPlayer.setPlayPosition(mVaRecordPosition);
+                mPlayer.setPlayPosition(sVaRecordPosition);
                 mPlayer.setPlayerListener(new VaPlayer.PlayerListener() {
                     @Override
                     public void setIncline(int videoIncline) {
@@ -285,6 +285,10 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
         }
     }
 
+    public static VaRecordPosition getVaRecordPosition() {
+        return sVaRecordPosition;
+    }
+
     @Override
     public boolean onTouch(View arg0, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -303,7 +307,7 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
     protected void onDestroy() {
         super.onDestroy();
         if (mPlayer != null) {
-            mVaRecordPosition = mPlayer.getPlayPosition();
+            sVaRecordPosition = mPlayer.getPlayPosition();
             mPlayer.stop();
             mPlayer = null;
         }

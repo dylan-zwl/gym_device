@@ -49,7 +49,12 @@
         <activity android:name=".ui.activity.HelpActivity"/>
         <activity android:name=".ui.activity.LanguageAcivity"/>
         <activity android:name=".ui.activity.SettingActivity"/>
-
+        <activity android:name=".ui.activity.ProgramAcitvity"/>
+        <activity android:name=".ui.activity.SetProgramTimeAcitvity"/>
+        <activity android:name=".ui.activity.SceneRunActivity"/>
+        <activity android:name=".ui.activity.ScenePlayActivity"/>
+        <activity android:name=".ui.activity.SportResultActivity"/>
+        <activity android:name=".ui.activity.WorkoutCtlSetActivity"/>
         <!-- service -->
         <service
             android:name=".service.MenuService"

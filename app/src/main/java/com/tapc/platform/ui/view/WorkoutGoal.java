@@ -31,8 +31,8 @@ public class WorkoutGoal extends BaseView {
         return R.layout.view_workout_goal;
     }
 
-    public void SetRange(float min, float max) {
-        mGoalProgress.setMax((int) max);
+    public void SetRange(int min, int max) {
+        mGoalProgress.setMax(max);
     }
 
     public float getPos() {

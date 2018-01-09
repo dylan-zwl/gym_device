@@ -131,8 +131,10 @@ public class IntentUtils {
 
     public static void registerReceiver(Context context, BroadcastReceiver receiver, String... actionList) {
         IntentFilter filter = new IntentFilter();
-        for (String action : actionList) {
-            filter.addAction(action);
+        if (actionList != null) {
+            for (String action : actionList) {
+                filter.addAction(action);
+            }
         }
         context.registerReceiver(receiver, filter);
     }

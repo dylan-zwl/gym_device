@@ -22,8 +22,11 @@ public abstract class BaseActivity extends RxActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentView());
-        ButterKnife.bind(this);
+        int rid = getContentView();
+        if (rid != 0) {
+            setContentView(rid);
+            ButterKnife.bind(this);
+        }
         mTapcApp = (TapcApplication) getApplication();
         mContext = this;
         initView();

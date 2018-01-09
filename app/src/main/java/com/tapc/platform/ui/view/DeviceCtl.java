@@ -44,6 +44,7 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
     private float mStepValue;
     private float mMaxValue;
     private float mMinValue;
+    private int mDelayTime = 100;
     private float mDefValue;
 
     private enum ValueChange {
@@ -131,7 +132,7 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
 
     void startObserable(final ValueChange valueChange) {
         cancelObserable();
-        mDisposable = RxjavaUtils.interval(150, 150, TimeUnit.MILLISECONDS, new Consumer<Long>() {
+        mDisposable = RxjavaUtils.interval(mDelayTime, mDelayTime, TimeUnit.MILLISECONDS, new Consumer<Long>() {
             @Override
             public void accept(@NonNull Long aLong) throws Exception {
                 switch (valueChange) {
@@ -180,11 +181,12 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
         void setDeviceValue(float value);
     }
 
-    public void setConfig(float minValue, float maxValue, float stepValue, float defValue) {
+    public void setConfig(float minValue, float maxValue, float stepValue, float defValue, int delayTimeMs) {
         this.mMinValue = minValue;
         this.mMaxValue = maxValue;
         this.mStepValue = stepValue;
         this.mDefValue = defValue;
+        this.mDelayTime = delayTimeMs;
         setValue(defValue);
     }
 

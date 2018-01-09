@@ -18,7 +18,7 @@ import butterknife.BindView;
 
 public class HelpActivity extends BaseActivity {
     @BindView(R.id.help_txt)
-    private TextView helpText;
+     TextView helpText;
 
     private LanguageModel.Language mLanguage;
 

@@ -25,6 +25,7 @@ import com.tapc.platform.service.LocalBinder;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.NetUtils;
+import com.tapc.platform.utils.SoundCtlUtils;
 
 /**
  * Created by Administrator on 2017/8/21.
@@ -72,6 +73,8 @@ public class TapcApplication extends Application {
         }, Context.BIND_AUTO_CREATE);
 
         initDeviceId();
+
+        SoundCtlUtils.getInstance().init(this);
     }
 
     private void initDeviceId() {
@@ -93,8 +96,8 @@ public class TapcApplication extends Application {
         }
         if (systemSettings != null) {
             systemSettings.Load(this, null);
-            //            systemSettings.mPath = "/mnt/sdcard/premierprograms.db";
-            AppSettings.setPlatform(CommonEnum.Platform.S700);
+            systemSettings.mPath = "/mnt/sdcard/premierprograms.db";
+            AppSettings.setPlatform(CommonEnum.Platform.RK3188);
             AppSettings.setLoopbackMode(false);
             MachineController controller = MachineController.getInstance();
             controller.initController(this);

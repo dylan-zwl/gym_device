@@ -61,16 +61,34 @@ public class NetUtils {
      * @param :
      */
     public static String getLocalMacAddress(Context context) {
-        String macAddress = "";
-        WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = wifi.getConnectionInfo();
         try {
-            macAddress = info.getMacAddress().replace(":", "");
+            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo infor = wifi.getConnectionInfo();
+            if (infor != null) {
+                String localMacAddress = infor.getMacAddress();
+                if (localMacAddress != null && localMacAddress.length() > 0) {
+                    return localMacAddress.replace(":", "");
+                }
+            }
         } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (macAddress == null) {
-            macAddress = "";
+        return "";
+    }
+
+    /**
+     * 功能描述 : 获取mac地址，wifi没有打开时会强制打开获取mac地址
+     */
+    public static String getDeviceId(Context context) {
+        String deviceId = "";
+        WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if (mWifiManager.isWifiEnabled()) {
+            deviceId = getLocalMacAddress(context);
+        } else {
+            mWifiManager.setWifiEnabled(true);
+            deviceId = getLocalMacAddress(context);
+            mWifiManager.setWifiEnabled(false);
         }
-        return macAddress;
+        return deviceId;
     }
 }

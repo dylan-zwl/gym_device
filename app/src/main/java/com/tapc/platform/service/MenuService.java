@@ -74,7 +74,7 @@ public class MenuService extends Service {
         mMenuBar.show();
 
         mNumberDialog = new NumberDialog(this);
-        mCountdownDialog = new CountdownDialog(this);
+        initCountdownDialog();
         mErrorDialog = new ErrorDialog(this);
 
         initKeyEvent();
@@ -92,6 +92,19 @@ public class MenuService extends Service {
         return mErrorDialog;
     }
 
+    private void initCountdownDialog() {
+        mCountdownDialog = new CountdownDialog(this);
+        mCountdownDialog.setFinishedListener(new CountdownDialog.FinishedListener() {
+            @Override
+            public void onFinished() {
+                if (mWorkOuting.isRunning()) {
+                    WorkoutBroadcase.send(mContext, DeviceWorkout.RESUME);
+                } else {
+                    WorkoutBroadcase.send(mContext, DeviceWorkout.START);
+                }
+            }
+        });
+    }
 
     private static final int NULL_NUM = -1;
     private int mPressnumber = NULL_NUM;
@@ -117,7 +130,7 @@ public class MenuService extends Service {
                 switch (keycode) {
                     case KeyCode.START:
                         if (!mWorkOuting.isRunning()) {
-                            WorkoutBroadcase.send(mContext, DeviceWorkout.START);
+                            WorkoutBroadcase.send(mContext, DeviceWorkout.COUNTDDOWN);
                             clickSound();
                         } else {
                             clickWarningSound();
@@ -141,7 +154,7 @@ public class MenuService extends Service {
                         break;
                     case KeyCode.START_PAUSE:
                         if (!mWorkOuting.isRunning()) {
-                            WorkoutBroadcase.send(mContext, DeviceWorkout.START);
+                            WorkoutBroadcase.send(mContext, DeviceWorkout.COUNTDDOWN);
                         } else {
                             if (mWorkOuting.isPausing()) {
                                 WorkoutBroadcase.send(mContext, DeviceWorkout.RESUME);
@@ -153,7 +166,7 @@ public class MenuService extends Service {
                         break;
                     case KeyCode.START_STOP:
                         if (!mWorkOuting.isRunning()) {
-                            WorkoutBroadcase.send(mContext, DeviceWorkout.START);
+                            WorkoutBroadcase.send(mContext, DeviceWorkout.COUNTDDOWN);
                         } else {
                             WorkoutBroadcase.send(mContext, DeviceWorkout.STOP);
                         }

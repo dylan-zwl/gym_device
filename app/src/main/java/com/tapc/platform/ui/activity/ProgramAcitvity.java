@@ -17,12 +17,10 @@ import com.tapc.platform.utils.IntentUtils;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ProgramAcitvity extends BaseActivity {
     @BindView(R.id.program_viewpage)
-    private ViewPager mProgramViewpage;
+    ViewPager mProgramViewpage;
 
     private ArrayList<View> mListViews;
     private int[] mListItemRid = {R.id.program1, R.id.program2, R.id.program3, R.id.program4, R.id.program5, R.id
@@ -41,8 +39,12 @@ public class ProgramAcitvity extends BaseActivity {
         mListViews.add(mInflater.inflate(R.layout.activity_program1, null));
         mListViews.add(mInflater.inflate(R.layout.activity_program2, null));
 
-        ButterKnife.bind(this, mListViews.get(0));
-        ButterKnife.bind(this, mListViews.get(1));
+        for (int i = 0; i < mListItemRid.length; i++) {
+            mListViews.get(i / 6).findViewById(mListItemRid[i]).setOnClickListener(mProgramListener);
+        }
+        mListViews.get(0).findViewById(R.id.program_nextbutton).setOnClickListener(mSetCurrentItemListener);
+        mListViews.get(1).findViewById(R.id.program_prebutton).setOnClickListener(mSetCurrentItemListener);
+
         PagerAdapter mPagerAdapter = new PagerAdapter() {
 
             @Override
@@ -77,25 +79,50 @@ public class ProgramAcitvity extends BaseActivity {
         });
     }
 
-    @OnClick(R.id.program_nextbutton)
-    protected void nextbuttonOnClick(View v) {
-        mProgramViewpage.setCurrentItem(1);
-    }
+//    @OnClick(R.id.program_nextbutton)
+//    void nextbuttonOnClick(View v) {
+//        mProgramViewpage.setCurrentItem(1);
+//    }
+//
+//    @OnClick(R.id.program_prebutton)
+//    void prebuttonOnClick(View v) {
+//        mProgramViewpage.setCurrentItem(0);
+//    }
+//
+//    @OnClick({R.id.program1, R.id.program2, R.id.program3, R.id.program4, R.id.program5, R.id.program6, R.id
+//            .program7, R.id.program8, R.id.program9, R.id.program10, R.id.program11, R.id.program12})
+//    void program(View v) {
+//        for (int i = 0; i < mListItemRid.length; i++) {
+//            if (v.getId() == mListItemRid[i]) {
+//                start(i + 1);
+//            }
+//        }
+//    }
 
-    @OnClick(R.id.program_prebutton)
-    protected void prebuttonOnClick(View v) {
-        mProgramViewpage.setCurrentItem(0);
-    }
-
-    @OnClick({R.id.program1, R.id.program2, R.id.program3, R.id.program4, R.id.program5, R.id.program6, R.id
-            .program7, R.id.program8, R.id.program9, R.id.program10, R.id.program11, R.id.program12})
-    void program(View v) {
-        for (int i = 0; i < mListItemRid.length; i++) {
-            if (v.getId() == mListItemRid[i]) {
-                start(i + 1);
+    private View.OnClickListener mSetCurrentItemListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.program_nextbutton:
+                    mProgramViewpage.setCurrentItem(1);
+                    break;
+                case R.id.program_prebutton:
+                    mProgramViewpage.setCurrentItem(0);
+                    break;
             }
         }
-    }
+    };
+
+    private View.OnClickListener mProgramListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            for (int i = 0; i < mListItemRid.length; i++) {
+                if (v.getId() == mListItemRid[i]) {
+                    start(i + 1);
+                }
+            }
+        }
+    };
 
     private void start(int program) {
         Bundle bundle = new Bundle();

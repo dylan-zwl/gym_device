@@ -18,9 +18,9 @@ import butterknife.OnClick;
 
 public class WorkoutCtlSetActivity extends BaseActivity {
     @BindView(R.id.workout_ctl_seekbar)
-    private SeekBar mSeekBar;
+    SeekBar mSeekBar;
     @BindView(R.id.workout_ctl_title)
-    private TextView mValueText;
+    TextView mValueText;
 
     public static final String SPEED = "speed";
     public static final String INCLINE = "incline";
