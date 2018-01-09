@@ -19,8 +19,7 @@ public class ScanQrcodePresenter implements ScanQrcodeContract.Presenter {
 
     public ScanQrcodePresenter(Context context, @NonNull ScanQrcodeContract.View view) {
         mView = view;
-        mModel = new ScanQrcodeModel();
-        mModel.init(context);
+        mModel = new ScanQrcodeModel(context.getApplicationContext());
         mModel.setTcpListener(mTcpListener);
     }
 
@@ -59,10 +58,6 @@ public class ScanQrcodePresenter implements ScanQrcodeContract.Presenter {
             mView.openDevice(user);
         }
 
-        @Override
-        public void recvSportPlan(String userId, List<SportData> plan_load) {
-
-        }
 
         @Override
         public int getWorkStatus() {
@@ -78,7 +73,7 @@ public class ScanQrcodePresenter implements ScanQrcodeContract.Presenter {
                 while (true) {
                     if (isConnectServered && mView.getDeviceStatus() == DeviceStatus.NO_USE) {
                         isFirstConnectServer = false;
-//                        uploadThirdSportsData();
+                        //                        uploadThirdSportsData();
                     }
                     SystemClock.sleep(20000);
                 }

@@ -49,13 +49,13 @@ public class HeartBeat {
         mNotHeartbeatCount = 0;
     }
 
-    private interface Listener {
+    public interface Listener {
         void connectFailed();
 
         void sendHeartbeat();
     }
 
-    private void setListener(Listener listener) {
+    public void setListener(Listener listener) {
         mListener = listener;
     }
 

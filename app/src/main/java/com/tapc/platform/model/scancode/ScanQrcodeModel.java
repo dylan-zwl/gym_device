@@ -7,17 +7,13 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tapc.platform.library.controller.MachineController;
-import com.tapc.platform.model.scancode.dao.SportsMenu;
+import com.google.gson.Gson;
 import com.tapc.platform.model.scancode.dao.User;
 import com.tapc.platform.model.scancode.url.ScanCodeUrl;
 import com.tapc.platform.model.tcp.SocketListener;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.NetUtils;
 import com.tapc.platform.utils.PreferenceHelper;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.InetAddress;
 
@@ -46,11 +42,14 @@ public class ScanQrcodeModel {
         int getWorkStatus();
     }
 
+    public ScanQrcodeModel(Context context) {
+        mContext = context;
+    }
+
     /**
      * 功能描述 : 连接服务器
      */
-    public void connectServer(Context context) {
-        mContext = context;
+    public void connectServer() {
         new Thread(mRunnable).start();
         new Thread(mQrRunnable).start();
     }
@@ -154,6 +153,17 @@ public class ScanQrcodeModel {
     private void startHeartbeat() {
         if (mHeartBeat != null) {
             mHeartBeat = new HeartBeat();
+            mHeartBeat.setListener(new HeartBeat.Listener() {
+                @Override
+                public void connectFailed() {
+                    mCurrentConnectStatus = false;
+                }
+
+                @Override
+                public void sendHeartbeat() {
+                    updateDeviceStatus();
+                }
+            });
         }
         mHeartBeat.start();
     }
@@ -174,73 +184,7 @@ public class ScanQrcodeModel {
 
         @Override
         public void onMessage(byte[] dataBuffer) {
-            try {
-                String jsonStr = new String(dataBuffer);
-                JSONObject jsonObject = new JSONObject(jsonStr);
-                int command = (int) jsonObject.get("command");
-                switch (command) {
-                    case Command.HEARTBEAT:
-                        if (mHeartBeat != null) {
-                            mHeartBeat.clearCount();
-                        }
-                        break;
-                    case Command.OPEN_DEVICE:
-                        OpenDeviceRequest openDeviceRequest = (OpenDeviceRequest) getGsonToObject(jsonStr,
-                                OpenDeviceRequest.class);
-                        if (openDeviceRequest != null) {
-                            if (openDeviceRequest.getDevice_id().endsWith(mDeviceId)
-                                    && !TextUtils.isEmpty(openDeviceRequest.getUser_id())) {
-                                if (mTcpListener != null && mTcpListener.getWorkStatus() != 1 && !mNeedChangeQrcode) {
-                                    User user = new User();
-                                    user.setName(openDeviceRequest.getUser_name());
-                                    user.setUserId(openDeviceRequest.getUser_id());
-                                    user.setDeviceId(openDeviceRequest.getDevice_id());
-                                    user.setAvatarUrl(openDeviceRequest.getUser_avatar());
-                                    user.setOrder_number(openDeviceRequest.getOrder_number());
 
-                                    mNeedChangeQrcode = true;
-                                    mTcpListener.openDevice(user);
-                                    // 绿动-开启后回传状态
-                                    sendOpenDeviceStatus(mTcpClient, Command.LD_OPEN_DEVICE, mDeviceId,
-                                            openDeviceRequest.getUser_id(), "0");
-                                    sendHeartbeat(mTcpClient, Command.HEARTBEAT, mDeviceId);
-                                    return;
-                                }
-                            }
-                        }
-                        sendOpenDeviceStatus(mTcpClient, Command.LD_OPEN_DEVICE, mDeviceId, null, "1");
-                        break;
-                    case Command.SPORTS_PLAN:
-                        SportsMenu sportsMenu = (SportsMenu) getGsonToObject(jsonStr, SportsMenu.class);
-                        if (sportsMenu != null && sportsMenu.getDevice_id().equals(mDeviceId)
-                                && sportsMenu.getAction_count() > 0) {
-                            int actionCount = sportsMenu.getAction_count();
-                            List<SportData> plan_load = new ArrayList<SportData>();
-                            if (actionCount > 0) {
-                                String userId = sportsMenu.getUser_id();
-                                if (!TextUtils.isEmpty(userId)) {
-                                    for (int i = 0; i < actionCount; i++) {
-                                        String key = "plan_load" + (i + 1);
-                                        if (jsonObject.has(key)) {
-                                            String sportDataStr = jsonObject.get(key).toString();
-                                            if (sportDataStr != null && !sportDataStr.isEmpty()) {
-                                                SportData sportData = new Gson().fromJson(sportDataStr, SportData
-                                                        .class);
-                                                plan_load.add(sportData);
-                                            }
-                                        }
-                                    }
-                                    mTcpListener.recvSportPlan(sportsMenu.getUser_id(), plan_load);
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
@@ -273,16 +217,20 @@ public class ScanQrcodeModel {
             while (true) {
                 if (mCurrentConnectStatus && isScanQrShow) {
                     synchronized (this) {
-
                         mRequestResult = 1;
                         startShowQrcode(new HttpListener() {
 
                             @Override
                             public void finsh() {
                                 mRequestResult = 0;
+                                notify();
                             }
                         });
-
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         while (mRequestResult != 0) {
                             if (mRequestResult > 0) {
                                 mRequestResult++;
@@ -382,88 +330,12 @@ public class ScanQrcodeModel {
         return mLoginPassword;
     }
 
-    /**
-     * 上传设备信息
-     */
-    private boolean checkUploadDeviceInforStatus() {
-        if (isUploadDeviceInfor) {
-            return true;
-        }
-//        isUploadDeviceInfor = PreferenceHelper.readBoolean(mContext, Config.SETTING_CONFIG, "is_upload_device_infor",
-//                false);
-        return isUploadDeviceInfor;
-    }
-
-    private void uploadDeviceInformation(final HttpListener listener) {
-        DeviceInformationParamter parameter = new DeviceInformationParamter();
-        parameter.setTime("" + (60 * 120));
-        parameter.setSpeed("" + TapcApp.MAX_SPEED);
-        parameter.setIncline("" + TapcApp.MAX_INCLINE);
-        String parameterStr = new Gson().toJson(parameter).toString();
-
-        DeviceInfor deviceInfor = getDeviceInfor();
-        TapcApp.getInstance()
-                .getHttpClient()
-                .uploadDevicInformation(mDeviceId, deviceInfor.getType(), deviceInfor.getModel(), parameterStr,
-                        new Callback() {
-
-                            @Override
-                            public void onSuccess(String result) {
-
-                            }
-
-                            @Override
-                            public void onSuccess(Object o) {
-                                ResponseDTO<String> responseDTO = (ResponseDTO<String>) o;
-                                if (responseDTO != null
-                                        && (responseDTO.getStatus() == 0 || responseDTO.getStatus() == 5)) {
-                                    Log.d("uploadDevicInformation", "successful");
-                                    PreferenceHelper.write(mContext, Config.SETTING_CONFIG, "is_upload_device_infor",
-                                            true);
-                                    isUploadDeviceInfor = true;
-                                    getQrcodeOrRandomcode(mDeviceId, GetLoginType.QRCODE, listener);
-                                } else {
-                                    listener.finsh();
-                                }
-                            }
-
-                            @Override
-                            public void onStart() {
-
-                            }
-
-                            @Override
-                            public void onFailure(Object o) {
-                                listener.finsh();
-                                Log.d("uploadDeviceInformation", "failed");
-                            }
-                        });
-    }
-
-    private DeviceInfor getDeviceInfor() {
-        MachineController controller = MachineController.getInstance();
-        controller.sendCtlVersionCmd();
-        SystemClock.sleep(1000);
-        String mcuVersion = "v" + controller.getCtlVersionValue();
-        DeviceInfor[] inforList = DeviceInfor.values();
-        DeviceInfor deviceInfor = inforList[0];
-        for (DeviceInfor infor : inforList) {
-            if (mcuVersion.startsWith(infor.getMcuVersion())) {
-                deviceInfor = infor;
-                break;
-            }
-        }
-        return deviceInfor;
-    }
-
     public class Command {
         public static final int HEARTBEAT = 1;
         public static final int OPEN_DEVICE = 2;
         public static final int SPORTS_PLAN = 3;
         public static final int LD_OPEN_DEVICE = 4;
     }
-
-    ;
 
     public <T> Object getGsonToObject(String jsonStr, Class<T> cls) {
         Gson gson = new Gson();
