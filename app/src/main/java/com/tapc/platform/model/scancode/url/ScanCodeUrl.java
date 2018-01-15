@@ -6,4 +6,5 @@ package com.tapc.platform.model.scancode.url;
 
 public class ScanCodeUrl {
     public static final String BASE_SERVER = "";
+    public static final String  GET_CODE = "";
 }

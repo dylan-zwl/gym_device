@@ -337,7 +337,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 WorkoutBroadcase.send(mContext, DeviceWorkout.PAUSE);
                 break;
             case R.id.resumeButton:
-                WorkoutBroadcase.send(mContext, DeviceWorkout.RESUME);
+                WorkoutBroadcase.send(mContext, DeviceWorkout.COUNTDDOWN);
                 break;
             case R.id.stopButton:
                 WorkoutBroadcase.send(mContext, DeviceWorkout.STOP);
@@ -376,13 +376,13 @@ public class MainActivity extends BaseActivity implements Observer {
                 int msgWhat = intent.getIntExtra(DeviceWorkout.MSG_WHAT, 0);
                 switch (msgWhat) {
                     case COUNTDDOWN:
-                        if (!mWorkOuting.isRunning()) {
-                            CountdownDialog countdownDialog = mTapcApp.getService().getCountdownDialog();
-                            if (!countdownDialog.isShown()) {
-                                startCountdown();
-                                countdownDialog.show();
-                            }
+//                        if (!mWorkOuting.isRunning()) {
+                        CountdownDialog countdownDialog = mTapcApp.getService().getCountdownDialog();
+                        if (!countdownDialog.isShown()) {
+                            startCountdown();
+                            countdownDialog.show();
                         }
+//                        }
                         break;
                     case DeviceWorkout.START:
                         startWorkOuting();

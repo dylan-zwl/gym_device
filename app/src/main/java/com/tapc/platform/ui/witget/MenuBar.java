@@ -178,7 +178,7 @@ public class MenuBar extends BaseSystemView implements Observer {
 
     private void setWifi(NetworkInfo networkInfo) {
         if (NetUtils.isConnected(mContext)) {
-            mWifiStatus.setBackgroundResource(R.drawable.ic_wifi_connect);
+            mWifiStatus.setImageResource(R.drawable.ic_wifi_connect);
             mWifiStatus.setVisibility(View.VISIBLE);
         } else {
             mWifiStatus.setVisibility(View.INVISIBLE);
@@ -188,7 +188,7 @@ public class MenuBar extends BaseSystemView implements Observer {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void blueStatusChange(BluetoothConnectStatus connectStatus) {
         if (connectStatus.isConnected()) {
-            mBluetoothStatus.setBackgroundResource(R.drawable.ic_blue_connect);
+            mBluetoothStatus.setImageResource(R.drawable.ic_blue_connect);
             mBluetoothStatus.setVisibility(View.VISIBLE);
         } else {
             mBluetoothStatus.setVisibility(View.INVISIBLE);

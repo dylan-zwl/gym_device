@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode.dao;
+package com.tapc.platform.model.scancode.dao.request;
 
 public class BikeStageSportData {
 	private String watt;

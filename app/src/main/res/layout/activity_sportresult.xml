@@ -30,7 +30,8 @@
             android:text="@string/sports_record"
             android:textColor="@android:color/white"
             android:textSize="28sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout

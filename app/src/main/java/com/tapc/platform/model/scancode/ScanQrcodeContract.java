@@ -1,7 +1,7 @@
 package com.tapc.platform.model.scancode;
 
-import com.tapc.platform.model.scancode.dao.SportsMenu;
-import com.tapc.platform.model.scancode.dao.User;
+import com.tapc.platform.model.scancode.dao.response.SportsMenu;
+import com.tapc.platform.model.scancode.dao.response.User;
 
 public interface ScanQrcodeContract {
 

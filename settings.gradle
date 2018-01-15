@@ -1,1 +1,1 @@
-include ':app', ':vaplayer'
+include ':app', ':vaplayer', ':retrofit', ':greendao'

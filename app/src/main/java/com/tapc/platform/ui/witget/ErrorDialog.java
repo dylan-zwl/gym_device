@@ -12,11 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tapc.platform.R;
-import com.tapc.platform.application.TapcApplication;
-import com.tapc.platform.broadcast.send.WorkoutBroadcase;
-import com.tapc.platform.entity.DeviceWorkout;
 import com.tapc.platform.library.controller.MachineController;
-import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.ui.base.BaseSystemView;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.WindowManagerUtils;
@@ -141,12 +137,28 @@ public class ErrorDialog extends BaseSystemView {
     private void resetDialogStatus() {
         if (isShowSafeKey || isShowError) {
             show();
-            if (WorkOuting.getInstance().isRunning()) {
-                TapcApplication.getInstance().getService().getCountdownDialog().dismiss();
-                WorkoutBroadcase.send(mContext, DeviceWorkout.STOP);
+            if (mListener != null) {
+                mListener.show();
             }
         } else {
-            dismiss();
+            hide();
+            if (mListener != null) {
+                mListener.hide();
+            }
         }
     }
+
+
+    private Listener mListener;
+
+    public interface Listener {
+        void show();
+
+        void hide();
+    }
+
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
 }

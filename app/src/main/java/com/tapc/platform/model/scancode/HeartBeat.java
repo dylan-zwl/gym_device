@@ -7,12 +7,10 @@ import java.util.TimerTask;
 
 /**
  * Created by Administrator on 2018/1/9.
+ * 服务器连接的心跳包
  */
 
 public class HeartBeat {
-    /**
-     * 服务器连接的心跳包
-     */
     private Timer mHeartbeatTimer;
     private int mNotHeartbeatCount;
     private int mNotHeartbeatNumber;
@@ -45,7 +43,7 @@ public class HeartBeat {
         cancelHearbeatTimer();
     }
 
-    public void clearCount() {
+    public void resetCount() {
         mNotHeartbeatCount = 0;
     }
 

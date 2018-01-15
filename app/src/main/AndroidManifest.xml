@@ -64,6 +64,19 @@
                 <action android:name=".service.MenuService"/>
             </intent-filter>
         </service>
+
+        <!-- receiver -->
+        <receiver android:name=".broadcast.receiver.NetWorkReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".broadcast.receiver.BlueReceiver">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

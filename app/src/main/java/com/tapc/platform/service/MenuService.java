@@ -70,14 +70,15 @@ public class MenuService extends Service {
     }
 
     private void initView() {
+        initKeyEvent();
+
+        //初始化dialog
         mMenuBar = new MenuBar(this);
         mMenuBar.show();
 
         mNumberDialog = new NumberDialog(this);
         initCountdownDialog();
-        mErrorDialog = new ErrorDialog(this);
-
-        initKeyEvent();
+        initErrorDialog();
     }
 
     public MenuBar getMenuBar() {
@@ -106,6 +107,28 @@ public class MenuService extends Service {
         });
     }
 
+
+    private void initErrorDialog() {
+        mErrorDialog = new ErrorDialog(this);
+        mErrorDialog.setListener(new ErrorDialog.Listener() {
+            @Override
+            public void show() {
+                if (WorkOuting.getInstance().isRunning()) {
+                    mErrorDialog.dismiss();
+                    WorkoutBroadcase.send(mContext, DeviceWorkout.STOP);
+                }
+            }
+
+            @Override
+            public void hide() {
+
+            }
+        });
+    }
+
+    /**
+     * 功能描述 : 物理按键功能模块
+     */
     private static final int NULL_NUM = -1;
     private int mPressnumber = NULL_NUM;
 

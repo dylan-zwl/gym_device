@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode.dao;
+package com.tapc.platform.model.scancode.dao.response;
 
 public class User {
     private String name;

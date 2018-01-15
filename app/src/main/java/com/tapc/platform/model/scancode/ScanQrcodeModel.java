@@ -7,13 +7,13 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.tapc.platform.model.scancode.dao.User;
+import com.tapc.platform.entity.DeviceType;
+import com.tapc.platform.model.scancode.dao.response.SportsMenu;
+import com.tapc.platform.model.scancode.dao.response.User;
 import com.tapc.platform.model.scancode.url.ScanCodeUrl;
 import com.tapc.platform.model.tcp.SocketListener;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.NetUtils;
-import com.tapc.platform.utils.PreferenceHelper;
 
 import java.net.InetAddress;
 
@@ -21,6 +21,7 @@ public class ScanQrcodeModel {
     public static final String IP = "112.74.87.166";
     public static final int PORT = 1234;
     private Context mContext;
+    private DeviceType mDeviceType;
     private String mDeviceId = "";
     private boolean isUploadDeviceInfor = false;
     private TcpClient mTcpClient;
@@ -29,6 +30,7 @@ public class ScanQrcodeModel {
     public static boolean mNeedChangeQrcode = true;
     private boolean mCurrentConnectStatus = false;
     private TcpListener mTcpListener;
+    private CommunicationManage mManage;
 
     public interface TcpListener {
         void showQrcode(String qrcodeStr);
@@ -37,13 +39,14 @@ public class ScanQrcodeModel {
 
         void openDevice(User user);
 
-        void recvSportPlan(String userId, List<SportData> plan_load);
+        void recvSportPlan(String userId, SportsMenu plan_load);
 
         int getWorkStatus();
     }
 
-    public ScanQrcodeModel(Context context) {
+    public ScanQrcodeModel(Context context, DeviceType deviceType) {
         mContext = context;
+        mDeviceType = deviceType;
     }
 
     /**
@@ -52,6 +55,7 @@ public class ScanQrcodeModel {
     public void connectServer() {
         new Thread(mRunnable).start();
         new Thread(mQrRunnable).start();
+        mManage = new CommunicationManage(mDeviceId);
     }
 
     private void connectServerResult(boolean isSuccess) {
@@ -76,6 +80,7 @@ public class ScanQrcodeModel {
                     ip = IP;
                 }
                 mTcpClient = new TcpClient();
+                mManage.setClient(mTcpClient);
                 mTcpClient.setListener(mSoketListener);
                 isConnected = mTcpClient.connect(ip, PORT, 4000);
             }
@@ -138,7 +143,7 @@ public class ScanQrcodeModel {
      * 功能描述 : 更新设备状态
      */
     public void updateDeviceStatus() {
-        sendHeartbeat(mTcpClient, Command.HEARTBEAT, mDeviceId);
+        mManage.sendHeartbeat(getWorkStatus());
     }
 
     public void setTcpListener(@NonNull TcpListener tcpListener) {
@@ -214,162 +219,7 @@ public class ScanQrcodeModel {
     private Runnable mQrRunnable = new Runnable() {
         @Override
         public void run() {
-            while (true) {
-                if (mCurrentConnectStatus && isScanQrShow) {
-                    synchronized (this) {
-                        mRequestResult = 1;
-                        startShowQrcode(new HttpListener() {
 
-                            @Override
-                            public void finsh() {
-                                mRequestResult = 0;
-                                notify();
-                            }
-                        });
-                        try {
-                            wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        while (mRequestResult != 0) {
-                            if (mRequestResult > 0) {
-                                mRequestResult++;
-                            }
-                            if (mRequestResult >= 16) {
-                                break;
-                            }
-                            SystemClock.sleep(1000);
-                        }
-
-                        mRequestResult = 1;
-                        initRandomcode(new HttpListener() {
-
-                            @Override
-                            public void finsh() {
-                                mRequestResult = 0;
-                            }
-
-                        });
-
-                        while (mRequestResult != 0) {
-                            if (mRequestResult > 0) {
-                                mRequestResult++;
-                            }
-                            if (mRequestResult >= 5) {
-                                break;
-                            }
-                            SystemClock.sleep(1000);
-                        }
-                    }
-                    SystemClock.sleep(2000);
-                } else {
-                    SystemClock.sleep(500);
-                }
-            }
         }
     };
-
-    private void startShowQrcode(HttpListener listener) {
-        if (checkUploadDeviceInforStatus()) {
-            if (mNeedChangeQrcode) {
-                getQrcodeOrRandomcode(mDeviceId, GetLoginType.QRCODE, listener);
-            } else {
-                if (mTcpListener != null && mTcpClient != null && mTcpClient.isConnecting()) {
-                    mTcpListener.showQrcode(mQrcodeStr);
-                }
-                listener.finsh();
-            }
-        } else {
-            uploadDeviceInformation(listener);
-        }
-    }
-
-    private boolean isScanQrShow = false;
-
-    public void setScanQrShowStatus(boolean isShow) {
-        isScanQrShow = isShow;
-    }
-
-    private class GetLoginType {
-        private static final String QRCODE = "qrcode";
-        private static final String RANDOMCODE = "randomcode";
-        private static final String ADVERTISMENT = "advertisement";
-    }
-
-    private void getQrcodeOrRandomcode(String deviceId, final String type, final HttpListener listener) {
-
-    }
-
-    /**
-     * 初始化登录的随机码
-     */
-    private void initRandomcode(HttpListener listener) {
-        if (mLoginPassword != null) {
-            listener.finsh();
-            return;
-        }
-        String randomcodeStr = PreferenceHelper.readString(mContext, Config.SETTING_CONFIG, "randomcode");
-        if (randomcodeStr != null) {
-            Randomcode randomcode = new Gson().fromJson(randomcodeStr, Randomcode.class);
-            String recodeDate = randomcode.getDeadtime();
-            long nowTime = System.currentTimeMillis();
-            String nowDate = SysUtils.getDataTimeStr("yyyy-MM-dd", nowTime);
-            String password = randomcode.getRandom_code();
-            if (!nowDate.equals(recodeDate) || password == null || (password != null && password.isEmpty())) {
-                getQrcodeOrRandomcode(mDeviceId, GetLoginType.RANDOMCODE, listener);
-            } else {
-                mLoginPassword = password;
-                listener.finsh();
-            }
-        } else {
-            getQrcodeOrRandomcode(mDeviceId, GetLoginType.RANDOMCODE, listener);
-        }
-    }
-
-    public String getLoginPassword() {
-        return mLoginPassword;
-    }
-
-    public class Command {
-        public static final int HEARTBEAT = 1;
-        public static final int OPEN_DEVICE = 2;
-        public static final int SPORTS_PLAN = 3;
-        public static final int LD_OPEN_DEVICE = 4;
-    }
-
-    public <T> Object getGsonToObject(String jsonStr, Class<T> cls) {
-        Gson gson = new Gson();
-        return gson.fromJson(jsonStr, cls);
-    }
-
-    private String getHeartbeatJson(int command, String deviceId) {
-        HeartbeatPacket heartbeatPacket = new HeartbeatPacket(command, deviceId);
-        int workStatus = getWorkStatus();
-        heartbeatPacket.setWork_status(workStatus);
-        Gson gson = new Gson();
-        String str = gson.toJson(heartbeatPacket).toString();
-        return str;
-    }
-
-    public void sendHeartbeat(TcpClient tcpClient, int command, String deviceId) {
-        String jsonStr = getHeartbeatJson(command, deviceId);
-        if (jsonStr != null && tcpClient != null) {
-            tcpClient.sendData(jsonStr);
-        }
-    }
-
-    private String getOpenDeviceAckJson(int command, String device_id, String user_id, String status) {
-        OpenDeviceAck openDeviceAck = new OpenDeviceAck(command, device_id, user_id, status);
-        Gson gson = new Gson();
-        String str = gson.toJson(openDeviceAck).toString();
-        return str;
-    }
-
-    public void sendOpenDeviceStatus(TcpClient tcpClient, int command, String device_id, String user_id, String
-            status) {
-        String jsonStr = getOpenDeviceAckJson(command, device_id, user_id, status);
-        if (jsonStr != null && tcpClient != null) {
-            tcpClient.sendData(jsonStr);
-        }
-    }
 }

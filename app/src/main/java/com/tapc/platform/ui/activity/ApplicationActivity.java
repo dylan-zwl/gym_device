@@ -11,9 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.tapc.platform.R;
 import com.tapc.platform.model.app.AppInfoEntity;
-import com.tapc.platform.model.app.AppModel;
 import com.tapc.platform.ui.adpater.AppGridViewAdapter;
 import com.tapc.platform.ui.base.BaseActivity;
 import com.tapc.platform.ui.base.BaseRecyclerViewAdapter;
@@ -68,11 +68,10 @@ public class ApplicationActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        mlistAppInfo = AppModel.getAllAppInfo(this, false);
-        //        if (mlistAppInfo == null) {
-        //            mlistAppInfo = new ArrayList<AppInfoEntity>();
-        //            mlistAppInfo = AppUtils.getAllAppInfo(this);
-        //        }
+        mlistAppInfo = mTapcApp.getListAppInfo();
+        if (mlistAppInfo == null) {
+            return;
+        }
         mAppType = getIntent().getIntExtra("appType", 0);
         switch (mAppType) {
             case NO_TYPE:
@@ -89,7 +88,7 @@ public class ApplicationActivity extends BaseActivity {
                             Intent intent = app.getIntent();
                             intent.setAction("android.intent.action.VIEW");
                             startActivity(intent);
-                            Log.d("start packagename", packageName);
+                            Logger.d("start app : " + packageName);
                         }
                     }
                 }

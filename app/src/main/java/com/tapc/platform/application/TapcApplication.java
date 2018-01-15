@@ -20,12 +20,22 @@ import com.tapc.platform.library.common.SystemSettings;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.library.controller.MachineController;
 import com.tapc.platform.library.workouting.WorkOuting;
+import com.tapc.platform.model.app.AppInfoEntity;
+import com.tapc.platform.model.app.AppModel;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.service.LocalBinder;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.NetUtils;
+import com.tapc.platform.utils.RxjavaUtils;
 import com.tapc.platform.utils.SoundCtlUtils;
+
+import java.util.List;
+
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Administrator on 2017/8/21.
@@ -39,6 +49,7 @@ public class TapcApplication extends Application {
 
     private ProgramSetting mProgramSetting;
     private boolean isScreenOn = true;
+    private List<AppInfoEntity> mListAppInfo;
 
     @Override
     public void onCreate() {
@@ -75,6 +86,19 @@ public class TapcApplication extends Application {
         initDeviceId();
 
         SoundCtlUtils.getInstance().init(this);
+
+        RxjavaUtils.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
+                mListAppInfo = AppModel.getAllAppInfo(mInstance, false);
+                e.onComplete();
+            }
+        }, new Consumer() {
+            @Override
+            public void accept(@NonNull Object o) throws Exception {
+
+            }
+        }, null);
     }
 
     private void initDeviceId() {
@@ -138,6 +162,10 @@ public class TapcApplication extends Application {
     //
     public ProgramSetting getProgramSetting() {
         return mProgramSetting;
+    }
+
+    public List<AppInfoEntity> getListAppInfo() {
+        return mListAppInfo;
     }
 
     public void setProgramSetting(ProgramSetting programSetting) {

@@ -4,22 +4,21 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
+import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.model.scancode.ScanQrcodeModel.TcpListener;
-import com.tapc.platform.model.scancode.dao.DeviceStatus;
-import com.tapc.platform.model.scancode.dao.User;
-
-import java.util.List;
+import com.tapc.platform.model.scancode.dao.request.DeviceStatus;
+import com.tapc.platform.model.scancode.dao.response.SportsMenu;
+import com.tapc.platform.model.scancode.dao.response.User;
 
 
 public class ScanQrcodePresenter implements ScanQrcodeContract.Presenter {
     private ScanQrcodeContract.View mView;
     private ScanQrcodeModel mModel;
     private boolean isConnectServered = false;
-    private boolean isFirstConnectServer = true;
 
-    public ScanQrcodePresenter(Context context, @NonNull ScanQrcodeContract.View view) {
+    public ScanQrcodePresenter(Context context, @NonNull ScanQrcodeContract.View view, DeviceType deviceType) {
         mView = view;
-        mModel = new ScanQrcodeModel(context.getApplicationContext());
+        mModel = new ScanQrcodeModel(context.getApplicationContext(), deviceType);
         mModel.setTcpListener(mTcpListener);
     }
 
@@ -58,6 +57,11 @@ public class ScanQrcodePresenter implements ScanQrcodeContract.Presenter {
             mView.openDevice(user);
         }
 
+        @Override
+        public void recvSportPlan(String userId, SportsMenu plan_load) {
+
+        }
+
 
         @Override
         public int getWorkStatus() {
@@ -72,7 +76,6 @@ public class ScanQrcodePresenter implements ScanQrcodeContract.Presenter {
             public void run() {
                 while (true) {
                     if (isConnectServered && mView.getDeviceStatus() == DeviceStatus.NO_USE) {
-                        isFirstConnectServer = false;
                         //                        uploadThirdSportsData();
                     }
                     SystemClock.sleep(20000);

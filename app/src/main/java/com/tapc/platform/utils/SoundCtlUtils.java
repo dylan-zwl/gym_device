@@ -13,6 +13,10 @@ public class SoundCtlUtils {
     private AudioManager mAudioManager;
     private int mSaveVolume;
 
+    private SoundCtlUtils() {
+
+    }
+
     public static SoundCtlUtils getInstance() {
         if (sSoundCtlUtils == null) {
             synchronized (SoundCtlUtils.class) {
