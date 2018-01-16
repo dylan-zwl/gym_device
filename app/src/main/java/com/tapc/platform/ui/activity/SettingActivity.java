@@ -8,7 +8,7 @@ import com.tapc.platform.ui.base.BaseActivity;
 
 public class SettingActivity extends BaseActivity {
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return 0;
     }
 }

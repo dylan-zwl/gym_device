@@ -18,12 +18,12 @@ import butterknife.BindView;
 
 public class HelpActivity extends BaseActivity {
     @BindView(R.id.help_txt)
-     TextView helpText;
+    TextView helpText;
 
     private LanguageModel.Language mLanguage;
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_help;
     }
 

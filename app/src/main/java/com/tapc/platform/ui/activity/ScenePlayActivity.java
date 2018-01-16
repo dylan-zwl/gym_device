@@ -77,7 +77,7 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_scene_play;
     }
 

@@ -102,9 +102,12 @@ public class TapcApplication extends Application {
     }
 
     private void initDeviceId() {
-        String id = NetUtils.getLocalMacAddress(this);
-        if (!TextUtils.isEmpty(id)) {
-            ConfigModel.setDeviceId(this, id);
+        String id = ConfigModel.getDeviceId(this, null);
+        if (TextUtils.isEmpty(id)) {
+            id = NetUtils.getDeviceId(this);
+            if (!TextUtils.isEmpty(id)) {
+                ConfigModel.setDeviceId(this, id);
+            }
         }
     }
 

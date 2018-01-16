@@ -4,7 +4,7 @@ package com.tapc.platform.model.scancode.dao.response;
  * Created by Administrator on 2018/1/15.
  */
 
-public class GetCode {
+public class QrCodeInfo {
     private String device_id;
     private String qrcode_url;
     private String upload;

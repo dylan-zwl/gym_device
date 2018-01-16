@@ -6,12 +6,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.tapc.platform.R;
-import com.tapc.platform.broadcast.send.WorkoutBroadcase;
-import com.tapc.platform.entity.DeviceWorkout;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.library.data.TreadmillProgramSetting;
 import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.ui.base.BaseActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -27,13 +27,14 @@ public class SetProgramTimeAcitvity extends BaseActivity {
     @BindView(R.id.program_time_title)
     TextView mProgramTimeText;
 
+    private TreadmillProgramSetting mProgramSetting;
     private int mProgramTimeMax = 99;
     private int mProgramTimeMin = 5;
     private int mStartTime = 30;
     private int mProgramTime;
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_program_time;
     }
 
@@ -45,10 +46,10 @@ public class SetProgramTimeAcitvity extends BaseActivity {
         if (bundle != null) {
             program = bundle.getInt("program");
         }
-        TreadmillProgramSetting programSetting = new TreadmillProgramSetting(WorkoutEnum.ProgramType.TAPC_PROG);
-        programSetting.setSpeed(TreadmillSystemSettings.DEFAULT_SPEED);
-        programSetting.setIncline(TreadmillSystemSettings.DEFAULT_INCLINE);
-        mTapcApp.setProgramSetting(programSetting);
+        mProgramSetting = new TreadmillProgramSetting(WorkoutEnum.ProgramType.TAPC_PROG);
+        mProgramSetting.setSpeed(TreadmillSystemSettings.DEFAULT_SPEED);
+        mProgramSetting.setIncline(TreadmillSystemSettings.DEFAULT_INCLINE);
+//        mTapcApp.setProgramSetting(mProgramSetting);
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -75,7 +76,7 @@ public class SetProgramTimeAcitvity extends BaseActivity {
 
     @OnClick(R.id.program_start)
     protected void start(View v) {
-        WorkoutBroadcase.send(this, DeviceWorkout.START);
+        EventBus.getDefault().post(mProgramSetting);
         finish();
     }
 

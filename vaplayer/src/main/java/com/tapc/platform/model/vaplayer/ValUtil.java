@@ -33,11 +33,9 @@ public class ValUtil {
                 }
             });
 
-            if (Files != null) {
-                if (Files.length > 0) {
-                    for (int nums = 0; nums < Files.length; nums++) {
-                        fileList.add(Files[nums].getAbsolutePath());
-                    }
+            if (Files != null && Files.length > 0) {
+                for (int nums = 0; nums < Files.length; nums++) {
+                    fileList.add(Files[nums].getAbsolutePath());
                 }
                 Collections.sort(fileList);
                 for (String FileDiretory : fileList) {

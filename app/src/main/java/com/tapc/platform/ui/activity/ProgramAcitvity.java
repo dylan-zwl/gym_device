@@ -27,7 +27,7 @@ public class ProgramAcitvity extends BaseActivity {
             .program6, R.id.program7, R.id.program8, R.id.program9, R.id.program10, R.id.program11, R.id.program12};
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_program;
     }
 

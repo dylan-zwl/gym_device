@@ -8,12 +8,16 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.tapc.platform.entity.DeviceType;
+import com.tapc.platform.model.scancode.dao.response.QrCodeInfo;
+import com.tapc.platform.model.scancode.dao.response.Randomcode;
+import com.tapc.platform.model.scancode.dao.response.ResponseDTO;
 import com.tapc.platform.model.scancode.dao.response.SportsMenu;
 import com.tapc.platform.model.scancode.dao.response.User;
-import com.tapc.platform.model.scancode.url.ScanCodeUrl;
+import com.tapc.platform.model.scancode.api.ScanCodeUrl;
 import com.tapc.platform.model.tcp.SocketListener;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.NetUtils;
+import com.tapc.platform.utils.PreferenceHelper;
 
 import java.net.InetAddress;
 
@@ -175,7 +179,7 @@ public class ScanQrcodeModel {
 
 
     /**
-     * 功能描述 : 回传数据处理
+     * 功能描述 : tcp 连接状态监听和接收到数据的处理
      */
     private SocketListener mSoketListener = new SocketListener() {
 
@@ -209,17 +213,54 @@ public class ScanQrcodeModel {
     }
 
     /**
-     * 获取二维码
+     * 获取并显示二维码
      */
-    private interface HttpListener {
-        void finsh();
-    }
-
-    private int mRequestResult = 0;
     private Runnable mQrRunnable = new Runnable() {
         @Override
         public void run() {
+            HttpRequest httpRequest = new HttpRequest(mDeviceId);
 
+            //上传设备信息
+            boolean isUploadDeviceInfo = PreferenceHelper.readBoolean(mContext, "", "is_upload_device_infor", false);
+            if (!isUploadDeviceInfo) {
+                ResponseDTO response = null;
+                while (true) {
+                    response = httpRequest.uploadDeviceInformation("", "", "", ResponseDTO.class);
+                    PreferenceHelper.write(mContext, "", "is_upload_device_infor", true);
+                    if (response != null && (response.getStatus() == 0 || response.getStatus() == 5)) {
+                        break;
+                    }
+                    SystemClock.sleep(3000);
+                }
+            }
+
+            //获取验证码
+            while (true) {
+                Randomcode randomcode = httpRequest.getCode(HttpRequest.GetLoginType.QRCODE, Randomcode.class);
+                if (randomcode != null) {
+                    String randomcodeStr = randomcode.getRandom_code();
+                    if (!TextUtils.isEmpty(randomcodeStr)) {
+                        mLoginPassword = randomcodeStr;
+                        break;
+                    }
+                }
+            }
+
+            //获取并显示二维码
+            while (true) {
+                if (mNeedChangeQrcode) {
+                    QrCodeInfo qrCodeInfo = httpRequest.getCode(HttpRequest.GetLoginType.QRCODE, QrCodeInfo.class);
+                    if (qrCodeInfo != null) {
+                        mQrcodeStr = qrCodeInfo.getQrcode_url();
+                        mNeedChangeQrcode = false;
+                    }
+                } else {
+                    if (mTcpListener != null && mTcpClient != null && mTcpClient.isConnecting()) {
+                        mTcpListener.showQrcode(mQrcodeStr);
+                    }
+                }
+                SystemClock.sleep(3000);
+            }
         }
     };
 }

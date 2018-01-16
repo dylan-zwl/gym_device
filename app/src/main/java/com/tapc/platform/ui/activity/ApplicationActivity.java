@@ -61,7 +61,7 @@ public class ApplicationActivity extends BaseActivity {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return 0;
     }
 

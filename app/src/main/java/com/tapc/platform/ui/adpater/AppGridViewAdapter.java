@@ -42,6 +42,10 @@ public class AppGridViewAdapter extends BaseRecyclerViewAdapter<AppGridViewAdapt
         AppInfoEntity appInfo = mDatas.get(position);
         holder.app_icon.setImageDrawable(appInfo.getAppIcon());
         holder.app_name.setText(appInfo.getAppLabel());
+        holder.itemView.setTag(appInfo);
+        holder.itemView.setOnClickListener(this);
+        holder.itemView.setBackgroundResource(R.drawable.bg_item_click);
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

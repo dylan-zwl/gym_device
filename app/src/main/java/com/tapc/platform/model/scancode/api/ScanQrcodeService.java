@@ -18,4 +18,8 @@ public interface ScanQrcodeService {
     @POST()
     @FormUrlEncoded
     Observable<ResponseBody> getCode(@Url String url, @FieldMap Map<String, Object> map);
+
+    @POST()
+    @FormUrlEncoded
+    Observable<ResponseBody> uploadDeviceInformation(@Url String url, @FieldMap Map<String, Object> map);
 }

@@ -62,7 +62,7 @@ public class ErrorDialog extends BaseSystemView {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.dialog_machine_status;
     }
 

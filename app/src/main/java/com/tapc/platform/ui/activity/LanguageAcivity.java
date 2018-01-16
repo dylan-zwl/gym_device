@@ -19,7 +19,7 @@ public class LanguageAcivity extends BaseActivity {
     private LanguageModel.Language mLanguage;
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_language;
     }
 

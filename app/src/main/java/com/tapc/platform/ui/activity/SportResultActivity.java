@@ -28,7 +28,7 @@ public class SportResultActivity extends BaseActivity {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_sportresult;
     }
 }

@@ -52,7 +52,7 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.view_workout_ctrl;
     }
 

@@ -75,7 +75,7 @@ public class MenuBar extends BaseSystemView implements Observer {
     private int mFanLevel = 3;
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.dialog_menu_bar;
     }
 
@@ -171,7 +171,7 @@ public class MenuBar extends BaseSystemView implements Observer {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void wifiStatusChange(NetworkInfo networkInfo) {
         setWifi(networkInfo);
     }

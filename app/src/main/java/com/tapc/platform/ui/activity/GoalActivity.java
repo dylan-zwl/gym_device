@@ -38,7 +38,7 @@ public class GoalActivity extends BaseActivity {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_goal;
     }
 

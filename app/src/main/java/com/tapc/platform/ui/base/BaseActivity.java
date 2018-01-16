@@ -3,8 +3,10 @@ package com.tapc.platform.ui.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 
 import com.tapc.platform.application.TapcApplication;
+import com.tapc.platform.model.common.NoActionModel;
 import com.trello.rxlifecycle2.components.RxActivity;
 
 import butterknife.ButterKnife;
@@ -17,12 +19,12 @@ public abstract class BaseActivity extends RxActivity {
     protected Context mContext;
     protected TapcApplication mTapcApp;
 
-    protected abstract int getContentView();
+    protected abstract int getLayoutResID();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int rid = getContentView();
+        int rid = getLayoutResID();
         if (rid != 0) {
             setContentView(rid);
             ButterKnife.bind(this);
@@ -39,5 +41,11 @@ public abstract class BaseActivity extends RxActivity {
     protected void onDestroy() {
         super.onDestroy();
         //        mTapcApp.addRefWatcher(this);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        NoActionModel.getInstance().cleanNoActionCount();
+        return super.dispatchTouchEvent(ev);
     }
 }

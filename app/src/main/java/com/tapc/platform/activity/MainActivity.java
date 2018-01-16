@@ -12,11 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tapc.platform.R;
-import com.tapc.platform.application.TapcApplication;
 import com.tapc.platform.broadcast.send.WorkoutBroadcase;
 import com.tapc.platform.entity.DeviceWorkout;
 import com.tapc.platform.entity.EventEntity;
 import com.tapc.platform.entity.FixedAppEntity;
+import com.tapc.platform.library.abstractset.ProgramSetting;
 import com.tapc.platform.library.common.SystemSettings;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.library.controller.MachineController;
@@ -100,11 +100,12 @@ public class MainActivity extends BaseActivity implements Observer {
 
     private ClickModel mClickModel;
     private WorkOuting mWorkOuting = WorkOuting.getInstance();
+    private ProgramSetting mProgramSetting;
     private boolean isAppToBackground;
     private int mPage = 0;
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_main;
     }
 
@@ -206,6 +207,7 @@ public class MainActivity extends BaseActivity implements Observer {
             showMainPage(1);
         }
         SportResultActivity.launch(this, "stoprun_show");
+        mProgramSetting = null;
     }
 
     @Override
@@ -348,19 +350,23 @@ public class MainActivity extends BaseActivity implements Observer {
         v.setClickable(true);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void otherActivityStar(ProgramSetting programSetting) {
+        mProgramSetting = programSetting;
+        WorkoutBroadcase.send(this, DeviceWorkout.COUNTDDOWN);
+    }
 
     private void startWorkOuting() {
-        TreadmillProgramSetting programSetting = (TreadmillProgramSetting) TapcApplication.getInstance()
-                .getProgramSetting();
-        if (programSetting == null) {
+//        mProgramSetting = (TreadmillProgramSetting) TapcApplication.getInstance().getProgramSetting();
+        if (mProgramSetting == null) {
             WorkoutEnum.ProgramType programType = WorkoutEnum.ProgramType.NORMAL;
             programType.setGoal(120 * 60);
             TreadmillProgramSetting treadmillProgramSetting = new TreadmillProgramSetting(programType);
             treadmillProgramSetting.setSpeed(TreadmillSystemSettings.MIN_SPEED);
             treadmillProgramSetting.setIncline(TreadmillSystemSettings.MIN_INCLINE);
-            programSetting = treadmillProgramSetting;
+            mProgramSetting = treadmillProgramSetting;
         }
-        mWorkOuting.setProgramSetting(programSetting);
+        mWorkOuting.setProgramSetting(mProgramSetting);
         WorkOuting.getInstance().start();
     }
 

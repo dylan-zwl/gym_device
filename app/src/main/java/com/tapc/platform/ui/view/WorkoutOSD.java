@@ -17,7 +17,7 @@ public class WorkoutOSD extends BaseView {
     TextView mValue;
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.view_workout_osd;
     }
 

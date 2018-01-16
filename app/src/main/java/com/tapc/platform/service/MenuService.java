@@ -14,6 +14,7 @@ import com.tapc.platform.entity.EventEntity;
 import com.tapc.platform.jni.Driver;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.library.workouting.WorkOuting;
+import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.model.key.KeyCode;
 import com.tapc.platform.model.key.KeyModel;
 import com.tapc.platform.ui.witget.CountdownDialog;
@@ -145,6 +146,8 @@ public class MenuService extends Service {
         mKeyModel.startListen(new KeyModel.KeyListener() {
             @Override
             public void receverMcuKey(int keycode) {
+                NoActionModel.getInstance().cleanNoActionCount();
+
                 if (mErrorDialog.isShown() || mCountdownDialog.isShown()) {
                     clickWarningSound();
                     return;

@@ -3,7 +3,10 @@ package com.tapc.platform.ui.base;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.widget.LinearLayout;
+
+import com.tapc.platform.model.common.NoActionModel;
 
 import butterknife.ButterKnife;
 
@@ -14,7 +17,7 @@ import butterknife.ButterKnife;
 public abstract class BaseView extends LinearLayout {
     protected Context mContext;
 
-    protected abstract int getContentView();
+    protected abstract int getLayoutResID();
 
     public BaseView(Context context) {
         super(context);
@@ -28,7 +31,7 @@ public abstract class BaseView extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(getContentView(), this, true);
+        inflater.inflate(getLayoutResID(), this, true);
         ButterKnife.bind(this);
         mContext = context;
         initView();
@@ -38,5 +41,11 @@ public abstract class BaseView extends LinearLayout {
     }
 
     public void onDestroy() {
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        NoActionModel.getInstance().cleanNoActionCount();
+        return super.dispatchTouchEvent(ev);
     }
 }

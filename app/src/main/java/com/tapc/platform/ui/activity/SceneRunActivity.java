@@ -3,7 +3,6 @@ package com.tapc.platform.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,6 +15,7 @@ import com.tapc.platform.ui.base.BaseActivity;
 import com.tapc.platform.ui.base.BaseRecyclerViewAdapter;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class SceneRunActivity extends BaseActivity {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_scene_run;
     }
 
@@ -59,8 +59,11 @@ public class SceneRunActivity extends BaseActivity {
             public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
                 if (VA_FILE_PATH == null) {
                     VA_FILE_PATH = new ArrayList<String>();
-                    VA_FILE_PATH.add(Environment.getExternalStorageDirectory().getPath());
-                    VA_FILE_PATH.add(System.getenv("SECONDARY_STORAGE"));
+                    String pathname = "/mnt/";
+                    for (String path : new File(pathname).list()) {
+                        VA_FILE_PATH.add(pathname + path + "/");
+                    }
+//                    VA_FILE_PATH.add(Environment.getExternalStorageDirectory().getPath());
                 }
 
                 mPlayList = new ArrayList<PlayEntity>();

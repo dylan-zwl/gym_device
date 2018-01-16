@@ -36,7 +36,7 @@ public class CountdownDialog extends BaseSystemView {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.dialog_countdown;
     }
 

@@ -42,7 +42,7 @@ public class WorkoutCtlSetActivity extends BaseActivity {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getLayoutResID() {
         return R.layout.activity_workout_ctl;
     }
 
