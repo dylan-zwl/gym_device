@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
+import java.net.InetAddress;
+
 /**
  * Created by Administrator on 2017/9/8.
  */
@@ -90,5 +92,22 @@ public class NetUtils {
             mWifiManager.setWifiEnabled(false);
         }
         return deviceId;
+    }
+
+    /**
+     * 功能描述 : 获取域名IP地址
+     *
+     * @param : host  域名
+     */
+    public static String getInetAddress(String host) {
+        String IPAddress = "";
+        InetAddress ReturnStr1 = null;
+        try {
+            ReturnStr1 = InetAddress.getByName(host);
+            IPAddress = ReturnStr1.getHostAddress();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return IPAddress;
     }
 }

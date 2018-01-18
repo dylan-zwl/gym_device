@@ -214,7 +214,7 @@
     <string name="net_connect">Net connect</string>
     <string name="net_unconnect">Net break</string>
     <string name="net_unconnected">Net unconnected</string>
-    <string name="toast_connect_server_failure">Connection to the server timed out, please try again later</string>
+    <string name="connect_server_failure">Connection to the server timed out, please try again later</string>
 
     <!-- 自更新 -->
     <string name="new_version">new version</string>
@@ -230,4 +230,16 @@
     <string name="confirm">confirm</string>
 
     <string name="error_lifter_tx">Lift error, whether to cancel the show?</string>
+
+    <!-- 扫码 -->
+    <string name="scan_code">Scan code</string>
+    <string name="scan_msg">Scan code</string>
+    <string name="switch_login">Switch login</string>
+    <string name="registered_device_fail">Failed to register device</string>
+    <string name="registered_device">Please register the device first</string>
+    <string name="sport_plan_stage">Stage</string>
+    <string name="quit">Quit</string>
+    <string name="password">Password error</string>
+    <string name="refresh_qrcode">Click refresh</string>
+
 </resources>

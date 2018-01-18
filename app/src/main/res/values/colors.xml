@@ -5,5 +5,7 @@
     <!-- goal edit text color -->
     <color name="goal_text_edit">#22A5D1</color>
     <color name="setting_text_color">#22A5D1</color>
+
     <color name="text_color1">#5da4d5</color>
+    <color name="text_color2">#ffffff</color>
 </resources>

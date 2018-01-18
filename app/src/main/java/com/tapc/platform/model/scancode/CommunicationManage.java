@@ -1,9 +1,21 @@
 package com.tapc.platform.model.scancode;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.tapc.platform.model.scancode.dao.request.HeartbeatPacket;
+import com.tapc.platform.model.scancode.dao.request.OpenDeviceRequest;
+import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.OpenDeviceAck;
+import com.tapc.platform.model.scancode.dao.response.User;
 import com.tapc.platform.model.tcp.TcpClient;
+import com.tapc.platform.utils.GsonUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 
@@ -30,11 +42,74 @@ public class CommunicationManage {
         mTcpClient = tcpClient;
     }
 
-
-    private void uploadDeviceInformation() {
-
+    /**
+     * 功能描述 : 获取数据中命令字节
+     */
+    public int getCommand(String jsonStr) {
+        JSONObject jsonObject = null;
+        int command = -1;
+        try {
+            jsonObject = new JSONObject(jsonStr);
+            command = (int) jsonObject.get("command");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return command;
     }
 
+    /**
+     * 功能描述 : 获取请求打开设备的用户信息，device_id  需要与本设备相同，user_id 不为空才能开启设备
+     */
+    public User getUser(int command, String jsonStr) {
+        OpenDeviceRequest openDeviceRequest = GsonUtils.fromJson(jsonStr, OpenDeviceRequest.class);
+        if (openDeviceRequest != null) {
+            String deviceId = openDeviceRequest.getDevice_id();
+            String userId = openDeviceRequest.getUser_id();
+            if (!TextUtils.isEmpty(deviceId) && deviceId.equals(mDeviceId) && !TextUtils.isEmpty(userId)) {
+                sendOpenDeviceStatus(command, mDeviceId, "0");
+                User user = new User();
+                user.setName(openDeviceRequest.getUser_name());
+                user.setUserId(userId);
+                user.setDeviceId(deviceId);
+                user.setAvatarUrl(openDeviceRequest.getUser_avatar());
+                return user;
+            }
+        }
+        sendOpenDeviceStatus(command, mDeviceId, "1");
+        return null;
+    }
+
+    /**
+     * 功能描述 : 获取锻炼程序
+     */
+    public ExerciseProgram getExerciseProgram(String jsonStr) {
+        ExerciseProgram exerciseProgram = GsonUtils.fromJson(jsonStr, ExerciseProgram.class);
+        if (exerciseProgram != null && exerciseProgram.getDevice_id().equals(mDeviceId) && exerciseProgram
+                .getAction_count() > 0) {
+            int actionCount = exerciseProgram.getAction_count();
+            List<String> plan_load = new ArrayList<>();
+            if (actionCount > 0) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(jsonStr);
+                    for (int i = 0; i < actionCount; i++) {
+                        String key = "plan_load" + (i + 1);
+                        if (jsonObject.has(key)) {
+                            String sportDataStr = jsonObject.get(key).toString();
+                            if (sportDataStr != null && !sportDataStr.isEmpty()) {
+                                plan_load.add(sportDataStr);
+                            }
+                        }
+                    }
+                    exerciseProgram.setPlan_load(plan_load);
+                    return exerciseProgram;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * 功能描述 : 心跳包回应
@@ -61,8 +136,8 @@ public class CommunicationManage {
         return toJson(openDeviceAck);
     }
 
-    public void sendOpenDeviceStatus(String user_id, String status) {
-        String jsonStr = getOpenDeviceAckJson(Command.OPEN_DEVICE, mDeviceId, user_id, status);
+    public void sendOpenDeviceStatus(int command, String user_id, String status) {
+        String jsonStr = getOpenDeviceAckJson(command, mDeviceId, user_id, status);
         sendData(jsonStr);
     }
 

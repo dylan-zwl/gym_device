@@ -2,14 +2,14 @@ package com.tapc.platform.model.scancode.dao.response;
 
 import java.util.List;
 
-public class SportsMenu<T> {
+public class ExerciseProgram {
     private int command;
     private String device_id;
     private String user_id;
     private String type;
     private String plan_id;
     private int action_count;
-    private List<T> plan_load;
+    private List<String> plan_load;
 
     public int getCommand() {
         return command;
@@ -43,13 +43,6 @@ public class SportsMenu<T> {
         this.action_count = action_count;
     }
 
-    public List<T> getPlan_load() {
-        return plan_load;
-    }
-
-    public void setPlan_load(List<T> plan_load) {
-        this.plan_load = plan_load;
-    }
 
     public String getUser_id() {
         return user_id;
@@ -61,5 +54,13 @@ public class SportsMenu<T> {
 
     public void setPlan_id(String plan_id) {
         this.plan_id = plan_id;
+    }
+
+    public List<String> getPlan_load() {
+        return plan_load;
+    }
+
+    public void setPlan_load(List<String> plan_load) {
+        this.plan_load = plan_load;
     }
 }

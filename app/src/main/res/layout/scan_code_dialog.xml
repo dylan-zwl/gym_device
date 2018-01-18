@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/dialog_rl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scan_qrcode_bg"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/scancode_login_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/system_settings"
+            android:layout_width="@dimen/main_icon3_with"
+            android:layout_height="@dimen/main_icon3_with"
+            android:background="@null"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp">
+
+            <RelativeLayout
+                android:id="@+id/dialog_qr_codes_fl"
+                android:layout_width="185px"
+                android:layout_height="185px"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
+
+                <LinearLayout
+                    android:id="@+id/refresh_qrcode_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/refresh_bg"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminateDrawable="@drawable/progress"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="@string/refresh_qrcode"
+                        android:textColor="@color/text_color2"
+                        android:textSize="25sp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/qr_codes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@id/dialog_qr_codes_fl"
+                android:background="@drawable/scan_login_bg"/>
+
+            <ImageView
+                android:id="@+id/device_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/dialog_qr_codes_fl"
+                android:background="@drawable/device_type3"/>
+
+            <TextView
+                android:id="@+id/show_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dialog_qr_codes_fl"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="@string/scan_msg"
+                android:textColor="@color/text_color2"
+                android:textSize="38sp"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/net_msg_rl"
+            android:layout_width="362dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/net_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/net_msg_bg"
+                android:gravity="center"
+                android:text="@string/connect_server_failure"
+                android:textColor="@color/text_color2"
+                android:textSize="30sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/net_msg"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/connect_service_yes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/net_msg_btn"
+                    android:text="YES"
+                    android:textColor="@color/text_color1"/>
+
+                <Button
+                    android:id="@+id/connect_service_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/net_msg_btn"
+                    android:text="NO"
+                    android:textColor="@color/text_color2"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rfid_msg_rl"
+            android:layout_width="362dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/rfid_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/net_msg_bg"
+                android:gravity="center"
+                android:textColor="@color/text_color2"
+                android:textSize="30sp"/>
+
+            <Button
+                android:id="@+id/rfid_reconnect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rfid_msg"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/net_msg_btn"
+                android:text="@string/rfid_reconnect"
+                android:textColor="@color/text_color1"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/randomcode_login_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90px"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/randomcode_et"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:inputType="textPassword"
+            android:textColorHint="@color/text_color1"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/randomcode_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/randomcode_et"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/scan_login"
+            android:gravity="center"
+            android:text="@string/login"
+            android:textColor="#b6b6b6"
+            android:textSize="30sp"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/change_login_mode"
+        android:layout_width="109dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="22dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/scan_login"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="@string/switch_login"
+        android:textColor="#b6b6b6"
+        android:textSize="20sp"/>
+
+</RelativeLayout>

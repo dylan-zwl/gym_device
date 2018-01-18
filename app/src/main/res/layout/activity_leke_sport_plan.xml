@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_top">
+
+    <RelativeLayout
+        android:id="@+id/list_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp">
+
+        <LinearLayout
+            android:id="@+id/list_ll1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sport_menu_user_name"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:lines="1"
+                android:scaleType="fitCenter"
+                android:textColor="@color/text_color2"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/list_ll2"
+            android:layout_width="562px"
+            android:layout_height="293px"
+            android:layout_below="@id/list_ll1"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="49px"
+                android:background="@drawable/sport_menu_data_title"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/sport_plan_stage"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/record_data_size"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/goaltime"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/record_data_size"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/speed"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/record_data_size"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/incline"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/record_data_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/sport_menu_list_bg">
+
+                <ListView
+                    android:id="@+id/sport_menu_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null">
+                </ListView>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_ll"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="136dp"
+            android:layout_height="50dp"
+            android:background="@drawable/sport_menu_start"
+            android:text="@string/start"
+            android:textColor="@color/text_color2"
+            android:textSize="@dimen/start_size"/>
+
+        <Button
+            android:id="@+id/exit"
+            android:layout_width="136dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_toRightOf="@id/start"
+            android:background="@drawable/sport_menu_exit"
+            android:text="@string/quit"
+            android:textColor="#909090"
+            android:textSize="@dimen/start_size"/>
+    </RelativeLayout>
+
+</RelativeLayout>

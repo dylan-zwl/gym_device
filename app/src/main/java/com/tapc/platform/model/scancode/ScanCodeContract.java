@@ -1,9 +1,9 @@
 package com.tapc.platform.model.scancode;
 
-import com.tapc.platform.model.scancode.dao.response.SportsMenu;
+import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.User;
 
-public interface ScanQrcodeContract {
+public interface ScanCodeContract {
 
     interface View {
         void connectServerResult(boolean isSuccess);
@@ -12,11 +12,9 @@ public interface ScanQrcodeContract {
 
         void openDevice(User user);
 
-        void recvSportPlan(SportsMenu plan_load);
+        void recvSportPlan(ExerciseProgram exerciseProgram);
 
         int getDeviceStatus();
-
-        void loginPassword(String password);
     }
 
     interface Presenter {
@@ -25,5 +23,7 @@ public interface ScanQrcodeContract {
         void stop();
 
         void updateDeviceStatus();
+
+        String getPassword();
     }
 }

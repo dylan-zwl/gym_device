@@ -3,6 +3,7 @@ package com.tapc.platform.activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.ClickModel;
 import com.tapc.platform.model.common.NoActionModel;
+import com.tapc.platform.model.scancode.ScanCodeEvent;
 import com.tapc.platform.model.vaplayer.VaRecordPosition;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.ui.activity.ApplicationActivity;
@@ -101,6 +103,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private ClickModel mClickModel;
     private WorkOuting mWorkOuting = WorkOuting.getInstance();
     private ProgramSetting mProgramSetting;
+    private Handler mHandler;
     private boolean isAppToBackground;
     private int mPage = 0;
 
@@ -112,10 +115,10 @@ public class MainActivity extends BaseActivity implements Observer {
     @Override
     protected void initView() {
         super.initView();
+        mHandler = new Handler();
         mWorkOuting.subscribeObserverNotification(this);
         EventBus.getDefault().register(this);
 
-        initEnterSetting();
         initDeviceCtl();
         initWorkOutReceive();
         initNoActionModel();
@@ -495,6 +498,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
             /* 其他 */
             case R.id.system_settings:
+                initEnterSetting();
                 mClickModel.click();
                 break;
             case R.id.nextButton:
@@ -530,13 +534,15 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void initEnterSetting() {
-        mClickModel = new ClickModel.Builder().onceClickTimeout(1000).maxClickNumbers(5).listener(new ClickModel
-                .Listener() {
-            @Override
-            public void onClickCompleted() {
-                IntentUtils.startActivity(mContext, SettingActivity.class);
-            }
-        }).create();
+        if (mClickModel == null) {
+            mClickModel = new ClickModel.Builder().onceClickTimeout(1000).maxClickNumbers(5).listener(new ClickModel
+                    .Listener() {
+                @Override
+                public void onClickCompleted() {
+                    IntentUtils.startActivity(mContext, SettingActivity.class);
+                }
+            }).create();
+        }
     }
 
     private void startThirdApp(Context context, String packageName, String className) {
@@ -592,6 +598,16 @@ public class MainActivity extends BaseActivity implements Observer {
         if (mPage == 2) {
             mTapcApp.getService().getMenuBar().showRunInformation(false);
         }
+        showScanCodeDialog(true, 500);
+    }
+
+    private void showScanCodeDialog(final boolean visibility, int delayTime) {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                EventBus.getDefault().postSticky(new ScanCodeEvent(visibility));
+            }
+        }, delayTime);
     }
 
     @Override

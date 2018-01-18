@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
+import com.android.module.retrofit.RetrofitClient;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.tapc.platform.entity.DeviceType;
@@ -84,7 +85,7 @@ public class TapcApplication extends Application {
         }, Context.BIND_AUTO_CREATE);
 
         initDeviceId();
-
+        RetrofitClient.init(this, null);
         SoundCtlUtils.getInstance().init(this);
 
         RxjavaUtils.create(new ObservableOnSubscribe<Object>() {

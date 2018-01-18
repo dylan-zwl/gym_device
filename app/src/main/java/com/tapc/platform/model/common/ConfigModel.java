@@ -19,6 +19,7 @@ public class ConfigModel {
     private static final String ERP = "erp";
     private static final String TEST = "test";
     private static final String RFID = "rfid";
+    private static final String SCAN_CODE = "scan_code";
     private static final String LANGUAGE = "languageName";
     private static final String BACKLIGHT = "backlight";
     private static final String LOCAL_USER = "local_user";
@@ -39,22 +40,33 @@ public class ConfigModel {
      * @Description: 待机
      */
     public static boolean getErpFunction(Context context, boolean defaults) {
-        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, RFID, defaults);
+        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, ERP, defaults);
     }
 
     public static void setErpFunction(Context context, boolean data) {
-        PreferenceHelper.write(context, SETTING_CONFIG, RFID, data);
+        PreferenceHelper.write(context, SETTING_CONFIG, ERP, data);
     }
 
     /**
      * @Description: rfid
      */
     public static boolean getRfidFunction(Context context, boolean defaults) {
-        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, ERP, defaults);
+        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, RFID, defaults);
     }
 
     public static void setRfidFunction(Context context, boolean data) {
-        PreferenceHelper.write(context, SETTING_CONFIG, ERP, data);
+        PreferenceHelper.write(context, SETTING_CONFIG, RFID, data);
+    }
+
+    /**
+     * @Description: scan code
+     */
+    public static boolean getScanCode(Context context, boolean defaults) {
+        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, SCAN_CODE, defaults);
+    }
+
+    public static void setScanCode(Context context, boolean data) {
+        PreferenceHelper.write(context, SETTING_CONFIG, SCAN_CODE, data);
     }
 
     /**

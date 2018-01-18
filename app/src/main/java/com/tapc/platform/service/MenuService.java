@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 
 import com.tapc.platform.R;
 import com.tapc.platform.broadcast.send.WorkoutBroadcase;
+import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.entity.DeviceWorkout;
 import com.tapc.platform.entity.EventEntity;
 import com.tapc.platform.jni.Driver;
@@ -21,6 +22,7 @@ import com.tapc.platform.ui.witget.CountdownDialog;
 import com.tapc.platform.ui.witget.ErrorDialog;
 import com.tapc.platform.ui.witget.MenuBar;
 import com.tapc.platform.ui.witget.NumberDialog;
+import com.tapc.platform.ui.witget.ScanCodeDialog;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.SoundCtlUtils;
 
@@ -79,6 +81,7 @@ public class MenuService extends Service {
 
         mNumberDialog = new NumberDialog(this);
         initCountdownDialog();
+        initScanCodeDialog();
         initErrorDialog();
     }
 
@@ -92,6 +95,11 @@ public class MenuService extends Service {
 
     public ErrorDialog getmErrorDialog() {
         return mErrorDialog;
+    }
+
+    private void initScanCodeDialog() {
+        ScanCodeDialog scanCodeDialog = new ScanCodeDialog(this, DeviceType.TREADMILL);
+        scanCodeDialog.addViewToWindow();
     }
 
     private void initCountdownDialog() {

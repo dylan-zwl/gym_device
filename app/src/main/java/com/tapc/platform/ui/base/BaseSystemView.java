@@ -29,10 +29,7 @@ public abstract class BaseSystemView extends BaseView {
     public void setShowStatus(WidgetShowStatus status) {
         switch (status) {
             case VISIBLE:
-                if (!mAddViewed) {
-                    WindowManagerUtils.addView(mWindowManager, this, getLayoutParams());
-                    mAddViewed = true;
-                }
+                addViewToWindow();
                 setVisibility(View.VISIBLE);
                 break;
             case INVISIBLE:
@@ -52,6 +49,16 @@ public abstract class BaseSystemView extends BaseView {
                     mAddViewed = false;
                 }
                 break;
+        }
+    }
+
+    public void addViewToWindow() {
+        if (!mAddViewed) {
+            WindowManager.LayoutParams layoutParams = getLayoutParams();
+            if (layoutParams != null) {
+                WindowManagerUtils.addView(mWindowManager, this, getLayoutParams());
+                mAddViewed = true;
+            }
         }
     }
 

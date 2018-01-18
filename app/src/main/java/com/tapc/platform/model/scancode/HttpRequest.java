@@ -1,10 +1,13 @@
 package com.tapc.platform.model.scancode;
 
 import com.android.module.retrofit.RetrofitClient;
-import com.tapc.platform.model.scancode.api.ScanQrcodeService;
+import com.google.gson.Gson;
 import com.tapc.platform.model.scancode.api.ScanCodeUrl;
+import com.tapc.platform.model.scancode.api.ScanQrcodeService;
+import com.tapc.platform.model.scancode.dao.response.ResponseDTO;
 import com.tapc.platform.utils.GsonUtils;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -36,7 +39,7 @@ public class HttpRequest {
      */
     private Object mObject;
 
-    public synchronized <T> T getCode(String type, final Class<T> classOfT) {
+    public synchronized <T> T getCode(String type, final Type typeOfT) {
         Map<String, Object> map = new HashMap<>();
         map.put("device_id", deviceId);
         map.put("type", type);
@@ -45,8 +48,11 @@ public class HttpRequest {
                 .subscribe(new Consumer<ResponseBody>() {
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
-                        mObject = GsonUtils.fromJson(responseBody.string(), classOfT);
-                        countDownLatch.countDown();
+                        ResponseDTO<T> responseDTO = new Gson().fromJson(responseBody.string(), typeOfT);
+                        if (responseDTO != null && responseDTO.getStatus() == 0) {
+                            mObject = responseDTO.getResponse();
+                            countDownLatch.countDown();
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -80,7 +86,7 @@ public class HttpRequest {
         map.put("parameter", parameter);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         RetrofitClient.getInstance().getService(ScanQrcodeService.class).uploadDeviceInformation(ScanCodeUrl
-                .GET_CODE, map)
+                .UPLOAD_DEVICE_INFORMATION, map)
                 .subscribe(new Consumer<ResponseBody>() {
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
