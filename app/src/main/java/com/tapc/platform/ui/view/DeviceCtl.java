@@ -82,7 +82,7 @@ public class DeviceCtl extends BaseView implements View.OnTouchListener {
     }
 
     public String formatShowStr(float value) {
-        return String.format("%.1f", value);
+        return FormatUtils.format("%.1f", value);
     }
 
     @OnClick(R.id.Add)

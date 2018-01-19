@@ -12,18 +12,18 @@ import com.tapc.platform.R;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.ui.base.BaseActivity;
+import com.tapc.platform.utils.FormatUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class WorkoutCtlSetActivity extends BaseActivity {
+    public static final String SPEED = "speed";
+    public static final String INCLINE = "incline";
     @BindView(R.id.workout_ctl_seekbar)
     SeekBar mSeekBar;
     @BindView(R.id.workout_ctl_title)
     TextView mValueText;
-
-    public static final String SPEED = "speed";
-    public static final String INCLINE = "incline";
     private String mType;
     private int mValueMax = 0;
     private int mValueMin = 0;
@@ -68,11 +68,11 @@ public class WorkoutCtlSetActivity extends BaseActivity {
                     if (progress >= mValueMin) {
                         mValue = progress;
                         if (mType.equals(SPEED)) {
-                            mValueText.setText(getString(R.string.speed) + " " + String.format(getString(R.string
+                            mValueText.setText(getString(R.string.speed) + " " + FormatUtils.format(getString(R.string
                                     .workout_ctl_title), mValue / mValuePoint) + "." + (mValue % mValuePoint) + " " +
                                     "km/h");
                         } else if (mType.equals(INCLINE)) {
-                            mValueText.setText(getString(R.string.incline) + " " + String.format(getString(R.string
+                            mValueText.setText(getString(R.string.incline) + " " + FormatUtils.format(getString(R.string
                                     .workout_ctl_title), mValue / mValuePoint) + " %");
                         }
                     } else {

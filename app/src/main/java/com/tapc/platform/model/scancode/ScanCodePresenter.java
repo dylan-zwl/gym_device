@@ -4,11 +4,21 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.tapc.platform.entity.DeviceType;
+import com.tapc.platform.library.common.BikeSystemSettings;
+import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.scancode.ScanCodeModel.ScanCodeListener;
 import com.tapc.platform.model.scancode.dao.request.DeviceStatus;
+import com.tapc.platform.model.scancode.dao.request.PowerDeviceInfor;
+import com.tapc.platform.model.scancode.dao.request.UploadDeviceInfo;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.User;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
+import com.tapc.platform.utils.GsonUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.tapc.platform.library.common.SystemSettings.mContext;
 
 
 public class ScanCodePresenter implements ScanCodeContract.Presenter {
@@ -20,6 +30,7 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         mView = view;
         mModel = new ScanCodeModel(context.getApplicationContext(), deviceType);
         mModel.setDeviceId(ConfigModel.getDeviceId(context, ""));
+        mModel.setUploadDeviceInfor(getDeviceParameter(deviceType));
         mModel.setTcpListener(mTcpListener);
     }
 
@@ -62,7 +73,7 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         }
 
         @Override
-        public void openDevice(User user) {
+        public void openDevice(ScanCodeUser user) {
             mView.openDevice(user);
         }
 
@@ -74,6 +85,11 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         @Override
         public int getWorkStatus() {
             return mView.getDeviceStatus();
+        }
+
+        @Override
+        public void seveLoginRandomcode(String randomcode) {
+            ConfigModel.setLoginRandomcode(mContext, randomcode);
         }
     };
 
@@ -99,5 +115,55 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
             }
         });
         mUploadLocalDataThread.start();
+    }
+
+    public UploadDeviceInfo getDeviceParameter(DeviceType deviceType) {
+        Map<String, Object> map = new HashMap<>();
+        switch (deviceType) {
+            case TREADMILL:
+                map.put("time", (60 * 120));
+                map.put("speed", TreadmillSystemSettings.MAX_SPEED);
+                map.put("incline", TreadmillSystemSettings.MAX_INCLINE);
+                break;
+            case BIKE:
+                map.put("time", (60 * 120));
+                map.put("watt", BikeSystemSettings.MAX_WATT);
+                map.put("resistance", BikeSystemSettings.MAX_RESISTANCE);
+                break;
+            case POWER:
+                map.put("times", 100);
+                map.put("heavy", 150);
+                map.put("cooldown", 120);
+                break;
+        }
+        String parameter = GsonUtils.toJson(map);
+        int deviceTypeId = ConfigModel.getDeviceTypeId(mContext, 0);
+        UploadDeviceInfo uploadDeviceInfo = UploadDeviceInfo.T5517T;
+        switch (deviceType) {
+            case TREADMILL:
+                for (UploadDeviceInfo info : UploadDeviceInfo.values()) {
+                    if (info.getDeviceType() == DeviceType.TREADMILL && info.getDeviceTypeId() == deviceTypeId) {
+                        info.setParameter(parameter);
+                        uploadDeviceInfo = info;
+                    }
+                }
+                break;
+            case BIKE:
+                for (UploadDeviceInfo info : UploadDeviceInfo.values()) {
+                    if (info.getDeviceType() == DeviceType.BIKE && info.getDeviceTypeId() == deviceTypeId) {
+                        info.setParameter(parameter);
+                        uploadDeviceInfo = info;
+                    }
+                }
+                break;
+            case POWER:
+                UploadDeviceInfo info = UploadDeviceInfo.POWER;
+                info.setType(PowerDeviceInfor.TYPE[deviceTypeId]);
+                info.setModel(PowerDeviceInfor.MODEL[deviceTypeId]);
+                info.setParameter(parameter);
+                uploadDeviceInfo = info;
+                break;
+        }
+        return uploadDeviceInfo;
     }
 }

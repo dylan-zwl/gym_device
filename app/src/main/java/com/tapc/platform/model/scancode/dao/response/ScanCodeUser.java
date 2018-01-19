@@ -1,6 +1,6 @@
 package com.tapc.platform.model.scancode.dao.response;
 
-public class User {
+public class ScanCodeUser {
     private String name;
     private String avatarUrl;
     private String deviceId;

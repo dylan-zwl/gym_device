@@ -24,6 +24,7 @@ import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.app.AppInfoEntity;
 import com.tapc.platform.model.app.AppModel;
 import com.tapc.platform.model.common.ConfigModel;
+import com.tapc.platform.model.common.UserManageModel;
 import com.tapc.platform.service.LocalBinder;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.utils.IntentUtils;
@@ -91,6 +92,7 @@ public class TapcApplication extends Application {
         RxjavaUtils.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
+                UserManageModel.getInstance();
                 mListAppInfo = AppModel.getAllAppInfo(mInstance, false);
                 e.onComplete();
             }

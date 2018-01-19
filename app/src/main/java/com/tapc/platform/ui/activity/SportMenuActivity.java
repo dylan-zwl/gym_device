@@ -8,7 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tapc.platform.R;
-import com.tapc.platform.model.scancode.dao.response.User;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.ui.adpater.SportMenuAdapter;
 import com.tapc.platform.ui.base.BaseActivity;
 
@@ -21,7 +21,7 @@ public class SportMenuActivity extends BaseActivity {
     @BindView(R.id.sport_menu_user_name)
     TextView mUserName;
 
-    private User mUser;
+    private ScanCodeUser mUser;
     //    private List<SportData> mSportMenuList;
     private SportMenuAdapter mSportMenuAdapter;
     private int mProgramTime = 0;

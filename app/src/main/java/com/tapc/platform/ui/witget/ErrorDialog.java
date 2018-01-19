@@ -104,7 +104,7 @@ public class ErrorDialog extends BaseSystemView {
                 isShowError = false;
             } else {
                 String errorStr = Integer.toHexString(status);
-                //                String text = String.format("2s%", errorStr);
+                //                String text = FormatUtils.format("2s%", errorStr);
                 mErrorCodeTx.setText(errorStr);
                 mErrorCodeRL.setVisibility(VISIBLE);
                 isShowError = true;

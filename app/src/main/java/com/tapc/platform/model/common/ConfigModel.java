@@ -18,12 +18,16 @@ public class ConfigModel {
     private static final String UNMANNED_RUN_CHECK = "unmanned_run_check";
     private static final String ERP = "erp";
     private static final String TEST = "test";
-    private static final String RFID = "rfid";
-    private static final String SCAN_CODE = "scan_code";
     private static final String LANGUAGE = "languageName";
     private static final String BACKLIGHT = "backlight";
     private static final String LOCAL_USER = "local_user";
     private static final String DEVICE_ID = "device_id";
+
+    private static final String RFID = "rfid";
+    private static final String SCAN_CODE = "scan_code";
+    private static final String DEVICE_TYPE_ID = "device_type_id";
+    private static final String LOGIN_RANDOMCODE = "login_randomcode";
+
 
     /**
      * @Description: 无人检测
@@ -45,28 +49,6 @@ public class ConfigModel {
 
     public static void setErpFunction(Context context, boolean data) {
         PreferenceHelper.write(context, SETTING_CONFIG, ERP, data);
-    }
-
-    /**
-     * @Description: rfid
-     */
-    public static boolean getRfidFunction(Context context, boolean defaults) {
-        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, RFID, defaults);
-    }
-
-    public static void setRfidFunction(Context context, boolean data) {
-        PreferenceHelper.write(context, SETTING_CONFIG, RFID, data);
-    }
-
-    /**
-     * @Description: scan code
-     */
-    public static boolean getScanCode(Context context, boolean defaults) {
-        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, SCAN_CODE, defaults);
-    }
-
-    public static void setScanCode(Context context, boolean data) {
-        PreferenceHelper.write(context, SETTING_CONFIG, SCAN_CODE, data);
     }
 
     /**
@@ -120,4 +102,55 @@ public class ConfigModel {
     public static void setDeviceId(Context context, String data) {
         PreferenceHelper.write(context, SETTING_CONFIG, DEVICE_ID, data);
     }
+
+    /**
+     * 功能描述 : 扫码部分配置
+     */
+
+    /**
+     * @Description: scan code
+     */
+    public static boolean getScanCode(Context context) {
+        boolean defaults = true;
+        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, SCAN_CODE, defaults);
+    }
+
+    public static void setScanCode(Context context, boolean data) {
+        PreferenceHelper.write(context, SETTING_CONFIG, SCAN_CODE, data);
+    }
+
+    /**
+     * @Description: rfid
+     */
+    public static boolean getRfidFunction(Context context) {
+        boolean defaults = false;
+        return PreferenceHelper.readBoolean(context, SETTING_CONFIG, RFID, defaults);
+    }
+
+    public static void setRfidFunction(Context context, boolean data) {
+        PreferenceHelper.write(context, SETTING_CONFIG, RFID, data);
+    }
+
+    /**
+     * @Description: 设备机型id
+     */
+    public static int getDeviceTypeId(Context context, int defaults) {
+        return PreferenceHelper.readInt(context, SETTING_CONFIG, DEVICE_TYPE_ID, defaults);
+    }
+
+    public static void setDeviceTypeId(Context context, String data) {
+        PreferenceHelper.write(context, SETTING_CONFIG, DEVICE_TYPE_ID, data);
+    }
+
+    /**
+     * @Description: 登录验证码
+     */
+    public static String getLoginRandomcode(Context context) {
+        return PreferenceHelper.readString(context, SETTING_CONFIG, LOGIN_RANDOMCODE);
+    }
+
+    public static void setLoginRandomcode(Context context, String data) {
+        PreferenceHelper.write(context, SETTING_CONFIG, LOGIN_RANDOMCODE, data);
+    }
+
 }

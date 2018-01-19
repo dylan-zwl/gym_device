@@ -10,6 +10,7 @@ import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.library.data.TreadmillProgramSetting;
 import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.ui.base.BaseActivity;
+import com.tapc.platform.utils.FormatUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -66,7 +67,7 @@ public class SetProgramTimeAcitvity extends BaseActivity {
             @Override
             public void onProgressChanged(SeekBar arg0, int progress, boolean arg2) {
                 mProgramTime = progress + mProgramTimeMin;
-                mProgramTimeText.setText(String.format(getString(R.string.program_time), mProgramTime));
+                mProgramTimeText.setText(FormatUtils.format(getString(R.string.program_time), mProgramTime));
                 //                mTapcApp.getProgramSetting().setProgramTime(mProgramTime);
             }
         });

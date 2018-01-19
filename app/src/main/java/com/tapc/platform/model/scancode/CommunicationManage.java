@@ -7,7 +7,7 @@ import com.tapc.platform.model.scancode.dao.request.HeartbeatPacket;
 import com.tapc.platform.model.scancode.dao.request.OpenDeviceRequest;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.OpenDeviceAck;
-import com.tapc.platform.model.scancode.dao.response.User;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.GsonUtils;
 
@@ -60,14 +60,14 @@ public class CommunicationManage {
     /**
      * 功能描述 : 获取请求打开设备的用户信息，device_id  需要与本设备相同，user_id 不为空才能开启设备
      */
-    public User getUser(int command, String jsonStr) {
+    public ScanCodeUser getUser(int command, String jsonStr) {
         OpenDeviceRequest openDeviceRequest = GsonUtils.fromJson(jsonStr, OpenDeviceRequest.class);
         if (openDeviceRequest != null) {
             String deviceId = openDeviceRequest.getDevice_id();
             String userId = openDeviceRequest.getUser_id();
             if (!TextUtils.isEmpty(deviceId) && deviceId.equals(mDeviceId) && !TextUtils.isEmpty(userId)) {
-                sendOpenDeviceStatus(command, mDeviceId, "0");
-                User user = new User();
+                sendOpenDeviceStatus(command, openDeviceRequest.getUser_id(), "0");
+                ScanCodeUser user = new ScanCodeUser();
                 user.setName(openDeviceRequest.getUser_name());
                 user.setUserId(userId);
                 user.setDeviceId(deviceId);
@@ -75,7 +75,7 @@ public class CommunicationManage {
                 return user;
             }
         }
-        sendOpenDeviceStatus(command, mDeviceId, "1");
+        sendOpenDeviceStatus(command, openDeviceRequest.getUser_id(), "1");
         return null;
     }
 

@@ -23,7 +23,7 @@ import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.ui.base.BaseSystemView;
 import com.tapc.platform.ui.view.WorkoutOSD;
-import com.tapc.platform.utils.CommonUtils;
+import com.tapc.platform.utils.FormatUtils;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.NetUtils;
 import com.tapc.platform.utils.RxjavaUtils;
@@ -119,14 +119,14 @@ public class MenuBar extends BaseSystemView implements Observer {
         long sysTime = System.currentTimeMillis();
         if (strTimeFormat != null) {
             if (strTimeFormat.equals("24")) {
-                sysTimeStr = CommonUtils.getDataTimeStr("HH:mm", sysTime);
+                sysTimeStr = FormatUtils.getDataTimeStr("HH:mm", sysTime);
             } else {
-                sysTimeStr = CommonUtils.getDataTimeStr("hh:mm", sysTime);
+                sysTimeStr = FormatUtils.getDataTimeStr("hh:mm", sysTime);
             }
         } else {
-            sysTimeStr = CommonUtils.getDataTimeStr("hh:mm", sysTime);
+            sysTimeStr = FormatUtils.getDataTimeStr("hh:mm", sysTime);
         }
-        String sysDateStr = CommonUtils.getDataTimeStr("yyyy/MM/dd", sysTime);
+        String sysDateStr = FormatUtils.getDataTimeStr("yyyy/MM/dd", sysTime);
         mDateTime.setTitle(sysTimeStr);
         mDateTime.setValue(sysDateStr);
     }
@@ -231,13 +231,13 @@ public class MenuBar extends BaseSystemView implements Observer {
     public void updateWorkout(TreadmillWorkout workout) {
         // incline
         double incline = workout.getIncline();
-        mIncline.setValue(String.format("%.1f", incline));
+        mIncline.setValue(FormatUtils.format("%.1f", incline));
         // speed
         double speed = workout.getSpeed();
-        mSpeed.setValue(String.format("%.1f", speed));
+        mSpeed.setValue(FormatUtils.format("%.1f", speed));
         // time
         long time = workout.getTotalTime();
-        mTime.setValue(String.format("%02d:%02d", time / 60, time % 60));
+        mTime.setValue(FormatUtils.format("%02d:%02d", time / 60, time % 60));
         // heart
         int heart = (int) workout.getHeart();
         mHeart.setValue(String.valueOf(heart));
@@ -246,7 +246,7 @@ public class MenuBar extends BaseSystemView implements Observer {
         switch (workout.getWorkoutGoal()) {
             case TIME:
                 if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.WARMUP) {
-                    // mGoalText.setTitleName(getString(R.string.warmUp_time), "min");
+                    // mGoalText.setTitleName(getInputStream2String(R.string.warmUp_time), "min");
                 } else if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.COOLDOWN) {
                     if (SystemSettings.COOLDOWN_TIME > 0) {
                         mGoalText.setText(R.string.relax_time);
@@ -255,7 +255,7 @@ public class MenuBar extends BaseSystemView implements Observer {
                     mGoalText.setText(R.string.goal_sports);
                 }
                 int timeProgress = workout.getTime();
-                mGoalText.setText(String.format("%d", (int) (goal / 60)));
+                mGoalText.setText(FormatUtils.format("%d", (int) (goal / 60)));
                 if (timeProgress != 0) {
                     mTarget.setMax((int) goal);
                     mTarget.setProgress(timeProgress);
@@ -293,10 +293,10 @@ public class MenuBar extends BaseSystemView implements Observer {
                     updateWorkout(workout);
                     break;
                 case UI_LEFT:
-                    mIncline.setValue(String.format("%.1f", workout.getIncline()));
+                    mIncline.setValue(FormatUtils.format("%.1f", workout.getIncline()));
                     break;
                 case UI_RIGHT:
-                    mSpeed.setValue(String.format("%.1f", workout.getSpeed()));
+                    mSpeed.setValue(FormatUtils.format("%.1f", workout.getSpeed()));
                     break;
             }
         }

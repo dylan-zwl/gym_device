@@ -1,7 +1,7 @@
 package com.tapc.platform.model.scancode;
 
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.User;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 
 public interface ScanCodeContract {
 
@@ -10,7 +10,7 @@ public interface ScanCodeContract {
 
         void showQrcode(String qrcode);
 
-        void openDevice(User user);
+        void openDevice(ScanCodeUser user);
 
         void recvSportPlan(ExerciseProgram exerciseProgram);
 

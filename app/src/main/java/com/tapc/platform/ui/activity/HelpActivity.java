@@ -6,7 +6,7 @@ import com.tapc.platform.R;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.language.LanguageModel;
 import com.tapc.platform.ui.base.BaseActivity;
-import com.tapc.platform.utils.CommonUtils;
+import com.tapc.platform.utils.FormatUtils;
 
 import java.io.InputStream;
 
@@ -42,7 +42,7 @@ public class HelpActivity extends BaseActivity {
                 break;
         }
         if (inputStream != null) {
-            String txt = CommonUtils.getString(inputStream);
+            String txt = FormatUtils.getInputStream2String(inputStream);
             helpText.setText(txt);
         }
     }

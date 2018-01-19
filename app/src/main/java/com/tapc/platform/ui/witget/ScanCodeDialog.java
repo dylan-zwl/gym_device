@@ -26,12 +26,13 @@ import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.model.common.ClickModel;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.common.NoActionModel;
+import com.tapc.platform.model.common.UserManageModel;
 import com.tapc.platform.model.scancode.ScanCodeContract;
 import com.tapc.platform.model.scancode.ScanCodeEvent;
 import com.tapc.platform.model.scancode.ScanCodePresenter;
 import com.tapc.platform.model.scancode.dao.request.DeviceStatus;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.User;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.ui.base.BaseSystemView;
 import com.tapc.platform.utils.CommonUtils;
 import com.tapc.platform.utils.QrcodeUtils;
@@ -113,7 +114,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
 //        if (Config.HAS_RFID) {
 //        connectRfid();
 //        }
-        isOpenScanCode = ConfigModel.getScanCode(mContext, true);
+        isOpenScanCode = ConfigModel.getScanCode(mContext);
         if (isOpenScanCode) {
             hideConnectNet();
             mPresenter.start();
@@ -150,11 +151,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
 
     private void initShowDialog() {
         switchLoginType(mLoginMode);
-//        if (TapcApp.getInstance().getSportsEngin().isRunning()) {
-//            TapcApp.getInstance().sendUIMessage(MessageType.MSG_UI_MAIN_STOP);
-//            return;
-//        }
-//        TapcApp.getInstance().mainActivity.setUser(null);
+        UserManageModel.getInstance().logout();
         mQrCode.setVisibility(View.GONE);
         setVisibility(View.VISIBLE);
     }
@@ -224,9 +221,8 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
         String loginPassword = mPresenter.getPassword();
         if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(loginPassword) && (password.equals(loginPassword) ||
                 password.equals("shuhua"))) {
-            User user = new User();
-            user.setName(null);
-//            TapcApp.getInstance().mainActivity.setUser(user);
+            UserManageModel.getInstance().setScanCodeUser(null);
+            UserManageModel.getInstance().login();
             mRandomcodeEt.setText("");
             setVisibility(false);
         } else {
@@ -305,9 +301,10 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
      * 功能描述 : 开启设备
      */
     @Override
-    public void openDevice(User user) {
+    public void openDevice(ScanCodeUser user) {
 //        mPresenter.setScanQrShowStatus(false);
-//        TapcApp.getInstance().mainActivity.setUser(user);
+        UserManageModel.getInstance().setScanCodeUser(user);
+        UserManageModel.getInstance().login();
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -322,7 +319,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
      */
     @Override
     public void recvSportPlan(ExerciseProgram plan_load) {
-//        User user = TapcApp.getInstance().mainActivity.getUser();
+//        ScanCodeUser user = TapcApp.getInstance().mainActivity.getUser();
 //        if (user == null || TapcApp.getInstance().isStart() || userId != user.getUserId()) {
 //            return;
 //        }
@@ -465,7 +462,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
 //
 //                            @Override
 //                            public void run() {
-//                                setRfidMsg(mContext.getString(R.string.rfid_device_connect_failed));
+//                                setRfidMsg(mContext.getInputStream2String(R.string.rfid_device_connect_failed));
 //                            }
 //                        });
 //                    }
@@ -477,7 +474,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
 //                        TapcApp.getInstance().controller.sendCommands(Commands.SET_BUZZER_CNTRL, null);
 //                        SysUtils.playBeep(mContext, R.raw.rfid);
 //                        String uidStr = UsbCtl.bytesToHexString(uid);
-//                        User user = new User();
+//                        ScanCodeUser user = new ScanCodeUser();
 //                        user.setName(uidStr);
 //                        user.setAvatarUrl(null);
 //                        TapcApp.getInstance().mainActivity.setUser(user);
@@ -493,7 +490,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
 //                }
 //            });
 //        } else {
-//            setRfidMsg(mContext.getString(R.string.rfid_device_malfunction));
+//            setRfidMsg(mContext.getInputStream2String(R.string.rfid_device_malfunction));
 //        }
 //    }
 //

@@ -26,7 +26,9 @@ import com.tapc.platform.library.data.TreadmillWorkout;
 import com.tapc.platform.library.util.WorkoutEnum;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.ClickModel;
+import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.common.NoActionModel;
+import com.tapc.platform.model.common.UserManageModel;
 import com.tapc.platform.model.scancode.ScanCodeEvent;
 import com.tapc.platform.model.vaplayer.VaRecordPosition;
 import com.tapc.platform.service.MenuService;
@@ -47,6 +49,7 @@ import com.tapc.platform.ui.view.WorkoutText;
 import com.tapc.platform.ui.witget.CountdownDialog;
 import com.tapc.platform.ui.witget.MenuBar;
 import com.tapc.platform.utils.AppUtils;
+import com.tapc.platform.utils.FormatUtils;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.SoundCtlUtils;
 
@@ -106,6 +109,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private Handler mHandler;
     private boolean isAppToBackground;
     private int mPage = 0;
+    private boolean isOpenScanCode = false;
 
     @Override
     protected int getLayoutResID() {
@@ -118,6 +122,7 @@ public class MainActivity extends BaseActivity implements Observer {
         mHandler = new Handler();
         mWorkOuting.subscribeObserverNotification(this);
         EventBus.getDefault().register(this);
+        isOpenScanCode = ConfigModel.getScanCode(this);
 
         initDeviceCtl();
         initWorkOutReceive();
@@ -209,7 +214,7 @@ public class MainActivity extends BaseActivity implements Observer {
             IntentUtils.home(mContext);
             showMainPage(1);
         }
-        SportResultActivity.launch(this, "stoprun_show");
+        SportResultActivity.launch(this, SportResultActivity.TYPE_STOP);
         mProgramSetting = null;
     }
 
@@ -250,28 +255,28 @@ public class MainActivity extends BaseActivity implements Observer {
     private void updateWorkout(TreadmillWorkout workout) {
         // time
         long time = workout.getTotalTime();
-        mWorkoutTextTime.setValue(String.format("%02d:%02d", time / 60, time % 60));
+        mWorkoutTextTime.setValue(FormatUtils.format("%02d:%02d", time / 60, time % 60));
 
         // distance
         double distance = workout.getTotalDistance();
-        mWorkoutTextDistance.setValue(String.format("%.2f", distance));
+        mWorkoutTextDistance.setValue(FormatUtils.format("%.2f", distance));
 
         // calorie
         double calorie = workout.getTotalCalorie();
-        mWorkoutTextCalorie.setValue(String.format("%.2f", calorie));
+        mWorkoutTextCalorie.setValue(FormatUtils.format("%.2f", calorie));
 
         // heartRate
         mWorkoutTextHeart.setValue(String.valueOf(workout.getHeart()));
 
         // Altitude
         double altitude = workout.getTotalAltitude();
-        mWorkoutTextPace.setValue(String.format("%.2f", altitude));
+        mWorkoutTextPace.setValue(FormatUtils.format("%.2f", altitude));
 
         float goal = workout.getGoal();
         switch (workout.getWorkoutGoal()) {
             case TIME:
                 if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.WARMUP) {
-                    // mWorkoutGoal.setTitleName(getString(R.string.warmUp_time), "min");
+                    // mWorkoutGoal.setTitleName(getInputStream2String(R.string.warmUp_time), "min");
                 } else if (workout.getWorkoutStage() == WorkoutEnum.WorkoutStage.COOLDOWN) {
                     if (SystemSettings.COOLDOWN_TIME > 0) {
                         mWorkoutGoal.setTitleName(getString(R.string.relax_time), "min");
@@ -280,7 +285,7 @@ public class MainActivity extends BaseActivity implements Observer {
                     mWorkoutGoal.setTitleName(getString(R.string.goal_sports), "min");
                 }
                 int timeProgress = workout.getTime();
-                mGoalRun.setText(String.format("%d", (int) (goal / 60)));
+                mGoalRun.setText(FormatUtils.format("%d", (int) (goal / 60)));
                 if (timeProgress != 0) {
                     mWorkoutGoal.SetRange(0, (int) goal);
                     mWorkoutGoal.setPos(timeProgress);
@@ -289,7 +294,7 @@ public class MainActivity extends BaseActivity implements Observer {
             case DISTANCE:
                 mWorkoutGoal.setTitleName(getString(R.string.goal_sports), "km");
                 float distanceProgress = workout.getDistance();
-                mGoalRun.setText(String.format("%.0f", goal));
+                mGoalRun.setText(FormatUtils.format("%.0f", goal));
                 if (distanceProgress != 0) {
                     mWorkoutGoal.SetRange(0, (int) (goal * 100));
                     mWorkoutGoal.setPos(distanceProgress * 100);
@@ -298,7 +303,7 @@ public class MainActivity extends BaseActivity implements Observer {
             case CALORIE:
                 mWorkoutGoal.setTitleName(getString(R.string.goal_sports), "kcal");
                 float calorieProgress = workout.getCalorie();
-                mGoalRun.setText(String.format("%.0f", goal));
+                mGoalRun.setText(FormatUtils.format("%.0f", goal));
                 if (calorie != 0) {
                     mWorkoutGoal.SetRange(0, (int) (goal * 100));
                     mWorkoutGoal.setPos(calorieProgress);
@@ -385,13 +390,15 @@ public class MainActivity extends BaseActivity implements Observer {
                 int msgWhat = intent.getIntExtra(DeviceWorkout.MSG_WHAT, 0);
                 switch (msgWhat) {
                     case COUNTDDOWN:
-//                        if (!mWorkOuting.isRunning()) {
+                        if (!UserManageModel.getInstance().isLogined() && !mWorkOuting.isRunning()) {
+                            showScanCodeDialog(true, 500);
+                            break;
+                        }
                         CountdownDialog countdownDialog = mTapcApp.getService().getCountdownDialog();
                         if (!countdownDialog.isShown()) {
                             startCountdown();
                             countdownDialog.show();
                         }
-//                        }
                         break;
                     case DeviceWorkout.START:
                         startWorkOuting();
@@ -471,7 +478,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 if (mWorkOuting.isRunning()) {
                     Toast.makeText(this, R.string.cannot_operate, Toast.LENGTH_SHORT).show();
                 } else {
-                    SportResultActivity.launch(this, "click_show");
+                    SportResultActivity.launch(this, SportResultActivity.TYPE_NOMAL);
                 }
                 break;
             case R.id.vaButton:
@@ -533,25 +540,9 @@ public class MainActivity extends BaseActivity implements Observer {
         }
     }
 
-    private void initEnterSetting() {
-        if (mClickModel == null) {
-            mClickModel = new ClickModel.Builder().onceClickTimeout(1000).maxClickNumbers(5).listener(new ClickModel
-                    .Listener() {
-                @Override
-                public void onClickCompleted() {
-                    IntentUtils.startActivity(mContext, SettingActivity.class);
-                }
-            }).create();
-        }
-    }
-
-    private void startThirdApp(Context context, String packageName, String className) {
-        //        boolean result = IntentUtils.startThirdApp(mContext, packageName, className, null, Intent
-        //                .FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        //        Logger.d("start third app result : " + result);
-        ApplicationActivity.launch(context, ApplicationActivity.START_APP, packageName, className);
-    }
-
+    /**
+     * 功能描述 : 初始化无人操作检测
+     */
     private void initNoActionModel() {
         NoActionModel.getInstance().setListener(new NoActionModel.Listener() {
             @Override
@@ -573,6 +564,40 @@ public class MainActivity extends BaseActivity implements Observer {
         });
     }
 
+    /**
+     * 功能描述 : 扫码界面显示设置
+     */
+    private void showScanCodeDialog(final boolean visibility, int delayTime) {
+        if (!isOpenScanCode) {
+            return;
+        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                EventBus.getDefault().postSticky(new ScanCodeEvent(visibility));
+            }
+        }, delayTime);
+    }
+
+    /**
+     * 功能描述 : 初始化进入后台设置
+     */
+    private void initEnterSetting() {
+        if (mClickModel == null) {
+            mClickModel = new ClickModel.Builder().onceClickTimeout(1000).maxClickNumbers(5).listener(new ClickModel
+                    .Listener() {
+                @Override
+                public void onClickCompleted() {
+                    IntentUtils.startActivity(mContext, SettingActivity.class);
+                }
+            }).create();
+        }
+    }
+
+    private void startThirdApp(Context context, String packageName, String className) {
+        ApplicationActivity.launch(context, ApplicationActivity.START_APP, packageName, className);
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND, priority = 100)
     public void reload(EventEntity.ReloadApp reload) {
         IntentUtils.stopService(this, MenuService.class);
@@ -587,6 +612,7 @@ public class MainActivity extends BaseActivity implements Observer {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             showMainPage(1);
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -598,16 +624,9 @@ public class MainActivity extends BaseActivity implements Observer {
         if (mPage == 2) {
             mTapcApp.getService().getMenuBar().showRunInformation(false);
         }
-        showScanCodeDialog(true, 500);
-    }
-
-    private void showScanCodeDialog(final boolean visibility, int delayTime) {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                EventBus.getDefault().postSticky(new ScanCodeEvent(visibility));
-            }
-        }, delayTime);
+        if (!UserManageModel.getInstance().isLogined()) {
+            showScanCodeDialog(true, 500);
+        }
     }
 
     @Override
