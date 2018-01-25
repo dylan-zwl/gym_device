@@ -6,8 +6,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by Administrator on 2018/1/9.
  * 服务器连接的心跳包
+ * Created by Administrator on 2018/1/9.
  */
 
 public class HeartBeat {
@@ -16,7 +16,7 @@ public class HeartBeat {
     private int mNotHeartbeatNumber;
     private Listener mListener;
 
-    public void start() {
+    public void start(int timeMs) {
         if (mListener == null) {
             return;
         }
@@ -36,7 +36,7 @@ public class HeartBeat {
                 }
                 mListener.sendHeartbeat();
             }
-        }, 10000, 10000);
+        }, 1000, timeMs);
     }
 
     public void stop() {

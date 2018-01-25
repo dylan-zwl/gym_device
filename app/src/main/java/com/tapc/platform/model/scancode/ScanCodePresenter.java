@@ -3,14 +3,15 @@ package com.tapc.platform.model.scancode;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.tapc.platform.application.Config;
 import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.library.common.BikeSystemSettings;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.scancode.ScanCodeModel.ScanCodeListener;
-import com.tapc.platform.model.scancode.dao.request.DeviceStatus;
-import com.tapc.platform.model.scancode.dao.request.PowerDeviceInfor;
-import com.tapc.platform.model.scancode.dao.request.UploadDeviceInfo;
+import com.tapc.platform.model.scancode.entity.DeviceStatus;
+import com.tapc.platform.model.scancode.entity.PowerDeviceInfor;
+import com.tapc.platform.model.scancode.entity.UploadDeviceInfo;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.utils.GsonUtils;
@@ -117,6 +118,9 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         mUploadLocalDataThread.start();
     }
 
+    /**
+     * 功能描述 : 获取设备参数信息
+     */
     public UploadDeviceInfo getDeviceParameter(DeviceType deviceType) {
         Map<String, Object> map = new HashMap<>();
         switch (deviceType) {
@@ -164,6 +168,7 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
                 uploadDeviceInfo = info;
                 break;
         }
+        uploadDeviceInfo.setManufacturerCode(Config.MANUFACTURER_CODE);
         return uploadDeviceInfo;
     }
 }

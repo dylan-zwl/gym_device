@@ -9,12 +9,12 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.model.scancode.api.ScanCodeUrl;
-import com.tapc.platform.model.scancode.dao.request.UploadDeviceInfo;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.QrCodeInfo;
 import com.tapc.platform.model.scancode.dao.response.Randomcode;
-import com.tapc.platform.model.scancode.dao.response.ResponseDTO;
+import com.tapc.platform.model.scancode.dao.response.ResponseDto;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
+import com.tapc.platform.model.scancode.entity.UploadDeviceInfo;
 import com.tapc.platform.model.tcp.SocketListener;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.NetUtils;
@@ -22,9 +22,10 @@ import com.tapc.platform.utils.PreferenceHelper;
 
 import java.lang.reflect.Type;
 
+import io.reactivex.functions.Consumer;
+import okhttp3.ResponseBody;
+
 public class ScanCodeModel {
-    public static final String IP = "112.74.87.166";
-    public static final int PORT = 1234;
     private Context mContext;
     private DeviceType mDeviceType;
     private String mDeviceId = "";
@@ -37,7 +38,7 @@ public class ScanCodeModel {
     private ScanCodeListener mListener;
     private CommunicationManage mManage;
     private UploadDeviceInfo mUploadDeviceInfo;
-    private HttpRequest mHttpRequest;
+    private ScanCodeHttpRequest mHttpRequest;
 
     public interface ScanCodeListener {
         void showQrcode(String qrcodeStr);
@@ -101,14 +102,14 @@ public class ScanCodeModel {
             mListener.showQrcode(null);
             if (NetUtils.isConnected(mContext) && !TextUtils.isEmpty(mDeviceId)) {
                 Log.d("tcp connect", "start  device id : " + mDeviceId);
-                String ip = NetUtils.getInetAddress(ScanCodeUrl.BASE_SERVER);
+                String ip = NetUtils.getInetAddress(ScanCodeUrl.BASE_SERVER_URL);
                 if (TextUtils.isEmpty(ip)) {
-                    ip = IP;
+                    ip = ScanCodeUrl.IP;
                 }
                 mTcpClient = new TcpClient();
                 mManage.setClient(mTcpClient);
                 mTcpClient.setListener(mSoketListener);
-                isConnected = mTcpClient.connect(ip, PORT, 4000);
+                isConnected = mTcpClient.connect(ip, ScanCodeUrl.PORT, 4000);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,12 +155,12 @@ public class ScanCodeModel {
     public void setDeviceId(@Nullable String deviceId) {
         if (!TextUtils.isEmpty(deviceId)) {
             mDeviceId = deviceId;
-            mHttpRequest = HttpRequest.getInstance();
+            mHttpRequest = ScanCodeHttpRequest.getInstance();
             mHttpRequest.init(deviceId);
         }
     }
 
-    public HttpRequest getHttpRequest() {
+    public ScanCodeHttpRequest getHttpRequest() {
         return mHttpRequest;
     }
 
@@ -203,7 +204,7 @@ public class ScanCodeModel {
                 }
             });
         }
-        mHeartBeat.start();
+        mHeartBeat.start(10000);
     }
 
 
@@ -216,7 +217,7 @@ public class ScanCodeModel {
         public void onOpen(boolean isConnect) {
             Log.d("tcp connect", "" + isConnect);
             if (isConnect) {
-                startHeartbeat();
+//                startHeartbeat();
             }
         }
 
@@ -282,10 +283,10 @@ public class ScanCodeModel {
                 boolean isUploadDeviceInfo = PreferenceHelper.readBoolean(mContext, "", "is_upload_device_infor",
                         false);
                 if (!isUploadDeviceInfo) {
-                    ResponseDTO response = null;
+                    ResponseDto response = null;
                     while (true) {
                         if (mCurrentConnectStatus) {
-                            response = mHttpRequest.uploadDeviceInformation(mUploadDeviceInfo, ResponseDTO.class);
+                            response = mHttpRequest.uploadDeviceInformation(mUploadDeviceInfo, ResponseDto.class);
                             if (response != null && (response.getStatus() == 0 || response.getStatus() == 5)) {
                                 PreferenceHelper.write(mContext, "", "is_upload_device_infor", true);
                                 break;
@@ -295,34 +296,74 @@ public class ScanCodeModel {
                     }
                 }
 
-                //获取验证码
-                Type type = new TypeToken<ResponseDTO<Randomcode>>() {
-                }.getType();
-                while (true) {
-                    if (mCurrentConnectStatus) {
-                        Randomcode randomcode = mHttpRequest.getCode(HttpRequest.GetLoginType.RANDOMCODE, type);
-                        if (randomcode != null) {
-                            String randomcodeStr = randomcode.getRandom_code();
-                            if (!TextUtils.isEmpty(randomcodeStr)) {
-                                mLoginPassword = randomcodeStr;
-                                mListener.seveLoginRandomcode(randomcodeStr);
-                                break;
-                            }
-                        }
-                    }
-                    Thread.sleep(3000);
-                }
 
-                //获取并显示二维码
-                Type type2 = new TypeToken<ResponseDTO<QrCodeInfo>>() {
+                mHttpRequest.getService().uploadStatus(mDeviceId, "0").subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(ResponseBody responseBody) throws Exception {
+                        String ss = responseBody.string();
+                        Log.d("#####", ss);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+
+                mHttpRequest.getService().uploadFault(mDeviceId, "0", "02").subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(ResponseBody responseBody) throws Exception {
+                        String ss = responseBody.string();
+                        Log.d("#####", ss);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+
+                mHttpRequest.getService().getInformation(mDeviceId, ScanCodeHttpRequest.GetInformationType.CONFIG)
+                        .subscribe(new Consumer<ResponseBody>() {
+                            @Override
+                            public void accept(ResponseBody responseBody) throws Exception {
+                                String ss = responseBody.string();
+                                Log.d("#####", ss);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+
+                            }
+                        });
+
+                mHttpRequest.getService().getInformation(mDeviceId, ScanCodeHttpRequest.GetInformationType.COST)
+                        .subscribe(new Consumer<ResponseBody>() {
+                            @Override
+                            public void accept(ResponseBody responseBody) throws Exception {
+                                String ss = responseBody.string();
+                                Log.d("#####", ss);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+
+                            }
+                        });
+
+                // 获取并显示二维码
+                Type type2 = new TypeToken<ResponseDto<QrCodeInfo>>() {
                 }.getType();
                 while (true) {
                     if (mNeedChangeQrcode) {
-                        QrCodeInfo qrCodeInfo = mHttpRequest.getCode(HttpRequest.GetLoginType.QRCODE, type2);
+                        QrCodeInfo qrCodeInfo = mHttpRequest.getCode(ScanCodeHttpRequest.GetInformationType.QRCODE,
+                                type2);
                         if (qrCodeInfo != null) {
-                            mQrcodeStr = qrCodeInfo.getQrcode_url();
+                            mQrcodeStr = qrCodeInfo.getUrl();
                             mListener.showQrcode(mQrcodeStr);
                             mNeedChangeQrcode = false;
+                            //获取验证码
+                            getRandomCode();
                         }
                     } else {
                         if (mCurrentConnectStatus) {
@@ -334,6 +375,24 @@ public class ScanCodeModel {
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Log.d("", "");
+            }
+        }
+
+        private void getRandomCode() {
+            if (TextUtils.isEmpty(mLoginPassword)) {
+                Type type = new TypeToken<ResponseDto<Randomcode>>() {
+                }.getType();
+                if (mCurrentConnectStatus) {
+                    Randomcode randomcode = mHttpRequest.getCode(ScanCodeHttpRequest.GetInformationType
+                            .RANDOMCODE, type);
+                    if (randomcode != null) {
+                        String randomcodeStr = randomcode.getRandom_code();
+                        if (!TextUtils.isEmpty(randomcodeStr)) {
+                            mLoginPassword = randomcodeStr;
+                            mListener.seveLoginRandomcode(randomcodeStr);
+                        }
+                    }
+                }
             }
         }
     };

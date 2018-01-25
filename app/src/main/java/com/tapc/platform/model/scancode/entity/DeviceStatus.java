@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode.dao.request;
+package com.tapc.platform.model.scancode.entity;
 
 /**
  * Created by Administrator on 2018/1/9.

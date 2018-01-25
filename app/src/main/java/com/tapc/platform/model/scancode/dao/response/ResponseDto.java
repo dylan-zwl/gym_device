@@ -3,13 +3,13 @@ package com.tapc.platform.model.scancode.dao.response;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class ResponseDTO<T> implements Serializable {
+public class ResponseDto<T> implements Serializable {
 
 	private int status; // 状态码
 	private String message; // 请求结果信息
 	private T response; // 请求返回的数据
 
-	public ResponseDTO() {
+	public ResponseDto() {
 		super();
 	}
 

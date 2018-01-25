@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode.dao.request;
+package com.tapc.platform.model.scancode.entity;
 
 import com.tapc.platform.entity.DeviceType;
 
@@ -17,6 +17,7 @@ public enum UploadDeviceInfo {
     private String mModel;
     private int mDeviceTypeId;
     private String mParameter;
+    private String mManufacturerCode;
 
     private UploadDeviceInfo(DeviceType deviceType, String type, String model, int deviceTypeId) {
         this.mDeviceType = deviceType;
@@ -63,5 +64,13 @@ public enum UploadDeviceInfo {
 
     public void setParameter(String parameter) {
         this.mParameter = parameter;
+    }
+
+    public String getManufacturerCode() {
+        return mManufacturerCode;
+    }
+
+    public void setManufacturerCode(String manufacturerCode) {
+        this.mManufacturerCode = manufacturerCode;
     }
 }

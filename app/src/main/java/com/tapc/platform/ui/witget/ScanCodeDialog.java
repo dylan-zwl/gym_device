@@ -30,7 +30,7 @@ import com.tapc.platform.model.common.UserManageModel;
 import com.tapc.platform.model.scancode.ScanCodeContract;
 import com.tapc.platform.model.scancode.ScanCodeEvent;
 import com.tapc.platform.model.scancode.ScanCodePresenter;
-import com.tapc.platform.model.scancode.dao.request.DeviceStatus;
+import com.tapc.platform.model.scancode.entity.DeviceStatus;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.ui.base.BaseSystemView;

@@ -3,10 +3,10 @@ package com.tapc.platform.model.scancode;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.tapc.platform.model.scancode.dao.request.HeartbeatPacket;
+import com.tapc.platform.model.scancode.dao.request.HeartbeatPacketAck;
 import com.tapc.platform.model.scancode.dao.request.OpenDeviceRequest;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.OpenDeviceAck;
+import com.tapc.platform.model.scancode.dao.request.OpenDeviceAck;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.GsonUtils;
@@ -117,7 +117,7 @@ public class CommunicationManage {
      * @param : work_status ：设备使用状态
      */
     private String getHeartbeatJson(int command, String deviceId, int work_status) {
-        HeartbeatPacket heartbeatPacket = new HeartbeatPacket(command, deviceId, work_status);
+        HeartbeatPacketAck heartbeatPacket = new HeartbeatPacketAck(command, deviceId, work_status);
         return toJson(heartbeatPacket);
     }
 

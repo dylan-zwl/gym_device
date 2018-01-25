@@ -141,7 +141,9 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
                 mPlayer.setPlayerListener(new VaPlayer.PlayerListener() {
                     @Override
                     public void setIncline(int videoIncline) {
-                        mWorkOuting.onLeftPanel(getDeviceIncline(videoIncline));
+                        if (mWorkOuting.isRunning()) {
+                            mWorkOuting.onLeftPanel(getDeviceIncline(videoIncline));
+                        }
                     }
 
                     @Override
@@ -205,17 +207,14 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
     };
 
     private int getDeviceIncline(int videoIncline) {
-        float incline = 0;
-        if (mWorkOuting.isRunning()) {
-            incline = videoIncline;
-            incline /= 1000;
-            incline *= (TreadmillSystemSettings.MAX_INCLINE - TreadmillSystemSettings.MIN_INCLINE);
-            incline /= TreadmillSystemSettings.STEP_INCLINE;
-            incline = FormatUtils.formatFloat(1, incline, RoundingMode.HALF_UP);
-            int inclinetemp = (int) incline;
-            incline = inclinetemp * TreadmillSystemSettings.STEP_INCLINE;
-            Logger.d("va incline set " + incline);
-        }
+        float incline = videoIncline;
+        incline /= 1000;
+        incline *= (TreadmillSystemSettings.MAX_INCLINE - TreadmillSystemSettings.MIN_INCLINE);
+        incline /= TreadmillSystemSettings.STEP_INCLINE;
+        incline = FormatUtils.formatFloat(1, incline, RoundingMode.HALF_UP);
+        int inclinetemp = (int) incline;
+        incline = inclinetemp * TreadmillSystemSettings.STEP_INCLINE;
+        Logger.d("va incline set " + incline);
         return (int) incline;
     }
 

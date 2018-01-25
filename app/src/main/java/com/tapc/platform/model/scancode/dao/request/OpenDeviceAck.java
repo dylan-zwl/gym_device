@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode.dao.response;
+package com.tapc.platform.model.scancode.dao.request;
 
 public class OpenDeviceAck {
 	private int command;

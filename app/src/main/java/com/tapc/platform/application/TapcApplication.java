@@ -25,6 +25,7 @@ import com.tapc.platform.model.app.AppInfoEntity;
 import com.tapc.platform.model.app.AppModel;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.common.UserManageModel;
+import com.tapc.platform.model.scancode.api.ScanCodeUrl;
 import com.tapc.platform.service.LocalBinder;
 import com.tapc.platform.service.MenuService;
 import com.tapc.platform.utils.IntentUtils;
@@ -86,7 +87,7 @@ public class TapcApplication extends Application {
         }, Context.BIND_AUTO_CREATE);
 
         initDeviceId();
-        RetrofitClient.init(this, null);
+        RetrofitClient.init(this, ScanCodeUrl.BASE_URL);
         SoundCtlUtils.getInstance().init(this);
 
         RxjavaUtils.create(new ObservableOnSubscribe<Object>() {

@@ -1,11 +1,11 @@
 package com.tapc.platform.model.scancode.dao.request;
 
-public class HeartbeatPacket {
+public class HeartbeatPacketAck {
     private int command;
     private String device_id;
     private int work_status;
 
-    public HeartbeatPacket(int command, String device_id, int work_status) {
+    public HeartbeatPacketAck(int command, String device_id, int work_status) {
         this.command = command;
         this.device_id = device_id;
         this.work_status = work_status;

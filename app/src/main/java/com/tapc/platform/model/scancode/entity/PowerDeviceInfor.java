@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode.dao.request;
+package com.tapc.platform.model.scancode.entity;
 
 public class PowerDeviceInfor {
 	public static final String[] TYPE = {"",

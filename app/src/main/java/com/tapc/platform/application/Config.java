@@ -19,4 +19,7 @@ public class Config {
         public static final String appName = "cloud-face-face-android";
         public static final String licenseFileName = "idl-license.face-android";
     }
+
+    //设备生产商编号
+    public static final String MANUFACTURER_CODE = "SH0001";
 }
