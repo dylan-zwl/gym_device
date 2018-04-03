@@ -10,6 +10,8 @@ public enum UploadDeviceInfo {
     B8900RT(DeviceType.BIKE, "卧式健身车", "SH-B8900RT", 3),
     B8900UT(DeviceType.BIKE, "立式健身车", "SH-B8900UT", 4),
 
+    DOOR(DeviceType.DOOR, "门禁", "SH-DOOR", 0),
+
     POWER(DeviceType.POWER, PowerDeviceInfor.TYPE[0], PowerDeviceInfor.MODEL[0], 0);
 
     private DeviceType mDeviceType;

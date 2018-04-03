@@ -9,11 +9,11 @@ import com.tapc.platform.library.common.BikeSystemSettings;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.scancode.ScanCodeModel.ScanCodeListener;
+import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.model.scancode.entity.DeviceStatus;
 import com.tapc.platform.model.scancode.entity.PowerDeviceInfor;
 import com.tapc.platform.model.scancode.entity.UploadDeviceInfo;
-import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.utils.GsonUtils;
 
 import java.util.HashMap;
@@ -139,6 +139,8 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
                 map.put("heavy", 150);
                 map.put("cooldown", 120);
                 break;
+            case DOOR:
+                break;
         }
         String parameter = GsonUtils.toJson(map);
         int deviceTypeId = ConfigModel.getDeviceTypeId(mContext, 0);
@@ -166,6 +168,9 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
                 info.setModel(PowerDeviceInfor.MODEL[deviceTypeId]);
                 info.setParameter(parameter);
                 uploadDeviceInfo = info;
+                break;
+            case DOOR:
+                uploadDeviceInfo = UploadDeviceInfo.DOOR;
                 break;
         }
         uploadDeviceInfo.setManufacturerCode(Config.MANUFACTURER_CODE);

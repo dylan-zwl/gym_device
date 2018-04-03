@@ -44,7 +44,7 @@ public class ClientInputThread extends Thread {
                     List<Byte> dataBuffer = new ArrayList<>();
                     while (data[0] != '\n') {
                         mInputStream.read(data);
-//                        dataBuffer.add(data[0]);
+                        dataBuffer.add(data[0]);
                     }
                     byte[] dataSend = new byte[dataBuffer.size()];
                     for (int i = 0; i < dataBuffer.size(); i++) {

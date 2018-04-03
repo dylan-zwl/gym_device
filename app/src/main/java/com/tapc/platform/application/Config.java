@@ -21,5 +21,5 @@ public class Config {
     }
 
     //设备生产商编号
-    public static final String MANUFACTURER_CODE = "SH0001";
+    public static final String MANUFACTURER_CODE = "sh001";
 }

@@ -98,7 +98,7 @@ public class MenuService extends Service {
     }
 
     private void initScanCodeDialog() {
-        ScanCodeDialog scanCodeDialog = new ScanCodeDialog(this, DeviceType.TREADMILL);
+        ScanCodeDialog scanCodeDialog = new ScanCodeDialog(this, DeviceType.DOOR);
         scanCodeDialog.addViewToWindow();
     }
 

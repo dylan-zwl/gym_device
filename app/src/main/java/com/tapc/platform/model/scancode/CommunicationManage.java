@@ -4,9 +4,9 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.tapc.platform.model.scancode.dao.request.HeartbeatPacketAck;
+import com.tapc.platform.model.scancode.dao.request.OpenDeviceAck;
 import com.tapc.platform.model.scancode.dao.request.OpenDeviceRequest;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.request.OpenDeviceAck;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.model.tcp.TcpClient;
 import com.tapc.platform.utils.GsonUtils;
@@ -66,16 +66,18 @@ public class CommunicationManage {
             String deviceId = openDeviceRequest.getDevice_id();
             String userId = openDeviceRequest.getUser_id();
             if (!TextUtils.isEmpty(deviceId) && deviceId.equals(mDeviceId) && !TextUtils.isEmpty(userId)) {
-                sendOpenDeviceStatus(command, openDeviceRequest.getUser_id(), "0");
+                sendOpenDeviceStatus(command, openDeviceRequest.getUser_id(), openDeviceRequest.getScan_order_id(),
+                        "0");
                 ScanCodeUser user = new ScanCodeUser();
                 user.setName(openDeviceRequest.getUser_name());
                 user.setUserId(userId);
                 user.setDeviceId(deviceId);
+                user.setScan_order_id(openDeviceRequest.getScan_order_id());
                 user.setAvatarUrl(openDeviceRequest.getUser_avatar());
                 return user;
             }
         }
-        sendOpenDeviceStatus(command, openDeviceRequest.getUser_id(), "1");
+        sendOpenDeviceStatus(command, openDeviceRequest.getUser_id(), openDeviceRequest.getScan_order_id(), "1");
         return null;
     }
 
@@ -131,13 +133,14 @@ public class CommunicationManage {
      *
      * @param :
      */
-    private String getOpenDeviceAckJson(int command, String device_id, String user_id, String status) {
-        OpenDeviceAck openDeviceAck = new OpenDeviceAck(command, device_id, user_id, status);
+    private String getOpenDeviceAckJson(int command, String device_id, String user_id, String scan_order_id, String
+            status) {
+        OpenDeviceAck openDeviceAck = new OpenDeviceAck(command, device_id, user_id, scan_order_id, status);
         return toJson(openDeviceAck);
     }
 
-    public void sendOpenDeviceStatus(int command, String user_id, String status) {
-        String jsonStr = getOpenDeviceAckJson(command, mDeviceId, user_id, status);
+    public void sendOpenDeviceStatus(int command, String user_id, String scan_order_id, String status) {
+        String jsonStr = getOpenDeviceAckJson(command, mDeviceId, user_id, scan_order_id, status);
         sendData(jsonStr);
     }
 

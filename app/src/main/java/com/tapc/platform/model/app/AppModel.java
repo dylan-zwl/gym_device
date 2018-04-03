@@ -24,7 +24,7 @@ public class AppModel {
      * 获取安装应用列表
      */
     public static ArrayList<AppInfoEntity> getAllAppInfo(Context context, boolean isShowSystemApp) {
-        ArrayList<AppInfoEntity> mlistAppInfo = new ArrayList<AppInfoEntity>();
+        ArrayList<AppInfoEntity> listAppInfo = new ArrayList<AppInfoEntity>();
         PackageManager pm = context.getPackageManager();
         List<ApplicationInfo> appInfos = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         for (ApplicationInfo applicationInfo : appInfos) {
@@ -58,9 +58,9 @@ public class AppModel {
                 appInfo.setAppIcon(icon);
                 appInfo.setSystemApp(isSystemApp);
                 appInfo.setIntent(launchIntent);
-                mlistAppInfo.add(appInfo);
+                listAppInfo.add(appInfo);
             }
         }
-        return mlistAppInfo;
+        return listAppInfo;
     }
 }

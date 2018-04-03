@@ -55,7 +55,7 @@ public class VaPlayer {
     public interface PlayerListener {
         void setIncline(int videoIncline);
 
-        void setPlaySpeed(MediaPlayer player, int videoSpeed);
+        void setPlaySpeed(MediaPlayer player, float videoSpeed);
 
         void error(String text);
 

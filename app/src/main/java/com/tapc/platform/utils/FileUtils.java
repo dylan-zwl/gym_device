@@ -20,7 +20,7 @@ public class FileUtils {
     public interface ProgressCallback {
         void onProgress(int progress);
 
-        void onCompeleted(boolean isSuccessd, String msg);
+        void onCompeleted(boolean isSuccessed, String msg);
     }
 
     //获取文件夹大小

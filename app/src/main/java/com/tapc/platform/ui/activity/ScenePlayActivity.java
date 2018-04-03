@@ -147,7 +147,7 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
                     }
 
                     @Override
-                    public void setPlaySpeed(MediaPlayer player, int videoSpeed) {
+                    public void setPlaySpeed(MediaPlayer player, float videoSpeed) {
 
                     }
 

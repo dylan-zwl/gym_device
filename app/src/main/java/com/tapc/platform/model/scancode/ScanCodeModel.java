@@ -22,9 +22,6 @@ import com.tapc.platform.utils.PreferenceHelper;
 
 import java.lang.reflect.Type;
 
-import io.reactivex.functions.Consumer;
-import okhttp3.ResponseBody;
-
 public class ScanCodeModel {
     private Context mContext;
     private DeviceType mDeviceType;
@@ -217,7 +214,7 @@ public class ScanCodeModel {
         public void onOpen(boolean isConnect) {
             Log.d("tcp connect", "" + isConnect);
             if (isConnect) {
-//                startHeartbeat();
+                startHeartbeat();
             }
         }
 
@@ -297,59 +294,59 @@ public class ScanCodeModel {
                 }
 
 
-                mHttpRequest.getService().uploadStatus(mDeviceId, "0").subscribe(new Consumer<ResponseBody>() {
-                    @Override
-                    public void accept(ResponseBody responseBody) throws Exception {
-                        String ss = responseBody.string();
-                        Log.d("#####", ss);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
-
-                mHttpRequest.getService().uploadFault(mDeviceId, "0", "02").subscribe(new Consumer<ResponseBody>() {
-                    @Override
-                    public void accept(ResponseBody responseBody) throws Exception {
-                        String ss = responseBody.string();
-                        Log.d("#####", ss);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
-
-                mHttpRequest.getService().getInformation(mDeviceId, ScanCodeHttpRequest.GetInformationType.CONFIG)
-                        .subscribe(new Consumer<ResponseBody>() {
-                            @Override
-                            public void accept(ResponseBody responseBody) throws Exception {
-                                String ss = responseBody.string();
-                                Log.d("#####", ss);
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-
-                            }
-                        });
-
-                mHttpRequest.getService().getInformation(mDeviceId, ScanCodeHttpRequest.GetInformationType.COST)
-                        .subscribe(new Consumer<ResponseBody>() {
-                            @Override
-                            public void accept(ResponseBody responseBody) throws Exception {
-                                String ss = responseBody.string();
-                                Log.d("#####", ss);
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-
-                            }
-                        });
+//                mHttpRequest.getService().uploadStatus(mDeviceId, "0").subscribe(new Consumer<ResponseBody>() {
+//                    @Override
+//                    public void accept(ResponseBody responseBody) throws Exception {
+//                        String ss = responseBody.string();
+//                        Log.d("#####", ss);
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//
+//                    }
+//                });
+//
+//                mHttpRequest.getService().uploadFault(mDeviceId, "0", "02").subscribe(new Consumer<ResponseBody>() {
+//                    @Override
+//                    public void accept(ResponseBody responseBody) throws Exception {
+//                        String ss = responseBody.string();
+//                        Log.d("#####", ss);
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//
+//                    }
+//                });
+//
+//                mHttpRequest.getService().getInformation(mDeviceId, ScanCodeHttpRequest.GetInformationType.CONFIG)
+//                        .subscribe(new Consumer<ResponseBody>() {
+//                            @Override
+//                            public void accept(ResponseBody responseBody) throws Exception {
+//                                String ss = responseBody.string();
+//                                Log.d("#####", ss);
+//                            }
+//                        }, new Consumer<Throwable>() {
+//                            @Override
+//                            public void accept(Throwable throwable) throws Exception {
+//
+//                            }
+//                        });
+//
+//                mHttpRequest.getService().getInformation(mDeviceId, ScanCodeHttpRequest.GetInformationType.COST)
+//                        .subscribe(new Consumer<ResponseBody>() {
+//                            @Override
+//                            public void accept(ResponseBody responseBody) throws Exception {
+//                                String ss = responseBody.string();
+//                                Log.d("#####", ss);
+//                            }
+//                        }, new Consumer<Throwable>() {
+//                            @Override
+//                            public void accept(Throwable throwable) throws Exception {
+//
+//                            }
+//                        });
 
                 // 获取并显示二维码
                 Type type2 = new TypeToken<ResponseDto<QrCodeInfo>>() {
@@ -359,11 +356,13 @@ public class ScanCodeModel {
                         QrCodeInfo qrCodeInfo = mHttpRequest.getCode(ScanCodeHttpRequest.GetInformationType.QRCODE,
                                 type2);
                         if (qrCodeInfo != null) {
-                            mQrcodeStr = qrCodeInfo.getUrl();
+                            mQrcodeStr = qrCodeInfo.getQrcode_url();
                             mListener.showQrcode(mQrcodeStr);
-                            mNeedChangeQrcode = false;
-                            //获取验证码
-                            getRandomCode();
+                            if (mQrcodeStr != null) {
+                                mNeedChangeQrcode = false;
+                                //获取验证码
+                                getRandomCode();
+                            }
                         }
                     } else {
                         if (mCurrentConnectStatus) {

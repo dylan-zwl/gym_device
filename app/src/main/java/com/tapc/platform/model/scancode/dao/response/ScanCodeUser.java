@@ -6,7 +6,7 @@ public class ScanCodeUser {
     private String deviceId;
     private String userId;
     private String planId;
-    private String order_number;
+    private String scan_order_id;
 
     public String getName() {
         return name;
@@ -35,12 +35,12 @@ public class ScanCodeUser {
         this.deviceId = deviceId;
     }
 
-    public String getOrder_number() {
-        return order_number;
+    public String getScan_order_id() {
+        return scan_order_id;
     }
 
-    public void setOrder_number(String order_number) {
-        this.order_number = order_number;
+    public void setScan_order_id(String scan_order_id) {
+        this.scan_order_id = scan_order_id;
     }
 
     public String getPlanId() {
