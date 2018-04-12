@@ -1,20 +1,30 @@
 package com.tapc.platform.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.tapc.platform.R;
 import com.tapc.platform.library.abstractset.WorkoutInfo;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.UserManageModel;
+import com.tapc.platform.model.scancode.ScanCodeHttpRequest;
+import com.tapc.platform.model.scancode.dao.request.TreadmillStageSportData;
+import com.tapc.platform.model.scancode.dao.request.UserSportsData;
+import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.ui.base.BaseActivity;
 import com.tapc.platform.utils.FormatUtils;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class SportResultActivity extends BaseActivity {
     @BindView(R.id.result_distance)
@@ -45,6 +55,7 @@ public class SportResultActivity extends BaseActivity {
         return R.layout.activity_sportresult;
     }
 
+    @SuppressLint("HandlerLeak")
     @Override
     protected void initView() {
         mShowType = this.getIntent().getExtras().getString("type");
@@ -56,7 +67,7 @@ public class SportResultActivity extends BaseActivity {
                 if (workoutInfo != null) {
                     initDataShow(workoutInfo);
                     if (mShowType.equals(TYPE_STOP)) {
-                        uploadSportData();
+                        upLoadTreadmillStageSportData(workoutInfo);
                     }
                 } else {
                     mCount++;
@@ -87,12 +98,62 @@ public class SportResultActivity extends BaseActivity {
         mTextSpeed.setText(FormatUtils.format("%.1f", distance * 3600 / time));
     }
 
-    private void uploadSportData() {
+    private void upLoadTreadmillStageSportData(WorkoutInfo workoutInfo) {
+        int distance = (int) (workoutInfo.getDistance() * 1000);
+        int calories = (int) (workoutInfo.getCalorie() * 1000);
+        int time = (int) (workoutInfo.getTime());
+
+        ScanCodeUser user = (ScanCodeUser) UserManageModel.getInstance().getScanCodeUser();
+
+        UserSportsData userSportsData = new UserSportsData<TreadmillStageSportData>();
+        userSportsData.setTime(String.valueOf(time));
+        userSportsData.setDistance(String.valueOf(distance));
+        userSportsData.setCalorie(String.valueOf(calories));
+        userSportsData.setPlan_id("0");
+        userSportsData.setSport_type("0");
+
+        userSportsData.setDevice_id(user.getDeviceId());
+        userSportsData.setUser_id(user.getUserId());
+        userSportsData.setScan_order_id(user.getScan_order_id());
+
+        ScanCodeHttpRequest.getInstance().getService().uploadSportsData(userSportsData).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ResponseBody>() {
+            @Override
+            public void accept(ResponseBody responseBody) throws Exception {
+                String reslult = responseBody.string();
+                Log.d("######", reslult);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+
+            }
+        });
+//        List<WorkoutIntervalInfo> mWorkoutInfoIntervalList = mEnginImpl.mWorkouting.getWorkoutInterval()
+// .mIntervalList;
+//        List<TreadmillStageSportData> TreadmillStageSportDatas = new ArrayList<TreadmillStageSportData>();
+//        if (mWorkoutInfoIntervalList == null || mWorkoutInfoIntervalList.isEmpty()) {
+//            TreadmillStageSportData spData = new TreadmillStageSportData();
+//            spData.setTime(String.valueOf(workoutInfo.getTime()));
+//            spData.setIncline(String.valueOf(SysUtils.formatDouble(1, workoutInfo.getIncline())));
+//            spData.setSpeed(String.valueOf(SysUtils.formatDouble(1, workoutInfo.getSpeed())));
+//            TreadmillStageSportDatas.add(spData);
+//        } else {
+//            for (WorkoutIntervalInfo infor : mWorkoutInfoIntervalList) {
+//                TreadmillStageSportData spData = new TreadmillStageSportData();
+//                spData.setTime(String.valueOf(infor.getTime()));
+//                spData.setIncline(String.valueOf(SysUtils.formatDouble(1, infor.getIncline())));
+//                spData.setSpeed(String.valueOf(SysUtils.formatDouble(1, infor.getSpeed())));
+//                TreadmillStageSportDatas.add(spData);
+//            }
+//        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        UserManageModel.getInstance().logout();
         finish();
     }
 
@@ -100,6 +161,5 @@ public class SportResultActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mExitHandler.removeCallbacksAndMessages(null);
-        UserManageModel.getInstance().logout();
     }
 }

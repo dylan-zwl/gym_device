@@ -17,6 +17,8 @@ public class UserSportsData<T> {
     private String customer_id;
     private int sport_flg;
 
+    private String scan_order_id;
+
     private long open_time;
     private long start_time;
     private long stop_time;
@@ -158,4 +160,11 @@ public class UserSportsData<T> {
         this.stop_time = stop_time;
     }
 
+    public String getScan_order_id() {
+        return scan_order_id;
+    }
+
+    public void setScan_order_id(String scan_order_id) {
+        this.scan_order_id = scan_order_id;
+    }
 }

@@ -22,7 +22,7 @@ import com.tapc.platform.ui.witget.CountdownDialog;
 import com.tapc.platform.ui.witget.ErrorDialog;
 import com.tapc.platform.ui.witget.MenuBar;
 import com.tapc.platform.ui.witget.NumberDialog;
-import com.tapc.platform.ui.witget.ScanCodeDialog;
+import com.tapc.platform.ui.witget.scancode.ScanCodeDialog;
 import com.tapc.platform.utils.IntentUtils;
 import com.tapc.platform.utils.SoundCtlUtils;
 
@@ -98,7 +98,7 @@ public class MenuService extends Service {
     }
 
     private void initScanCodeDialog() {
-        ScanCodeDialog scanCodeDialog = new ScanCodeDialog(this, DeviceType.DOOR);
+        ScanCodeDialog scanCodeDialog = new ScanCodeDialog(this, DeviceType.TREADMILL);
         scanCodeDialog.addViewToWindow();
     }
 

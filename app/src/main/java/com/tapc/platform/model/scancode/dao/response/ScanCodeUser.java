@@ -1,6 +1,10 @@
 package com.tapc.platform.model.scancode.dao.response;
 
-public class ScanCodeUser {
+
+import com.tapc.platform.model.common.UserManageModel;
+
+
+public class ScanCodeUser extends UserManageModel.User {
     private String name;
     private String avatarUrl;
     private String deviceId;

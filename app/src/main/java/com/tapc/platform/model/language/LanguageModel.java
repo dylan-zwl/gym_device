@@ -18,11 +18,20 @@ public class LanguageModel {
         public String languageName;
         public String languageCode;
         public String countryCode;
+        private int rid;
 
         Language(String language, String languageCode, String countryCode) {
             this.languageName = language;
             this.languageCode = languageCode;
             this.countryCode = countryCode;
+        }
+
+        public int getRid() {
+            return rid;
+        }
+
+        public void setRid(int rid) {
+            this.rid = rid;
         }
     }
 

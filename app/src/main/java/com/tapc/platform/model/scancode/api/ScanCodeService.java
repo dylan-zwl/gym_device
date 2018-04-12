@@ -1,9 +1,12 @@
 package com.tapc.platform.model.scancode.api;
 
+import com.tapc.platform.model.scancode.dao.request.UserSportsData;
+
 import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -49,7 +52,6 @@ public interface ScanCodeService {
     Observable<ResponseBody> unbind(@Field("device_id") String deviceId);
 
     //上传运动数据接口
-//    @POST()
-//    @FormUrlEncoded
-//    Observable<ResponseBody> uploadSportData(@Url String url, @Body RequestBody body);
+    @POST("uploadData")
+    Observable<ResponseBody> uploadSportsData(@Body UserSportsData body);
 }

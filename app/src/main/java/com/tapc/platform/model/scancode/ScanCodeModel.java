@@ -44,9 +44,9 @@ public class ScanCodeModel {
 
         void openDevice(ScanCodeUser user);
 
-        void recvSportPlan(ExerciseProgram exerciseProgram);
+        void recvExerciseProgram(ExerciseProgram exerciseProgram);
 
-        int getWorkStatus();
+        int getDeviceStatus();
 
         void seveLoginRandomcode(String randomcode);
     }
@@ -114,6 +114,9 @@ public class ScanCodeModel {
         return isConnected;
     }
 
+    /**
+     * 连接，重连服务器线程
+     */
     private Runnable mConnectServerRunnable = new Runnable() {
         @Override
         public void run() {
@@ -237,7 +240,7 @@ public class ScanCodeModel {
                 case CommunicationManage.Command.SPORTS_PLAN:
                     ExerciseProgram exerciseProgram = mManage.getExerciseProgram(jsonStr);
                     if (exerciseProgram != null) {
-                        mListener.recvSportPlan(exerciseProgram);
+                        mListener.recvExerciseProgram(exerciseProgram);
                     }
                     break;
                 default:
@@ -259,7 +262,7 @@ public class ScanCodeModel {
         if (mListener == null) {
             return 0;
         }
-        return mListener.getWorkStatus();
+        return mListener.getDeviceStatus();
     }
 
     /**

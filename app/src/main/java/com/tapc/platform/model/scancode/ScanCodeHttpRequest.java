@@ -2,9 +2,7 @@ package com.tapc.platform.model.scancode;
 
 import com.android.module.retrofit.RetrofitClient;
 import com.google.gson.Gson;
-import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.model.scancode.api.ScanCodeService;
-import com.tapc.platform.model.scancode.dao.request.UserSportsData;
 import com.tapc.platform.model.scancode.dao.response.ResponseDto;
 import com.tapc.platform.model.scancode.entity.UploadDeviceInfo;
 import com.tapc.platform.utils.GsonUtils;
@@ -37,7 +35,7 @@ public class ScanCodeHttpRequest {
 
     public static ScanCodeHttpRequest getInstance() {
         if (sHttpRequest == null) {
-            synchronized (NoActionModel.class) {
+            synchronized (ScanCodeHttpRequest.class) {
                 if (sHttpRequest == null) {
                     sHttpRequest = new ScanCodeHttpRequest();
                 }
@@ -129,22 +127,7 @@ public class ScanCodeHttpRequest {
         return (T) mObject2;
     }
 
-    public void uploadSportData(UserSportsData sportsData) {
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("device_id", deviceId);
-//        map.put("user_id", info.getType());
-//        map.put("plan_id", info.getModel());
-//        map.put("time", info.getParameter());
-//
-//        map.put("calorie", info.getType());
-//        map.put("distance", info.getModel());
-//        map.put("customer_id", info.getParameter());
-//
-//        map.put("sport_data", info.getType());
-//        map.put("weight", info.getModel());
-//        map.put("sport_type", info.getParameter());
-//        map.put("date", info.getParameter());
-
-//        mService.commonRequest(ScanCodeUrl.UPLOAD_SPORTS_DATA);
-    }
+//    public Observable<ResponseBody> uploadSportsData(UserSportsData sportsData) {
+//        return mService.uploadSportsData(sportsData);
+//    }
 }
