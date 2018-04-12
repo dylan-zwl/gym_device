@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode;
+package com.tapc.platform.ui.witget.scancode;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.library.common.BikeSystemSettings;
 import com.tapc.platform.library.common.TreadmillSystemSettings;
 import com.tapc.platform.model.common.ConfigModel;
+import com.tapc.platform.model.scancode.ScanCodeModel;
 import com.tapc.platform.model.scancode.ScanCodeModel.ScanCodeListener;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
@@ -32,7 +33,7 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         mModel = new ScanCodeModel(context.getApplicationContext(), deviceType);
         mModel.setDeviceId(ConfigModel.getDeviceId(context, ""));
         mModel.setUploadDeviceInfor(getDeviceParameter(deviceType));
-        mModel.setTcpListener(mTcpListener);
+        mModel.setTcpListener(mScanCodeListener);
     }
 
     @Override
@@ -54,13 +55,15 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         mModel.updateDeviceStatus();
     }
 
-
+    /**
+     * 获取登录验证码
+     */
     @Override
     public String getPassword() {
         return mModel.getLoginPassword();
     }
 
-    private ScanCodeListener mTcpListener = new ScanCodeListener() {
+    private ScanCodeListener mScanCodeListener = new ScanCodeListener() {
 
         @Override
         public void showQrcode(String qrcodeStr) {
@@ -79,12 +82,12 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
         }
 
         @Override
-        public void recvSportPlan(ExerciseProgram exerciseProgram) {
-            mView.recvSportPlan(exerciseProgram);
+        public void recvExerciseProgram(ExerciseProgram exerciseProgram) {
+            mView.recvExerciseProgram(exerciseProgram);
         }
 
         @Override
-        public int getWorkStatus() {
+        public int getDeviceStatus() {
             return mView.getDeviceStatus();
         }
 
@@ -119,7 +122,7 @@ public class ScanCodePresenter implements ScanCodeContract.Presenter {
     }
 
     /**
-     * 功能描述 : 获取设备参数信息
+     * 获取设备参数信息
      */
     public UploadDeviceInfo getDeviceParameter(DeviceType deviceType) {
         Map<String, Object> map = new HashMap<>();

@@ -1,4 +1,4 @@
-package com.tapc.platform.ui.witget;
+package com.tapc.platform.ui.witget.scancode;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,12 +27,10 @@ import com.tapc.platform.model.common.ClickModel;
 import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.model.common.UserManageModel;
-import com.tapc.platform.model.scancode.ScanCodeContract;
 import com.tapc.platform.model.scancode.ScanCodeEvent;
-import com.tapc.platform.model.scancode.ScanCodePresenter;
-import com.tapc.platform.model.scancode.entity.DeviceStatus;
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
+import com.tapc.platform.model.scancode.entity.DeviceStatus;
 import com.tapc.platform.ui.base.BaseSystemView;
 import com.tapc.platform.utils.CommonUtils;
 import com.tapc.platform.utils.QrcodeUtils;
@@ -318,7 +316,7 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
      * 功能描述 : 接收到的运动计划
      */
     @Override
-    public void recvSportPlan(ExerciseProgram plan_load) {
+    public void recvExerciseProgram(ExerciseProgram plan_load) {
 //        ScanCodeUser user = TapcApp.getInstance().mainActivity.getUser();
 //        if (user == null || TapcApp.getInstance().isStart() || userId != user.getUserId()) {
 //            return;

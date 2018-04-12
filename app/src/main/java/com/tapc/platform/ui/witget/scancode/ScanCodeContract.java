@@ -1,4 +1,4 @@
-package com.tapc.platform.model.scancode;
+package com.tapc.platform.ui.witget.scancode;
 
 import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
@@ -12,7 +12,7 @@ public interface ScanCodeContract {
 
         void openDevice(ScanCodeUser user);
 
-        void recvSportPlan(ExerciseProgram exerciseProgram);
+        void recvExerciseProgram(ExerciseProgram exerciseProgram);
 
         int getDeviceStatus();
     }
