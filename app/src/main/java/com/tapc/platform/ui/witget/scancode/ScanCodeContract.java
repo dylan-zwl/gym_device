@@ -1,7 +1,6 @@
 package com.tapc.platform.ui.witget.scancode;
 
-import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
+import com.tapc.platform.model.healthcat.BaseCtlModel;
 
 public interface ScanCodeContract {
 
@@ -10,11 +9,11 @@ public interface ScanCodeContract {
 
         void showQrcode(String qrcode);
 
-        void openDevice(ScanCodeUser user);
-
-        void recvExerciseProgram(ExerciseProgram exerciseProgram);
+        void loginStatus(boolean isSuccess);
 
         int getDeviceStatus();
+
+        void serverSetLock(boolean lock);
     }
 
     interface Presenter {
@@ -22,8 +21,8 @@ public interface ScanCodeContract {
 
         void stop();
 
-        void updateDeviceStatus();
-
         String getPassword();
+
+        void setListener(BaseCtlModel.BaseListener listener);
     }
 }

@@ -5,9 +5,11 @@ package com.tapc.platform.entity;
  */
 
 public class EventEntity {
+    //重启APP事件
     public static class ReloadApp {
     }
 
+    //风扇状态改变事件
     public static class ChangeFanStatus {
     }
 }

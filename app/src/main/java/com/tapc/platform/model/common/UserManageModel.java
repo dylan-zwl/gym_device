@@ -1,7 +1,5 @@
 package com.tapc.platform.model.common;
 
-import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
-
 /**
  * Created by Administrator on 2018/1/19.
  */
@@ -9,9 +7,13 @@ import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 public class UserManageModel {
     private static UserManageModel sUserManageModel;
     private boolean isLogined = false;
-    private ScanCodeUser mScanCodeUser;
+    private User mScanCodeUser;
 
     private UserManageModel() {
+    }
+
+    public static class User {
+
     }
 
     public static UserManageModel getInstance() {
@@ -38,11 +40,11 @@ public class UserManageModel {
         mScanCodeUser = null;
     }
 
-    public ScanCodeUser getScanCodeUser() {
+    public User getScanCodeUser() {
         return mScanCodeUser;
     }
 
-    public void setScanCodeUser(ScanCodeUser scanCodeUser) {
+    public void setScanCodeUser(User scanCodeUser) {
         this.mScanCodeUser = scanCodeUser;
     }
 }

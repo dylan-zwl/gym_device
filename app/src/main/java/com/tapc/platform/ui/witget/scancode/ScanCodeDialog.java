@@ -28,8 +28,6 @@ import com.tapc.platform.model.common.ConfigModel;
 import com.tapc.platform.model.common.NoActionModel;
 import com.tapc.platform.model.common.UserManageModel;
 import com.tapc.platform.model.scancode.ScanCodeEvent;
-import com.tapc.platform.model.scancode.dao.response.ExerciseProgram;
-import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.model.scancode.entity.DeviceStatus;
 import com.tapc.platform.ui.base.BaseSystemView;
 import com.tapc.platform.utils.CommonUtils;
@@ -165,7 +163,6 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
             mDialogRl.setClickable(false);
 
             initShowDialog();
-//            mPresenter.setScanQrShowStatus(true);
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_to_down);
             mDialogRl.startAnimation(animation);
             animation.setAnimationListener(new AnimationListener() {
@@ -187,7 +184,6 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
             });
         } else {
             mDialogRl.setClickable(false);
-//            mPresenter.setScanQrShowStatus(false);
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.down_to_up);
             mDialogRl.startAnimation(animation);
             animation.setAnimationListener(new AnimationListener() {
@@ -295,39 +291,9 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
         thread.start();
     }
 
-    /**
-     * 功能描述 : 开启设备
-     */
     @Override
-    public void openDevice(ScanCodeUser user) {
-//        mPresenter.setScanQrShowStatus(false);
-        UserManageModel.getInstance().setScanCodeUser(user);
-        UserManageModel.getInstance().login();
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                setVisibility(false);
-                mQrCode.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
+    public void loginStatus(boolean isSuccess) {
 
-    /**
-     * 功能描述 : 接收到的运动计划
-     */
-    @Override
-    public void recvExerciseProgram(ExerciseProgram plan_load) {
-//        ScanCodeUser user = TapcApp.getInstance().mainActivity.getUser();
-//        if (user == null || TapcApp.getInstance().isStart() || userId != user.getUserId()) {
-//            return;
-//        }
-//        user.setPlan_load(plan_load);
-//        mHandler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                SportMenuActivity.launch(mContext);
-//            }
-//        });
     }
 
     @Override
@@ -336,6 +302,19 @@ public class ScanCodeDialog extends BaseSystemView implements ScanCodeContract.V
             return DeviceStatus.USING;
         }
         return DeviceStatus.NO_USE;
+    }
+
+    /**
+     * 功能描述 : 加锁，解锁设备
+     */
+    @Override
+    public void serverSetLock(final boolean lock) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                setVisibility(lock);
+            }
+        });
     }
 
     /**

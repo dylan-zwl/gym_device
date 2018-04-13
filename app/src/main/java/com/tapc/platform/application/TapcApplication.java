@@ -11,6 +11,8 @@ import android.view.KeyEvent;
 import com.android.module.retrofit.RetrofitClient;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.tapc.platform.entity.DeviceType;
 import com.tapc.platform.jni.Driver;
 import com.tapc.platform.library.abstractset.ProgramSetting;
@@ -45,7 +47,7 @@ import io.reactivex.functions.Consumer;
  */
 
 public class TapcApplication extends Application {
-    //    private RefWatcher mRefWatcher;
+    private RefWatcher mRefWatcher;
     private static TapcApplication mInstance;
     private MenuService mService;
     private KeyEvent mKeyEvent;
@@ -61,9 +63,9 @@ public class TapcApplication extends Application {
 
         //        Thread.setDefaultUncaughtExceptionHandler(new AppExceptionHandler());
 
-        //        内存泄漏检测工具
+        // 内存泄漏检测工具
         if (Config.Debug.OPEN_REF_WATCHER) {
-            //            mRefWatcher = LeakCanary.install(this);
+            mRefWatcher = LeakCanary.install(this);
         }
 
         Logger.init("tapc").methodCount(1).hideThreadInfo().logLevel(LogLevel.FULL).methodOffset(0);
@@ -137,15 +139,15 @@ public class TapcApplication extends Application {
         }
     }
 
-    //    public void addRefWatcher(Object watchedReference) {
-    //        if (mRefWatcher != null) {
-    //            mRefWatcher.watch(watchedReference);
-    //        }
-    //    }
-    //
-    //    public RefWatcher getRefWatcher() {
-    //        return mRefWatcher;
-    //    }
+    public void addRefWatcher(Object watchedReference) {
+        if (mRefWatcher != null) {
+            mRefWatcher.watch(watchedReference);
+        }
+    }
+
+    public RefWatcher getRefWatcher() {
+        return mRefWatcher;
+    }
 
     public static TapcApplication getInstance() {
         return mInstance;

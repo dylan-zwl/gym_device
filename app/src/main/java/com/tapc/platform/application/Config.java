@@ -12,12 +12,8 @@ public class Config {
     public static final String MEDIA_FILE = "/sdcard/tapc";
 
     public class Debug {
-        public static final boolean OPEN_REF_WATCHER = false;
-    }
-
-    public class Face {
-        public static final String appName = "cloud-face-face-android";
-        public static final String licenseFileName = "idl-license.face-android";
+        //开启内存泄漏监听，正式版要设为false
+        public static final boolean OPEN_REF_WATCHER = true;
     }
 
     //设备生产商编号
