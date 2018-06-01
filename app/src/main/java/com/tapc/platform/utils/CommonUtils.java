@@ -1,9 +1,8 @@
 package com.tapc.platform.utils;
 
+import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import static com.tapc.platform.library.common.SystemSettings.mContext;
 
 /**
  * Created by Administrator on 2017/9/29.
@@ -15,8 +14,8 @@ public class CommonUtils {
      *
      * @param : visibility  = false 隐藏显示
      */
-    public static void setSoftInputVisibility(View view, boolean visibility) {
-        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+    public static void setSoftInputVisibility(Context context, View view, boolean visibility) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (visibility) {
             imm.showSoftInput(view, 0);
         } else {

@@ -1,4 +1,4 @@
-package com.tapc.platform.model.healthcat.bike;
+package com.tapc.platform.model.healthcat.power;
 
 import android.content.Context;
 
@@ -11,31 +11,30 @@ import com.tapc.platform.model.healthcat.Command;
  * Created by Administrator on 2018/4/12.
  */
 
-public class BikeCtlModel extends BaseCtlModel {
-    private BikeManage mManage;
-    private BikeCtlLister mCtlLister;
+public class PowerCtlModel extends BaseCtlModel {
+    private PowerManage mManage;
+    private PowerCtlLister mCtlLister;
 
-    public BikeCtlModel(Context context) {
+    public PowerCtlModel(Context context) {
         super(context);
     }
 
     @Override
     public void sendHeartbeat() {
-        mManage.sendHeartbeat(Command.Bike.D_UPLOAD_INFO, (BikeData) mCtlLister.serverReadInfo());
+        mManage.sendHeartbeat(Command.Power.D_UPLOAD_INFO, (PowerData) mCtlLister.serverReadInfo());
     }
 
     @Override
     public BaseCommunicationManage getManage() {
-        mManage = new BikeManage();
+        mManage = new PowerManage();
         return mManage;
     }
 
-    public interface BikeCtlLister extends BaseCtlModel.BaseListener {
+    public interface PowerCtlLister extends BaseListener {
 
-        void serverSetResistance(byte resistance);
     }
 
-    public void setCtlLister(BikeCtlLister listener) {
+    public void setCtlLister(PowerCtlLister listener) {
         setBaseListener(listener);
         this.mCtlLister = listener;
     }
@@ -66,26 +65,23 @@ public class BikeCtlModel extends BaseCtlModel {
                     }
                 }
                 break;
-            case Command.Bike.S_READ_INFO:
-                mManage.sendReadInfoData((BikeData) mCtlLister.serverReadInfo());
+            case Command.Power.S_SET_HEART_TIME:
+                int time = mManage.getDataPack().getCommanData(data, 0);
+                setHeatbeatTime(time);
+                startHeartbeat();
+                mManage.sendHeartbeat(Command.Power.D_READ_INFO, (PowerData) mCtlLister.serverReadInfo());
+                mManage.ackStatus(Command.Power.D_SET_HEART_TIME, AckStatus.SUCCESS);
                 break;
-            case Command.Bike.S_READ_STATUS:
-                mManage.sendHeartbeat(Command.Bike.D_READ_STATUS, (BikeData) mCtlLister.serverReadInfo());
+            case Command.Power.S_READ_INFO:
+                mManage.sendHeartbeat(Command.Power.D_READ_INFO, (PowerData) mCtlLister.serverReadInfo());
                 break;
-            case Command.Bike.S_SET_RESISTANCE:
-                byte resistance = mManage.getDataPack().getCommanData(data, 0);
-                if (resistance != -1) {
-                    mCtlLister.serverSetResistance(resistance);
-                }
-                mManage.ackStatus(Command.Bike.D_SET_RESISTANCE, AckStatus.SUCCESS);
+            case Command.Power.S_START_STOP:
+                setRunStatus(Command.Power.D_START_STOP, data);
                 break;
-            case Command.Bike.S_START_STOP:
-                setRunStatus(Command.Bike.D_START_STOP, data);
+            case Command.Power.S_LOCK:
+                setLock(Command.Power.D_LOCK, data);
                 break;
-            case Command.Bike.S_LOCK:
-                setLock(Command.Bike.D_LOCK, data);
-                break;
-            case Command.Bike.S_UPLOAD_INFO:
+            case Command.Power.S_UPLOAD_INFO:
                 mHeartBeat.resetCount();
                 break;
         }

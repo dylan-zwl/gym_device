@@ -13,7 +13,7 @@ import com.tapc.platform.utils.NetUtils;
 public abstract class BaseCtlModel {
     public static final String BASE_SERVER_URL = "beta-accsail.healthmall.cn";
     public static final String IP = "121.201.63.252";
-    public static final int PORT = 28090;
+    public static final int PORT = 50890;
 
     protected Context mContext;
     protected String mDeviceId = "";
@@ -21,13 +21,20 @@ public abstract class BaseCtlModel {
     protected boolean mCurrentConnectStatus = false;
     protected BaseListener mBaseListener;
     private BaseCommunicationManage mManage;
+    protected int mHeatbeatTime = 10000;
 
     public interface BaseListener {
+        Object serverReadInfo();
+
         void showQrcode(String qrcodeStr);
 
         void connectServerResult(boolean isSuccess);
 
         void login(boolean isSuccess);
+
+        boolean serverSetRunStatus(boolean isStart);
+
+        boolean serverSetLock(boolean lock);
     }
 
     public BaseCtlModel(Context context) {
@@ -140,6 +147,9 @@ public abstract class BaseCtlModel {
         }
     }
 
+    public String getDeviceId() {
+        return mDeviceId;
+    }
 
     /**
      * 功能描述 : 更新设备状态
@@ -151,7 +161,12 @@ public abstract class BaseCtlModel {
      */
     protected HeartBeat mHeartBeat;
 
-    private void startHeartbeat() {
+    //心跳包相隔时间
+    public void setHeatbeatTime(int heatbeatTime) {
+        this.mHeatbeatTime = heatbeatTime;
+    }
+
+    protected void startHeartbeat() {
         if (mHeartBeat == null) {
             mHeartBeat = new HeartBeat();
             mHeartBeat.setListener(new HeartBeat.Listener() {
@@ -162,11 +177,11 @@ public abstract class BaseCtlModel {
 
                 @Override
                 public void sendHeartbeat() {
-                    sendHeartbeat();
+                    BaseCtlModel.this.sendHeartbeat();
                 }
             });
         }
-        mHeartBeat.start(10000);
+        mHeartBeat.start(mHeatbeatTime);
     }
 
 
@@ -180,9 +195,6 @@ public abstract class BaseCtlModel {
         @Override
         public void onOpen(boolean isConnect) {
             Log.d("tcp connect", "" + isConnect);
-            if (isConnect) {
-                startHeartbeat();
-            }
         }
 
         @Override
@@ -209,4 +221,44 @@ public abstract class BaseCtlModel {
 //    public void setManage(BaseCommunicationManage manage) {
 //        this.mManage = manage;
 //    }
+
+    public void setRunStatus(byte cmd, byte[] data) {
+        byte runStatus = mManage.getDataPack().getCommanData(data, 0);
+        boolean setRunStatusResult = false;
+        if (runStatus != -1) {
+            switch (runStatus) {
+                case AckStatus.START:
+                    setRunStatusResult = mBaseListener.serverSetRunStatus(true);
+                    break;
+                case AckStatus.STOP:
+                    setRunStatusResult = mBaseListener.serverSetRunStatus(false);
+                    break;
+            }
+        }
+        if (setRunStatusResult) {
+            mManage.ackStatus(cmd, AckStatus.SUCCESS);
+        } else {
+            mManage.ackStatus(cmd, AckStatus.FAIL);
+        }
+    }
+
+    public void setLock(byte cmd, byte[] data) {
+        byte lock = mManage.getDataPack().getCommanData(data, 0);
+        boolean lockResult = false;
+        if (lock != -1) {
+            switch (lock) {
+                case AckStatus.LOCK:
+                    lockResult = mBaseListener.serverSetLock(true);
+                    break;
+                case AckStatus.UNLOCK:
+                    lockResult = mBaseListener.serverSetLock(false);
+                    break;
+            }
+        }
+        if (lockResult) {
+            mManage.ackStatus(cmd, AckStatus.SUCCESS);
+        } else {
+            mManage.ackStatus(cmd, AckStatus.FAIL);
+        }
+    }
 }

@@ -48,7 +48,12 @@ public abstract class BaseCommunicationManage {
 
 
     public boolean login() {
-        byte[] data = mBaseDataPack.login(mDeviceId);
+        byte[] data = mBaseDataPack.login(mDeviceId + "000000000000");
+        return sendData(data);
+    }
+
+    public boolean ackStatus(byte command, byte status) {
+        byte[] data = mBaseDataPack.ackStatus(command, status);
         return sendData(data);
     }
 }

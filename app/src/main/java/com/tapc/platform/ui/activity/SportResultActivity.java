@@ -9,15 +9,22 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.tapc.platform.R;
+import com.tapc.platform.application.Config;
 import com.tapc.platform.library.abstractset.WorkoutInfo;
+import com.tapc.platform.library.data.BikeWorkoutInfo;
+import com.tapc.platform.library.data.TreadmillWorkoutInfo;
 import com.tapc.platform.library.workouting.WorkOuting;
 import com.tapc.platform.model.common.UserManageModel;
 import com.tapc.platform.model.scancode.ScanCodeHttpRequest;
+import com.tapc.platform.model.scancode.dao.request.BikeStageSportData;
 import com.tapc.platform.model.scancode.dao.request.TreadmillStageSportData;
 import com.tapc.platform.model.scancode.dao.request.UserSportsData;
 import com.tapc.platform.model.scancode.dao.response.ScanCodeUser;
 import com.tapc.platform.ui.base.BaseActivity;
 import com.tapc.platform.utils.FormatUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -106,17 +113,18 @@ public class SportResultActivity extends BaseActivity {
         ScanCodeUser user = (ScanCodeUser) UserManageModel.getInstance().getScanCodeUser();
 
         UserSportsData userSportsData = new UserSportsData<TreadmillStageSportData>();
-        userSportsData.setTime(String.valueOf(time));
-        userSportsData.setDistance(String.valueOf(distance));
-        userSportsData.setCalorie(String.valueOf(calories));
-        userSportsData.setPlan_id("0");
-        userSportsData.setSport_type("0");
+        userSportsData.setTime(time);
+        userSportsData.setDistance(distance);
+        userSportsData.setCalorie(calories);
 
+        userSportsData.setPlan_id(user.getPlanId());
         userSportsData.setDevice_id(user.getDeviceId());
         userSportsData.setUser_id(user.getUserId());
         userSportsData.setScan_order_id(user.getScan_order_id());
 
-        ScanCodeHttpRequest.getInstance().getService().uploadSportsData(userSportsData).subscribeOn(Schedulers.io())
+//        setSportData(userSportsData, workoutInfo);
+
+        ScanCodeHttpRequest.getInstance().uploadSportsData(userSportsData).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ResponseBody>() {
             @Override
             public void accept(ResponseBody responseBody) throws Exception {
@@ -129,25 +137,61 @@ public class SportResultActivity extends BaseActivity {
 
             }
         });
-//        List<WorkoutIntervalInfo> mWorkoutInfoIntervalList = mEnginImpl.mWorkouting.getWorkoutInterval()
-// .mIntervalList;
-//        List<TreadmillStageSportData> TreadmillStageSportDatas = new ArrayList<TreadmillStageSportData>();
-//        if (mWorkoutInfoIntervalList == null || mWorkoutInfoIntervalList.isEmpty()) {
-//            TreadmillStageSportData spData = new TreadmillStageSportData();
-//            spData.setTime(String.valueOf(workoutInfo.getTime()));
-//            spData.setIncline(String.valueOf(SysUtils.formatDouble(1, workoutInfo.getIncline())));
-//            spData.setSpeed(String.valueOf(SysUtils.formatDouble(1, workoutInfo.getSpeed())));
-//            TreadmillStageSportDatas.add(spData);
-//        } else {
-//            for (WorkoutIntervalInfo infor : mWorkoutInfoIntervalList) {
-//                TreadmillStageSportData spData = new TreadmillStageSportData();
-//                spData.setTime(String.valueOf(infor.getTime()));
-//                spData.setIncline(String.valueOf(SysUtils.formatDouble(1, infor.getIncline())));
-//                spData.setSpeed(String.valueOf(SysUtils.formatDouble(1, infor.getSpeed())));
-//                TreadmillStageSportDatas.add(spData);
-//            }
-//        }
 
+
+    }
+
+    private void setSportData(UserSportsData userSportsData, WorkoutInfo workoutInfo) {
+        List<WorkoutInfo> mWorkoutInfoIntervalList = (List<WorkoutInfo>) WorkOuting.getInstance()
+                .getWorkoutInterval();
+        switch (Config.DEVICE_TYPE) {
+            case TREADMILL:
+                List<Object> treadmillStageSportDatas = new ArrayList<Object>();
+                if (mWorkoutInfoIntervalList == null || mWorkoutInfoIntervalList.isEmpty()) {
+                    TreadmillWorkoutInfo info = (TreadmillWorkoutInfo) workoutInfo;
+                    TreadmillStageSportData data = new TreadmillStageSportData();
+                    data.setTime(String.valueOf(workoutInfo.getTime()));
+                    data.setIncline(String.valueOf(info.getIncline()));
+                    data.setSpeed(String.valueOf(info.getSpeed()));
+                    treadmillStageSportDatas.add(data);
+                } else {
+                    for (WorkoutInfo infor : mWorkoutInfoIntervalList) {
+                        TreadmillWorkoutInfo info = (TreadmillWorkoutInfo) infor;
+                        TreadmillStageSportData data = new TreadmillStageSportData();
+                        data.setTime(String.valueOf(infor.getTime()));
+                        data.setIncline(String.valueOf(info.getIncline()));
+                        data.setSpeed(String.valueOf(info.getSpeed()));
+                        treadmillStageSportDatas.add(data);
+                    }
+                }
+                userSportsData.setSport_data(treadmillStageSportDatas);
+                break;
+            case BIKE:
+                List<Object> bikeStageSportDatas = new ArrayList<Object>();
+                if (mWorkoutInfoIntervalList == null || mWorkoutInfoIntervalList.isEmpty()) {
+                    BikeWorkoutInfo info = (BikeWorkoutInfo) workoutInfo;
+                    BikeStageSportData data = new BikeStageSportData();
+                    data.setTime(String.valueOf(workoutInfo.getTime()));
+                    data.setResistance(String.valueOf(info.getResistance()));
+                    data.setWatt(String.valueOf(info.getWatt()));
+//                    spData.setSpeed(String.valueOf(info.getSpeed()));
+                    bikeStageSportDatas.add(data);
+                } else {
+                    for (WorkoutInfo infor : mWorkoutInfoIntervalList) {
+                        BikeWorkoutInfo info = (BikeWorkoutInfo) infor;
+                        BikeStageSportData data = new BikeStageSportData();
+                        data.setTime(String.valueOf(infor.getTime()));
+                        data.setResistance(String.valueOf(info.getResistance()));
+                        data.setWatt(String.valueOf(info.getWatt()));
+//                        spData.setSpeed(String.valueOf(info.getSpeed()));
+                        bikeStageSportDatas.add(data);
+                    }
+                }
+                userSportsData.setSport_data(bikeStageSportDatas);
+                break;
+            case POWER:
+                break;
+        }
     }
 
     @Override

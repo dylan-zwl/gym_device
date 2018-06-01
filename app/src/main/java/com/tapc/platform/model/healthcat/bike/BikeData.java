@@ -6,14 +6,16 @@ package com.tapc.platform.model.healthcat.bike;
 
 public class BikeData {
     private int diameter;
-    private int resistance;
 
-    private int status;
-    private int speed;
+    private byte status;
+    private float speed;
     private int rounds;
     private int heart;
-    private int energy;
-    private int delayTime;
+    private int resistance;
+    private int calorie;
+    private int delayAckTime;
+    private int distance;
+    private int runTime;
 
     public int getDiameter() {
         return diameter;
@@ -23,27 +25,12 @@ public class BikeData {
         this.diameter = diameter;
     }
 
-    public int getResistance() {
-        return resistance;
-    }
 
-    public void setResistance(int resistance) {
-        this.resistance = resistance;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getSpeed() {
+    public float getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 
@@ -63,19 +50,51 @@ public class BikeData {
         this.heart = heart;
     }
 
-    public int getEnergy() {
-        return energy;
+    public int getResistance() {
+        return resistance;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
+    public void setResistance(int resistance) {
+        this.resistance = resistance;
     }
 
-    public int getDelayTime() {
-        return delayTime;
+    public int getCalorie() {
+        return calorie;
     }
 
-    public void setDelayTime(int delayTime) {
-        this.delayTime = delayTime;
+    public void setCalorie(int calorie) {
+        this.calorie = calorie;
+    }
+
+    public int getDelayAckTime() {
+        return delayAckTime;
+    }
+
+    public void setDelayAckTime(int delayAckTime) {
+        this.delayAckTime = delayAckTime;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getRunTime() {
+        return runTime;
+    }
+
+    public void setRunTime(int runTime) {
+        this.runTime = runTime;
+    }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
     }
 }

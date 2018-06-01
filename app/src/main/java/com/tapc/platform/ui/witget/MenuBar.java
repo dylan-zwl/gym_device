@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 import static com.tapc.platform.R.id.calorie;
@@ -73,6 +74,7 @@ public class MenuBar extends BaseSystemView implements Observer {
 
     private WorkOuting mWorkOuting;
     private int mFanLevel = 3;
+    private Disposable mDisposable;
 
     @Override
     protected int getLayoutResID() {
@@ -97,7 +99,7 @@ public class MenuBar extends BaseSystemView implements Observer {
         setWifi(null);
         changeFanStatus();
         mWorkOuting = WorkOuting.getInstance();
-        RxjavaUtils.interval(1, 1, TimeUnit.SECONDS, new Consumer() {
+        mDisposable = RxjavaUtils.interval(1, 1, TimeUnit.SECONDS, new Consumer() {
             @Override
             public void accept(@NonNull Object o) throws Exception {
                 updateTime();
@@ -307,5 +309,7 @@ public class MenuBar extends BaseSystemView implements Observer {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         mWorkOuting.unsubscribeObserverNotification(this);
+        RxjavaUtils.dispose(mDisposable);
+        mDisposable = null;
     }
 }

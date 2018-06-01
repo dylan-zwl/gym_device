@@ -3,26 +3,41 @@ package com.tapc.platform.model.scancode.dao.request;
 import java.util.List;
 
 public class UserSportsData<T> {
+    //设备id
     private String device_id;
+    //用户id
     private String user_id;
-    private String plan_id;
-    private String sport_type;
-    private String time;
-    private String calorie;
-    private String distance;
-    private String weight;
-    private List<T> sport_data;
-    private String date;
-    private String order_number;
-    private String customer_id;
-    private int sport_flg;
 
+    //用户运动类型
+    private String sport_type;
+
+    //扫码id 第三接入订单号
     private String scan_order_id;
 
+    //上传的时间记录，默认null
+    private String date;
+    //打开设备时间
     private long open_time;
+    //开启运动时间
     private long start_time;
+    //停止运动时间
     private long stop_time;
+    //使用设备总时间
     private long use_device_time;
+
+    //运动数据
+    private long time;
+    private float calorie;
+    private float distance;
+
+    //特有参数
+    //重训的次数
+    private String times;
+
+    //运动阶段数据
+    private String plan_id;
+    //运动详细数据
+    private List<T> sport_data;
 
     public String getDevice_id() {
         return device_id;
@@ -64,70 +79,6 @@ public class UserSportsData<T> {
         this.sport_type = sport_type;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getCalorie() {
-        return calorie;
-    }
-
-    public void setCalorie(String calorie) {
-        this.calorie = calorie;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
-    public String getOrder_number() {
-        return order_number;
-    }
-
-    public void setOrder_number(String order_number) {
-        this.order_number = order_number;
-    }
-
-    public List<T> getSport_data() {
-        return sport_data;
-    }
-
-    public void setSport_data(List<T> sport_data) {
-        this.sport_data = sport_data;
-    }
-
-    public String getCustomer_id() {
-        return customer_id;
-    }
-
-    public void setCustomer_id(String customer_id) {
-        this.customer_id = customer_id;
-    }
-
-    public int getSport_flg() {
-        return sport_flg;
-    }
-
-    public void setSport_flg(int sport_flg) {
-        this.sport_flg = sport_flg;
-    }
-
     public long getOpen_time() {
         return open_time;
     }
@@ -167,4 +118,74 @@ public class UserSportsData<T> {
     public void setScan_order_id(String scan_order_id) {
         this.scan_order_id = scan_order_id;
     }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public float getCalorie() {
+        return calorie;
+    }
+
+    public void setCalorie(float calorie) {
+        this.calorie = calorie;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public String getTimes() {
+        return times;
+    }
+
+    public void setTimes(String times) {
+        this.times = times;
+    }
+
+    public List<T> getSport_data() {
+        return sport_data;
+    }
+
+    public void setSport_data(List<T> sport_data) {
+        this.sport_data = sport_data;
+    }
+
+
+/*
+    运动阶段数据
+
+    ①　跑步机（有氧）
+    [
+        {
+            "incline": "0.0", //当期阶段平均坡度
+                "speed": "1.5", //当前阶段平均速度
+                "time": "4" //当前阶段耗时
+        }
+    ]
+    ②　健身车（有氧）
+    [
+        {
+            "speed": "36.6", //当前阶段平均速度
+                "time": "39",	//当前阶段耗时
+                "watt": "184892.0" //当前阶段平均瓦特
+        }
+    ]
+    ③　重训（无氧）
+    [
+        {
+            "cooldown": "", //当前阶段休息时间（秒）
+                "heavy": "20.0",//当前阶段重量（公斤）
+                "times": "4"//当前阶段次数
+        },
+    ]
+*/
 }

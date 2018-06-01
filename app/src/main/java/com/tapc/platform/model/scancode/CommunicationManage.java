@@ -43,7 +43,7 @@ public class CommunicationManage {
     }
 
     /**
-     * 功能描述 : 获取数据中命令字节
+     * 获取数据中命令字节
      */
     public int getCommand(String jsonStr) {
         JSONObject jsonObject = null;
@@ -58,7 +58,7 @@ public class CommunicationManage {
     }
 
     /**
-     * 功能描述 : 获取请求打开设备的用户信息，device_id  需要与本设备相同，user_id 不为空才能开启设备
+     * 获取请求打开设备的用户信息，device_id  需要与本设备相同，user_id 不为空才能开启设备
      */
     public ScanCodeUser getUser(int command, String jsonStr) {
         OpenDeviceRequest openDeviceRequest = GsonUtils.fromJson(jsonStr, OpenDeviceRequest.class);
@@ -82,7 +82,7 @@ public class CommunicationManage {
     }
 
     /**
-     * 功能描述 : 获取锻炼程序
+     * 获取锻炼程序
      */
     public ExerciseProgram getExerciseProgram(String jsonStr) {
         ExerciseProgram exerciseProgram = GsonUtils.fromJson(jsonStr, ExerciseProgram.class);
@@ -114,36 +114,34 @@ public class CommunicationManage {
     }
 
     /**
-     * 功能描述 : 心跳包回应
+     * 心跳包回应
      *
      * @param : work_status ：设备使用状态
      */
-    private String getHeartbeatJson(int command, String deviceId, int work_status) {
-        HeartbeatPacketAck heartbeatPacket = new HeartbeatPacketAck(command, deviceId, work_status);
-        return toJson(heartbeatPacket);
-    }
-
     public void sendHeartbeat(int work_status) {
-        String jsonStr = getHeartbeatJson(Command.HEARTBEAT, mDeviceId, work_status);
+        String jsonStr = toJson(new HeartbeatPacketAck(Command.HEARTBEAT, mDeviceId, work_status));
         sendData(jsonStr);
     }
 
     /**
-     * 功能描述 : 打开设备回应
+     * 打开设备回应
      *
      * @param :
      */
-    private String getOpenDeviceAckJson(int command, String device_id, String user_id, String scan_order_id, String
-            status) {
-        OpenDeviceAck openDeviceAck = new OpenDeviceAck(command, device_id, user_id, scan_order_id, status);
-        return toJson(openDeviceAck);
-    }
-
     public void sendOpenDeviceStatus(int command, String user_id, String scan_order_id, String status) {
-        String jsonStr = getOpenDeviceAckJson(command, mDeviceId, user_id, scan_order_id, status);
+        String jsonStr = toJson(new OpenDeviceAck(command, mDeviceId, user_id, scan_order_id, status));
         sendData(jsonStr);
     }
 
+    /**
+     * 下发运动计划回应
+     *
+     * @param :
+     */
+//    public void sendExerciseProgramStatus(int command, String user_id, String scan_order_id, String status) {
+//        String jsonStr = toJson(new ExerciseProgram(command, mDeviceId, user_id, scan_order_id, status));
+//        sendData(jsonStr);
+//    }
     public <T> T fromJson(String jsonStr, Class<T> classOfT) {
         return new Gson().fromJson(jsonStr, classOfT);
     }

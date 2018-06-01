@@ -108,7 +108,7 @@ public class ScenePlayActivity extends BaseActivity implements View.OnTouchListe
                 case UI_RESUME:
                     setPlayPause(false);
                     break;
-                case UI_LEFT:
+                case UI_RIGHT:
                     if (AppSettings.getPlatform() == CommonEnum.Platform.TCC8935) {
                         mPlayer.initVideoSpeed(100000, 200000);
                     } else {

@@ -26,8 +26,8 @@ public class HeartBeat {
         mHeartbeatTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                mNotHeartbeatCount++;
-                if (mNotHeartbeatCount >= 2) {
+//                mNotHeartbeatCount++;
+                if (mNotHeartbeatCount > 2) {
                     cancelHearbeatTimer();
                     mNotHeartbeatNumber++;
                     Log.d("recv hearbeat", "failed number : " + mNotHeartbeatNumber);

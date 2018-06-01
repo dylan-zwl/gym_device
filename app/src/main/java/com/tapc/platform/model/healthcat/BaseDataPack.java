@@ -49,13 +49,6 @@ public class BaseDataPack {
         return crc;
     }
 
-    public byte[] login(String deviceId) {
-        if (TextUtils.isEmpty(deviceId)) {
-            return null;
-        }
-        return getDataStream(Command.D_LOGIN, deviceId.getBytes());
-    }
-
     public byte getComman(byte[] dataPack) {
         if (dataPack != null && dataPack.length > 4) {
             return dataPack[3];
@@ -63,28 +56,53 @@ public class BaseDataPack {
         return 0;
     }
 
-    public byte getDataByte(byte[] data, int index) {
+    public byte getCommanData(byte[] data, int index) {
         if (data.length >= (index + 1)) {
             return data[index];
         }
         return AckStatus.NULL;
     }
 
-    public byte[] getData(byte[] dataPack) {
+    public byte[] getCommanDataPack(byte[] dataPack) {
         int length = dataPack.length;
         if (dataPack != null && length > 5) {
             int dataLength = dataPack[4] & 0xff;
             if (dataLength >= 0 && dataLength == (length - 7)) {
                 byte crc = getCrc(dataPack);
                 if (crc == dataPack[length - 2]) {
-                    byte[] data = new byte[length];
+                    byte[] data = new byte[dataLength];
                     System.arraycopy(dataPack, 5, data, 0, data.length);
                     return data;
                 }
             }
         }
-        return null;
+        return new byte[0];
     }
+
+    public byte[] login(String deviceId) {
+        if (TextUtils.isEmpty(deviceId)) {
+            return null;
+        }
+        return getDataStream(Command.D_LOGIN, deviceId.getBytes());
+    }
+
+    public byte[] ackStatus(byte command, byte status) {
+        byte[] data = new byte[]{status};
+        return getDataStream(command, data);
+    }
+
+    /**
+     * int转byte[]
+     */
+    public static byte[] intToBytes(int i) {
+        byte[] bytes = new byte[4];
+        bytes[0] = (byte) (i & 0xff);
+        bytes[1] = (byte) ((i >> 8) & 0xff);
+        bytes[2] = (byte) ((i >> 16) & 0xff);
+        bytes[3] = (byte) ((i >> 24) & 0xff);
+        return bytes;
+    }
+
 
     public static byte[] getStart() {
         return start;

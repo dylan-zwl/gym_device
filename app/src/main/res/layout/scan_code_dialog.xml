@@ -214,6 +214,7 @@
         android:padding="0dp"
         android:text="@string/switch_login"
         android:textColor="#b6b6b6"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

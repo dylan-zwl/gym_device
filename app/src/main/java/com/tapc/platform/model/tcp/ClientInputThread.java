@@ -41,19 +41,10 @@ public class ClientInputThread extends Thread {
             while (isStart) {
                 if (isCanRead) {
                     byte[] data = new byte[1];
-                    List<Byte> start = new ArrayList<>();
                     List<Byte> dataBuffer = new ArrayList<>();
-                    while (true) {
+                    while (data[0] != '\n') {
                         mInputStream.read(data);
                         dataBuffer.add(data[0]);
-                        if (data[0] == 0x16 && dataBuffer.size() >= 7) {
-                            int length = dataBuffer.get(4);
-                            if (dataBuffer.size() == (length + 7)) {
-                                break;
-                            } else if (dataBuffer.size() > (length + 7)) {
-                                dataBuffer.clear();
-                            }
-                        }
                     }
                     byte[] dataSend = new byte[dataBuffer.size()];
                     for (int i = 0; i < dataBuffer.size(); i++) {

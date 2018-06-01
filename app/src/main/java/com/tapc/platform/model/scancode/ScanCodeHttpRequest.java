@@ -3,13 +3,17 @@ package com.tapc.platform.model.scancode;
 import com.android.module.retrofit.RetrofitClient;
 import com.google.gson.Gson;
 import com.tapc.platform.model.scancode.api.ScanCodeService;
+import com.tapc.platform.model.scancode.dao.request.UserSportsData;
 import com.tapc.platform.model.scancode.dao.response.ResponseDto;
 import com.tapc.platform.model.scancode.entity.UploadDeviceInfo;
 import com.tapc.platform.utils.GsonUtils;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import okhttp3.ResponseBody;
 
@@ -127,7 +131,29 @@ public class ScanCodeHttpRequest {
         return (T) mObject2;
     }
 
-//    public Observable<ResponseBody> uploadSportsData(UserSportsData sportsData) {
-//        return mService.uploadSportsData(sportsData);
-//    }
+    public Observable<ResponseBody> uploadSportsData(UserSportsData sportsData) {
+        Map<String, Object> map = new HashMap<>();
+        mapPut(map, "device_id", sportsData.getDevice_id());
+        mapPut(map, "user_id", sportsData.getUser_id());
+        mapPut(map, "plan_id", sportsData.getPlan_id());
+        mapPut(map, "sport_type", sportsData.getSport_type());
+        mapPut(map, "time", sportsData.getTime());
+        mapPut(map, "calorie", sportsData.getCalorie());
+        mapPut(map, "distance", sportsData.getDistance());
+        String sportDataStr = new Gson().toJson(sportsData.getSport_data());
+        mapPut(map, "sport_data", sportDataStr);
+        mapPut(map, "date", sportsData.getDate());
+        mapPut(map, "scan_order_id", sportsData.getScan_order_id());
+        mapPut(map, "open_time", sportsData.getOpen_time());
+        mapPut(map, "start_time", sportsData.getStart_time());
+        mapPut(map, "stop_time", sportsData.getStop_time());
+        mapPut(map, "use_device_time", sportsData.getUse_device_time());
+        return mService.uploadSportsData(map);
+    }
+
+    public void mapPut(Map<String, Object> map, String key, Object value) {
+        if (value != null) {
+            map.put(key, value);
+        }
+    }
 }
